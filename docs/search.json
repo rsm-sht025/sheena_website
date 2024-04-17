@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Sheena",
+    "section": "",
+    "text": "Welcome to my website!"
+  },
+  {
+    "objectID": "projects/project1/index.html",
+    "href": "projects/project1/index.html",
+    "title": "Analysis of Cars",
+    "section": "",
+    "text": "Let’s investigate the relationship between fuel efficiency (mpg) and engine displacement (disp) from the mtcars dataset. Those variables have a correlation of -0.85.\n\n\nHere is a plot:\n\nlibrary(tidyverse)\n\nWarning: package 'tidyverse' was built under R version 4.3.1\n\n\nWarning: package 'ggplot2' was built under R version 4.3.1\n\n\nWarning: package 'tibble' was built under R version 4.3.1\n\n\nWarning: package 'tidyr' was built under R version 4.3.1\n\n\nWarning: package 'readr' was built under R version 4.3.1\n\n\nWarning: package 'purrr' was built under R version 4.3.1\n\n\nWarning: package 'dplyr' was built under R version 4.3.1\n\n\nWarning: package 'stringr' was built under R version 4.3.1\n\n\nWarning: package 'forcats' was built under R version 4.3.1\n\n\nWarning: package 'lubridate' was built under R version 4.3.1\n\ndata(mtcars)\nmtcars |&gt;\n  ggplot(aes(mpg, disp)) + \n  geom_point(color=\"dodgerblue4\", size=2)"
+  },
+  {
+    "objectID": "projects/project1/index.html#sub-header",
+    "href": "projects/project1/index.html#sub-header",
+    "title": "Analysis of Cars",
+    "section": "",
+    "text": "Here is a plot:\n\nlibrary(tidyverse)\n\nWarning: package 'tidyverse' was built under R version 4.3.1\n\n\nWarning: package 'ggplot2' was built under R version 4.3.1\n\n\nWarning: package 'tibble' was built under R version 4.3.1\n\n\nWarning: package 'tidyr' was built under R version 4.3.1\n\n\nWarning: package 'readr' was built under R version 4.3.1\n\n\nWarning: package 'purrr' was built under R version 4.3.1\n\n\nWarning: package 'dplyr' was built under R version 4.3.1\n\n\nWarning: package 'stringr' was built under R version 4.3.1\n\n\nWarning: package 'forcats' was built under R version 4.3.1\n\n\nWarning: package 'lubridate' was built under R version 4.3.1\n\ndata(mtcars)\nmtcars |&gt;\n  ggplot(aes(mpg, disp)) + \n  geom_point(color=\"dodgerblue4\", size=2)"
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "My Projects",
+    "section": "",
+    "text": "Analysis of Cars\n\n\n\n\n\n\nYour Name\n\n\nApr 16, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "resume.html",
+    "href": "resume.html",
+    "title": "resume",
+    "section": "",
+    "text": "Download PDF file."
+  }
+]

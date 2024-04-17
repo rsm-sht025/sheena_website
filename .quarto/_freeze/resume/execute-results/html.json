@@ -1,0 +1,16 @@
+{
+  "hash": "6e725360af4a93887abe78574b430f7b",
+  "result": {
+    "markdown": "---\ntitle: \"Analysis of Cars\"\nauthor: Your Name\ndate: today\n---\n\n\n# Header\n\nLet's investigate the relationship between fuel efficiency (`mpg`) and engine displacement (`disp`) from the `mtcars` dataset. Those variables have a correlation of -0.85.\n\n## Sub-Header\n\nHere is a plot:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\n```\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: package 'tidyverse' was built under R version 4.3.1\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: package 'ggplot2' was built under R version 4.3.1\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: package 'tibble' was built under R version 4.3.1\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: package 'tidyr' was built under R version 4.3.1\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: package 'readr' was built under R version 4.3.1\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: package 'purrr' was built under R version 4.3.1\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: package 'dplyr' was built under R version 4.3.1\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: package 'stringr' was built under R version 4.3.1\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: package 'forcats' was built under R version 4.3.1\n```\n:::\n\n::: {.cell-output .cell-output-stderr}\n```\nWarning: package 'lubridate' was built under R version 4.3.1\n```\n:::\n\n```{.r .cell-code}\ndata(mtcars)\nmtcars |>\n  ggplot(aes(mpg, disp)) + \n  geom_point(color=\"dodgerblue4\", size=2)\n```\n\n::: {.cell-output-display}\n![](resume_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n:::\n",
+    "supporting": [
+      "resume_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
