@@ -2,9 +2,9 @@
   "hash": "16a10b8c10e28b100dccf1c6ff55fe5a",
   "result": {
     "engine": "jupyter",
-    "markdown": "---\ntitle: \"HW1\"\nauthor: Sheena\ndate: today\n---\n\n# Replication of Paper\n\n## Import Data\n\nBelow I import the data.\n\n::: {#78979a3a .cell execution_count=1}\n``` {.python .cell-code}\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.stats import ttest_ind, norm\nimport statsmodels.api as sm\n\nprint(\"hello world\")\n```\n\n::: {.cell-output .cell-output-stdout}\n```\nhello world\n```\n:::\n:::\n\n\n## Balance Checks\n\n::: {#f82beb4d .cell execution_count=2}\n``` {.python .cell-code}\n# run regressions\n```\n:::\n\n\n## T-tests\n\n# Simulation of LLN and CLT\n\n",
+    "markdown": "---\ntitle: \"HW1\"\nauthor: Sheena\ndate: today\n---\n\n# Replication of Paper\n\n## Import Data\n\nBelow I import the data.\n\n::: {#54ca8a05 .cell execution_count=1}\n``` {.python .cell-code}\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.stats import ttest_ind, norm\nimport statsmodels.api as sm\n\nprint(\"hello world\")\n```\n\n::: {.cell-output .cell-output-stdout}\n```\nhello world\n```\n:::\n:::\n\n\n## Balance Checks\n\n::: {#6793204d .cell execution_count=2}\n``` {.python .cell-code}\n# run regressions\n```\n:::\n\n\n## T-tests\n\n# Simulation of LLN and CLT\n\n",
     "supporting": [
-      "index_files/figure-html"
+      "index_files"
     ],
     "filters": [],
     "includes": {}

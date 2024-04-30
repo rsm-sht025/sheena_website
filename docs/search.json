@@ -32,7 +32,7 @@
     "href": "projects.html",
     "title": "My Projects",
     "section": "",
-    "text": "HW1\n\n\n\n\n\n\nSheena\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHW1\n\n\n\n\n\n\nSheena\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "HW1\n\n\n\n\n\n\nSheena\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHW3\n\n\n\n\n\n\nSheena\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHomework 1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "resume.html",
@@ -58,22 +58,29 @@
   {
     "objectID": "projects/project 3/index.html",
     "href": "projects/project 3/index.html",
-    "title": "HW1",
+    "title": "HW3",
     "section": "",
     "text": "Below I import the data.\n\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.stats import ttest_ind, norm\nimport statsmodels.api as sm\n\nprint(\"hello world\")\n\nhello world\n\n\n\n\n\n\n# run regressions"
   },
   {
     "objectID": "projects/project 3/index.html#import-data",
     "href": "projects/project 3/index.html#import-data",
-    "title": "HW1",
+    "title": "HW3",
     "section": "",
     "text": "Below I import the data.\n\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.stats import ttest_ind, norm\nimport statsmodels.api as sm\n\nprint(\"hello world\")\n\nhello world"
   },
   {
     "objectID": "projects/project 3/index.html#balance-checks",
     "href": "projects/project 3/index.html#balance-checks",
-    "title": "HW1",
+    "title": "HW3",
     "section": "",
     "text": "# run regressions"
+  },
+  {
+    "objectID": "projects/project2/index.html",
+    "href": "projects/project2/index.html",
+    "title": "Homework 1",
+    "section": "",
+    "text": "Download PDF file."
   }
 ]

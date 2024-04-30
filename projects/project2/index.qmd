@@ -1,0 +1,5 @@
+---
+title: "Homework 1"
+editor: visual
+---
+{{< pdf files/MarketingHomework1 FINAL.pdf width=100% height=800 >}}

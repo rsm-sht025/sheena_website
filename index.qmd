@@ -7,7 +7,7 @@ about:
     - icon: envelope
       href: mailto:your_email@address.com
     - icon: linkedin
-      href: https://www.linkedin.com/in/your_username
+      href: https://www.linkedin.com/in/your_username 
 ---
 
 Welcome to my website!
