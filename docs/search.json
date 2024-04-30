@@ -16,9 +16,9 @@
   {
     "objectID": "projects/project1/index.html",
     "href": "projects/project1/index.html",
-    "title": "Analysis of Cars",
+    "title": "HW1",
     "section": "",
-    "text": "Let’s investigate the relationship between fuel efficiency (mpg) and engine displacement (disp) from the mtcars dataset. Those variables have a correlation of -0.85.\n\n\nHere is a plot:\n\nlibrary(tidyverse)\n\nWarning: package 'tidyverse' was built under R version 4.3.1\n\n\nWarning: package 'ggplot2' was built under R version 4.3.1\n\n\nWarning: package 'tibble' was built under R version 4.3.1\n\n\nWarning: package 'tidyr' was built under R version 4.3.1\n\n\nWarning: package 'readr' was built under R version 4.3.1\n\n\nWarning: package 'purrr' was built under R version 4.3.1\n\n\nWarning: package 'dplyr' was built under R version 4.3.1\n\n\nWarning: package 'stringr' was built under R version 4.3.1\n\n\nWarning: package 'forcats' was built under R version 4.3.1\n\n\nWarning: package 'lubridate' was built under R version 4.3.1\n\ndata(mtcars)\nmtcars |&gt;\n  ggplot(aes(mpg, disp)) + \n  geom_point(color=\"dodgerblue4\", size=2)"
+    "text": "Below I import the data.\n\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.stats import ttest_ind, norm\nimport statsmodels.api as sm\n\nprint(\"hello world\")\n\nhello world\n\n\n\n\n\n\n# run regressions"
   },
   {
     "objectID": "projects/project1/index.html#sub-header",
@@ -32,7 +32,7 @@
     "href": "projects.html",
     "title": "My Projects",
     "section": "",
-    "text": "Analysis of Cars\n\n\n\n\n\n\nYour Name\n\n\nApr 16, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "HW1\n\n\n\n\n\n\nSheena\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHW1\n\n\n\n\n\n\nSheena\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "resume.html",
@@ -40,5 +40,40 @@
     "title": "resume",
     "section": "",
     "text": "Download PDF file."
+  },
+  {
+    "objectID": "projects/project1/index.html#import-data",
+    "href": "projects/project1/index.html#import-data",
+    "title": "HW1",
+    "section": "",
+    "text": "Below I import the data.\n\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.stats import ttest_ind, norm\nimport statsmodels.api as sm\n\nprint(\"hello world\")\n\nhello world"
+  },
+  {
+    "objectID": "projects/project1/index.html#balance-checks",
+    "href": "projects/project1/index.html#balance-checks",
+    "title": "HW1",
+    "section": "",
+    "text": "# run regressions"
+  },
+  {
+    "objectID": "projects/project 3/index.html",
+    "href": "projects/project 3/index.html",
+    "title": "HW1",
+    "section": "",
+    "text": "Below I import the data.\n\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.stats import ttest_ind, norm\nimport statsmodels.api as sm\n\nprint(\"hello world\")\n\nhello world\n\n\n\n\n\n\n# run regressions"
+  },
+  {
+    "objectID": "projects/project 3/index.html#import-data",
+    "href": "projects/project 3/index.html#import-data",
+    "title": "HW1",
+    "section": "",
+    "text": "Below I import the data.\n\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.stats import ttest_ind, norm\nimport statsmodels.api as sm\n\nprint(\"hello world\")\n\nhello world"
+  },
+  {
+    "objectID": "projects/project 3/index.html#balance-checks",
+    "href": "projects/project 3/index.html#balance-checks",
+    "title": "HW1",
+    "section": "",
+    "text": "# run regressions"
   }
 ]
