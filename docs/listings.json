@@ -3,7 +3,6 @@
     "listing": "/projects.html",
     "items": [
       "/projects/project1/index.html",
-      "/projects/project 3/index.html",
       "/projects/project2/index.html"
     ]
   }

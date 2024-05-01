@@ -1,6 +1,6 @@
 ---
 title: "About"
----
+---Sheena Taylor is a data scientist specializing in machine learning and data analysis. She has a strong background in Python and has experience working with various data science libraries such as NumPy, Pandas, and Scikit-learn. Sheena is known for her ability to clean and preprocess data, build predictive models, and communicate her findings effectively to stakeholders.
 
 About this site
 

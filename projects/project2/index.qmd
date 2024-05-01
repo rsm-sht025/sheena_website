@@ -1,5 +1,5 @@
 ---
-title: "Homework 1"
+title: "Homework 2"
 editor: visual
 ---
-{{< pdf files/MarketingHomework1 FINAL.pdf width=100% height=800 >}}
+{{< pdf files/Air B .pdf.pdf width=100% height=800 >}}

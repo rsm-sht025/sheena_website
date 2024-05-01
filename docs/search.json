@@ -16,9 +16,9 @@
   {
     "objectID": "projects/project1/index.html",
     "href": "projects/project1/index.html",
-    "title": "HW1",
+    "title": "Homework 1",
     "section": "",
-    "text": "Below I import the data.\n\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom scipy.stats import ttest_ind, norm\nimport statsmodels.api as sm\n\nprint(\"hello world\")\n\nhello world\n\n\n\n\n\n\n# run regressions"
+    "text": "Download PDF file."
   },
   {
     "objectID": "projects/project1/index.html#sub-header",
@@ -32,7 +32,7 @@
     "href": "projects.html",
     "title": "My Projects",
     "section": "",
-    "text": "HW1\n\n\n\n\n\n\nSheena\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHW3\n\n\n\n\n\n\nSheena\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHomework 1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Homework 1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHomework 2\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "resume.html",
@@ -79,7 +79,7 @@
   {
     "objectID": "projects/project2/index.html",
     "href": "projects/project2/index.html",
-    "title": "Homework 1",
+    "title": "Homework 2",
     "section": "",
     "text": "Download PDF file."
   }
