@@ -1,14 +1,15 @@
 ---
-title: "Sheena"
+title: "Sheena Taylor"
 image: "files/profile.jpg"
 about:
   template: jolla
   links:
     - icon: envelope
-      href: mailto:your_email@address.com
+      href: mailto:sht025@ucsd.edu
     - icon: linkedin
-      href: https://www.linkedin.com/in/your_username 
+      href: www.linkedin.com/in/sheenataylor
 ---
 
 
 Welcome to my website!
+I'm Sheena Taylor, a versatile data-driven marketing and sales professional with a unique background in management and client success.

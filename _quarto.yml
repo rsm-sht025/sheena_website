@@ -3,10 +3,10 @@ project:
   output-dir: docs
 
 website:
-  title: "sheena_website"
+  title: "Sheena Taylor"
   navbar:
     left:
-      - href: index.qmd
+      - href: about.qmd
         text: About
       - href: resume.qmd  
         text: Resume  

@@ -1,0 +1,96 @@
+---
+title: "Project 3"
+editor: visual
+---
+Working with various data science libraries such as NumPy, Pandas, and Scikit-learn. Sheena is known for her ability to clean and preprocess data, build predictive models, and communicate her findings effectively to stakeholders.
+ 
+
+
+The purpose of the code is to explore the relationship between various factors, such as age, region, and customer status, and the number of patents held by individuals or companies. It also aims to build a statistical model to predict the number of patents based on these factors.
+
+The code takes a single input, which is a CSV file named "blueprinty.csv". This file likely contains data about individuals or companies, including information such as their age, region, customer status, and the number of patents they hold.
+
+The output of the code includes various visualizations and statistical summaries, as well as the results of a Poisson regression model that predicts the number of patents based on the input variables.
+
+Here's how the code achieves its purpose:
+
+It starts by importing the necessary Python libraries, such as pandas for data manipulation, numpy for numerical operations, matplotlib and seaborn for data visualization, and statsmodels for statistical modeling.
+
+The code reads the "blueprinty.csv" file into a pandas DataFrame called "blueprinty".
+
+It performs exploratory data analysis by printing the first few rows of the data, displaying information about the data types and columns, and calculating summary statistics like mean, median, and quartiles.
+
+The code checks for missing values in the dataset.
+
+It creates a histogram to visualize the distribution of the number of patents, grouped by customer status (whether the individual or company is a customer or not).
+
+The code calculates and prints the mean number of patents for customers and non-customers separately.
+
+It analyzes the distribution of regions and the mean age for customers and non-customers.
+
+The code creates new columns in the DataFrame, such as "age_squared" and dummy variables for different regions, to be used as input variables for the regression model.
+
+It fits a Poisson regression model using the statsmodels library, with the number of patents as the dependent variable and age, age squared, region dummies, and customer status as independent variables.
+
+The code prints a summary of the regression results, including the estimated coefficients and their statistical significance.
+
+It interprets the exponential of the coefficients, which represent the multiplicative effect of each variable on the expected number of patents.
+
+Finally, the code creates additional visualizations to explore the distributions of age and region by customer status.
+
+The code follows a logical flow, starting with data loading and exploration, followed by data preprocessing and feature engineering, and then building and interpreting the statistical model. It performs various data transformations, such as creating dummy variables and calculating squared terms, to prepare the data for the regression analysis.
+
+The dataset has 1500 rows (entries).
+The "patents" column contains integer values ranging from 0 to 16, with a mean of around 3.68.
+The "age" column contains float values ranging from 9 to 49, with a mean of around 26.36.
+The "iscustomer" column is binary, with 0 representing non-customers and 1 representing customers. Around 13.13% of the entries are customers.
+There are no missing values in the dataset, as indicated by the "0" values in the last line of the output.
+
+The purpose of the code is to explore the relationship between the number of patents held by individuals and their customer status, as well as other factors such as age and region. It also aims to build a statistical model to predict the number of patents based on these variables.
+
+The code takes a single input, which is a CSV file named "blueprinty.csv". This file is assumed to contain data with columns representing the number of patents, customer status (iscustomer), age, and region for a set of individuals.
+
+The output of the code includes:
+
+Exploratory data analysis results, such as summary statistics, missing value checks, and visualizations of the distribution of patents and other variables by customer status.
+Comparison of means and distributions of patents, age, and region between customers and non-customers.
+A fitted Poisson regression model that relates the number of patents to age, age squared, region (encoded as dummy variables), and customer status.
+The model coefficients and their exponential values, which can be interpreted as the multiplicative effect of each variable on the expected number of patents.
+Additional visualizations of the distribution of age and region by customer status.
+To achieve its purpose, the code follows these steps:
+
+Import necessary Python libraries for data manipulation, visualization, and statistical modeling.
+Read the "blueprinty.csv" file into a pandas DataFrame named "blueprinty".
+Perform exploratory data analysis by printing the first few rows, data types, summary statistics, and checking for missing values.
+Visualize the distribution of the number of patents by customer status using a histogram.
+Compare the mean number of patents between customers and non-customers.
+Analyze the distribution of regions and mean age by customer status.
+Create new columns in the DataFrame for age squared and region dummy variables.
+Fit a Poisson regression model using the statsmodels library, with the number of patents as the dependent variable and age, age squared, region dummies, and customer status as independent variables.
+Print the model summary and interpret the coefficients by taking their exponential.
+Visualize the distribution of age and region by customer status using histograms and bar plots.
+The key logic flows and data transformations happening in the code include:
+
+Exploratory data analysis to understand the characteristics of the dataset and identify potential relationships between variables.
+Creation of new features (age squared and region dummies) to capture non-linear effects and categorical variables in the regression model.
+Fitting a Poisson regression model, which is suitable for modeling count data like the number of patents.
+Interpretation of model coefficients by taking their exponential, which provides the multiplicative effect of each variable on the expected number of patents.
+ 
+
+
+```{python}
+
+```
+
+```{python}
+
+
+```
+
+```{python}
+
+```
+
+```{python}
+
+```

@@ -1,9 +1,9 @@
 ---
-title: "Homework 2"
+title: "Project 2"
 editor: visual
 ---
 
-Sheena Taylor is a data scientist specializing in machine learning and data analysis. She has a strong background in Python and has experience working with various data science libraries such as NumPy, Pandas, and Scikit-learn. Sheena is known for her ability to clean and preprocess data, build predictive models, and communicate her findings effectively to stakeholders. 
+
 
 
 The purpose of the code is to explore the relationship between various factors, such as age, region, and customer status, and the number of patents held by individuals or companies. It also aims to build a statistical model to predict the number of patents based on these factors.
