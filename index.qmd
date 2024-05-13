@@ -7,7 +7,7 @@ about:
     - icon: envelope
       href: mailto:sht025@ucsd.edu
     - icon: linkedin
-      href: www.linkedin.com/in/sheenataylor
+      href: https://www.linkedin.com/in/sheenataylor
 ---
 
 
