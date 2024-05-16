@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -66,6 +100,8 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -111,7 +147,17 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#estimating-yogurt-preferences" id="toc-estimating-yogurt-preferences" class="nav-link active" data-scroll-target="#estimating-yogurt-preferences">1. Estimating Yogurt Preferences</a>
+  <ul class="collapse">
+  <li><a href="#likelihood-for-the-multi-nomial-logit-mnl-model" id="toc-likelihood-for-the-multi-nomial-logit-mnl-model" class="nav-link" data-scroll-target="#likelihood-for-the-multi-nomial-logit-mnl-model">Likelihood for the Multi-nomial Logit (MNL) Model</a></li>
+  <li><a href="#yogurt-dataset" id="toc-yogurt-dataset" class="nav-link" data-scroll-target="#yogurt-dataset">Yogurt Dataset</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -135,33 +181,8410 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Working with various data science libraries such as NumPy, Pandas, and Scikit-learn. Sheena is known for her ability to clean and preprocess data, build predictive models, and communicate her findings effectively to stakeholders.</p>
-<p>The purpose of the code is to explore the relationship between various factors, such as age, region, and customer status, and the number of patents held by individuals or companies. It also aims to build a statistical model to predict the number of patents based on these factors.</p>
-<p>The code takes a single input, which is a CSV file named “blueprinty.csv”. This file likely contains data about individuals or companies, including information such as their age, region, customer status, and the number of patents they hold.</p>
-<p>The output of the code includes various visualizations and statistical summaries, as well as the results of a Poisson regression model that predicts the number of patents based on the input variables.</p>
+<p>This assignment uses uses the MNL model to analyze (1) yogurt purchase data made by consumers at a retail location, and (2) conjoint data about consumer preferences for minivans.</p>
+<section id="estimating-yogurt-preferences" class="level2">
+<h2 class="anchored" data-anchor-id="estimating-yogurt-preferences">1. Estimating Yogurt Preferences</h2>
+<section id="likelihood-for-the-multi-nomial-logit-mnl-model" class="level3">
+<h3 class="anchored" data-anchor-id="likelihood-for-the-multi-nomial-logit-mnl-model">Likelihood for the Multi-nomial Logit (MNL) Model</h3>
+<p>Suppose we have <span class="math inline">\(i=1,\ldots,n\)</span> consumers who each select exactly one product <span class="math inline">\(j\)</span> from a set of <span class="math inline">\(J\)</span> products. The outcome variable is the identity of the product chosen <span class="math inline">\(y_i \in \{1, \ldots, J\}\)</span> or equivalently a vector of <span class="math inline">\(J-1\)</span> zeros and <span class="math inline">\(1\)</span> one, where the <span class="math inline">\(1\)</span> indicates the selected product. For example, if the third product was chosen out of 4 products, then either <span class="math inline">\(y=3\)</span> or <span class="math inline">\(y=(0,0,1,0)\)</span> depending on how we want to represent it. Suppose also that we have a vector of data on each product <span class="math inline">\(x_j\)</span> (eg, size, price, etc.).</p>
+<p>We model the consumer’s decision as the selection of the product that provides the most utility, and we’ll specify the utility function as a linear function of the product characteristics:</p>
+<p><span class="math display">\[ U_{ij} = x_j'\beta + \epsilon_{ij} \]</span></p>
+<p>where <span class="math inline">\(\epsilon_{ij}\)</span> is an i.i.d. extreme value error term.</p>
+<p>The choice of the i.i.d. extreme value error term leads to a closed-form expression for the probability that consumer <span class="math inline">\(i\)</span> chooses product <span class="math inline">\(j\)</span>:</p>
+<p><span class="math display">\[ \mathbb{P}_i(j) = \frac{e^{x_j'\beta}}{\sum_{k=1}^Je^{x_k'\beta}} \]</span></p>
+<p>For example, if there are 4 products, the probability that consumer <span class="math inline">\(i\)</span> chooses product 3 is:</p>
+<p><span class="math display">\[ \mathbb{P}_i(3) = \frac{e^{x_3'\beta}}{e^{x_1'\beta} + e^{x_2'\beta} + e^{x_3'\beta} + e^{x_4'\beta}} \]</span></p>
+<p>A clever way to write the individual likelihood function for consumer <span class="math inline">\(i\)</span> is the product of the <span class="math inline">\(J\)</span> probabilities, each raised to the power of an indicator variable (<span class="math inline">\(\delta_{ij}\)</span>) that indicates the chosen product:</p>
+<p><span class="math display">\[ L_i(\beta) = \prod_{j=1}^J \mathbb{P}_i(j)^{\delta_{ij}} = \mathbb{P}_i(1)^{\delta_{i1}} \times \ldots \times \mathbb{P}_i(J)^{\delta_{iJ}}\]</span></p>
+<p>Notice that if the consumer selected product <span class="math inline">\(j=3\)</span>, then <span class="math inline">\(\delta_{i3}=1\)</span> while <span class="math inline">\(\delta_{i1}=\delta_{i2}=\delta_{i4}=0\)</span> and the likelihood is:</p>
+<p><span class="math display">\[ L_i(\beta) = \mathbb{P}_i(1)^0 \times \mathbb{P}_i(2)^0 \times \mathbb{P}_i(3)^1 \times \mathbb{P}_i(4)^0 = \mathbb{P}_i(3) = \frac{e^{x_3'\beta}}{\sum_{k=1}^Je^{x_k'\beta}} \]</span></p>
+<p>The joint likelihood (across all consumers) is the product of the <span class="math inline">\(n\)</span> individual likelihoods:</p>
+<p><span class="math display">\[ L_n(\beta) = \prod_{i=1}^n L_i(\beta) = \prod_{i=1}^n \prod_{j=1}^J \mathbb{P}_i(j)^{\delta_{ij}} \]</span></p>
+<p>And the joint log-likelihood function is:</p>
+<p><span class="math display">\[ \ell_n(\beta) = \sum_{i=1}^n \sum_{j=1}^J \delta_{ij} \log(\mathbb{P}_i(j)) \]</span></p>
+</section>
+<section id="yogurt-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="yogurt-dataset">Yogurt Dataset</h3>
+<p>We will use the <code>yogurt_data</code> dataset, which provides anonymized consumer identifiers (<code>id</code>), a vector indicating the chosen product (<code>y1</code>:<code>y4</code>), a vector indicating if any products were “featured” in the store as a form of advertising (<code>f1</code>:<code>f4</code>), and the products’ prices (<code>p1</code>:<code>p4</code>). For example, consumer 1 purchased yogurt 4 at a price of 0.079/oz and none of the yogurts were featured/advertised at the time of consumer 1’s purchase. Consumers 2 through 7 each bought yogurt 2, etc.</p>
+<p><em>todo: import the data, maybe show the first few rows, and describe the data a bit.</em></p>
+<p>Let the vector of product features include brand dummy variables for yogurts 1-3 (we’ll omit a dummy for product 4 to avoid multi-collinearity), a dummy variable to indicate if a yogurt was featured, and a continuous variable for the yogurts’ prices:</p>
+<p><span class="math display">\[ x_j' = [\mathbbm{1}(\text{Yogurt 1}), \mathbbm{1}(\text{Yogurt 2}), \mathbbm{1}(\text{Yogurt 3}), X_f, X_p] \]</span></p>
+<p>The “hard part” of the MNL likelihood function is organizing the data, as we need to keep track of 3 dimensions (consumer <span class="math inline">\(i\)</span>, covariate <span class="math inline">\(k\)</span>, and product <span class="math inline">\(j\)</span>) instead of the typical 2 dimensions for cross-sectional regression models (consumer <span class="math inline">\(i\)</span> and covariate <span class="math inline">\(k\)</span>).</p>
+<p>What we would like to do is reorganize the data from a “wide” shape with <span class="math inline">\(n\)</span> rows and multiple columns for each covariate, to a “long” shape with <span class="math inline">\(n \times J\)</span> rows and a single column for each covariate. As part of this re-organization, we’ll add binary variables to indicate the first 3 products; the variables for featured and price are included in the dataset and simply need to be “pivoted” or “melted” from wide to long.</p>
+<p>The purpose of the code is to read a CSV file containing data about different yogurt products, reshape the data into a long format, and create new columns to indicate specific characteristics of the products, such as whether they are featured or their price.</p>
+<p>The input is a CSV file named ‘yogurt_data.csv’ located in the ‘/home/jovyan/Desktop/new web 111/sheena_website 2 2/’ directory.</p>
+<p>The output is a transformed pandas DataFrame named ‘yogurt_data_long’ containing the original data reshaped into a long format, along with new columns indicating whether each product is a yogurt (y1, y2, y3), whether it is featured (featured), and its price (price).</p>
 <p>Here’s how the code achieves its purpose:</p>
-<p>It starts by importing the necessary Python libraries, such as pandas for data manipulation, numpy for numerical operations, matplotlib and seaborn for data visualization, and statsmodels for statistical modeling.</p>
-<p>The code reads the “blueprinty.csv” file into a pandas DataFrame called “blueprinty”.</p>
-<p>It performs exploratory data analysis by printing the first few rows of the data, displaying information about the data types and columns, and calculating summary statistics like mean, median, and quartiles.</p>
-<p>The code checks for missing values in the dataset.</p>
-<p>It creates a histogram to visualize the distribution of the number of patents, grouped by customer status (whether the individual or company is a customer or not).</p>
-<p>The code calculates and prints the mean number of patents for customers and non-customers separately.</p>
-<p>It analyzes the distribution of regions and the mean age for customers and non-customers.</p>
-<p>The code creates new columns in the DataFrame, such as “age_squared” and dummy variables for different regions, to be used as input variables for the regression model.</p>
-<p>It fits a Poisson regression model using the statsmodels library, with the number of patents as the dependent variable and age, age squared, region dummies, and customer status as independent variables.</p>
-<p>The code prints a summary of the regression results, including the estimated coefficients and their statistical significance.</p>
-<p>It interprets the exponential of the coefficients, which represent the multiplicative effect of each variable on the expected number of patents.</p>
-<p>Finally, the code creates additional visualizations to explore the distributions of age and region by customer status.</p>
-<p>The code follows a logical flow, starting with data loading and exploration, followed by data preprocessing and feature engineering, and then building and interpreting the statistical model. It performs various data transformations, such as creating dummy variables and calculating squared terms, to prepare the data for the regression analysis.</p>
-<p>The dataset has 1500 rows (entries). The “patents” column contains integer values ranging from 0 to 16, with a mean of around 3.68. The “age” column contains float values ranging from 9 to 49, with a mean of around 26.36. The “iscustomer” column is binary, with 0 representing non-customers and 1 representing customers. Around 13.13% of the entries are customers. There are no missing values in the dataset, as indicated by the “0” values in the last line of the output.</p>
-<p>The purpose of the code is to explore the relationship between the number of patents held by individuals and their customer status, as well as other factors such as age and region. It also aims to build a statistical model to predict the number of patents based on these variables.</p>
-<p>The code takes a single input, which is a CSV file named “blueprinty.csv”. This file is assumed to contain data with columns representing the number of patents, customer status (iscustomer), age, and region for a set of individuals.</p>
-<p>The output of the code includes:</p>
-<p>Exploratory data analysis results, such as summary statistics, missing value checks, and visualizations of the distribution of patents and other variables by customer status. Comparison of means and distributions of patents, age, and region between customers and non-customers. A fitted Poisson regression model that relates the number of patents to age, age squared, region (encoded as dummy variables), and customer status. The model coefficients and their exponential values, which can be interpreted as the multiplicative effect of each variable on the expected number of patents. Additional visualizations of the distribution of age and region by customer status. To achieve its purpose, the code follows these steps:</p>
-<p>Import necessary Python libraries for data manipulation, visualization, and statistical modeling. Read the “blueprinty.csv” file into a pandas DataFrame named “blueprinty”. Perform exploratory data analysis by printing the first few rows, data types, summary statistics, and checking for missing values. Visualize the distribution of the number of patents by customer status using a histogram. Compare the mean number of patents between customers and non-customers. Analyze the distribution of regions and mean age by customer status. Create new columns in the DataFrame for age squared and region dummy variables. Fit a Poisson regression model using the statsmodels library, with the number of patents as the dependent variable and age, age squared, region dummies, and customer status as independent variables. Print the model summary and interpret the coefficients by taking their exponential. Visualize the distribution of age and region by customer status using histograms and bar plots. The key logic flows and data transformations happening in the code include:</p>
-<p>Exploratory data analysis to understand the characteristics of the dataset and identify potential relationships between variables. Creation of new features (age squared and region dummies) to capture non-linear effects and categorical variables in the regression model. Fitting a Poisson regression model, which is suitable for modeling count data like the number of patents. Interpretation of model coefficients by taking their exponential, which provides the multiplicative effect of each variable on the expected number of patents.</p>
+<p>First, it reads the CSV file into a pandas DataFrame named ‘yogurt_data’ using pd.read_csv(). The header=None parameter indicates that the first row should not be used as column names, and skiprows=1 skips the first row entirely.</p>
+<p>Next, it renames the columns of the ‘yogurt_data’ DataFrame to more descriptive names using yogurt_data.columns = […].</p>
+<p>Then, it uses pd.melt() to reshape the data into a long format, where each row represents a single product-choice combination. The value_vars parameter specifies which columns to include in the melted DataFrame, var_name and value_name specify the names of the new columns created by melt().</p>
+<p>After that, it creates new columns in the ‘yogurt_data_long’ DataFrame to indicate whether each product is a yogurt (y1, y2, y3) by checking if the ‘product’ column contains the strings ‘y1’, ‘y2’, or ‘y3’, and converting the result to an integer (0 or 1).</p>
+<p>Similarly, it creates a ‘featured’ column to indicate whether each product is featured by checking if the ‘product’ column contains the string ‘f’.</p>
+<p>It also extracts the price information from the ‘product’ column using str.extract() and converts it to a float to create the ‘price’ column.</p>
+<p>Finally, it drops the ‘product’ and ‘choice’ columns from the ‘yogurt_data_long’ DataFrame, as they are no longer needed.</p>
+<p>The key data transformations happening in this code are:</p>
+<p>Reading the CSV file into a DataFrame Renaming the columns Reshaping the data from wide to long format using melt() Creating new columns based on string patterns in the ‘product’ column Extracting price information from the ‘product’ column Dropping unnecessary columns The code follows a logical flow of reading the data, reshaping it, and creating new columns based on the existing data to prepare it for further analysis or processing.</p>
+<div id="e7b26b2f" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>yogurt_data <span class="op">=</span> pd.read_csv(<span class="st">'/home/jovyan/Desktop/new web 111/sheena_website 2 2/yogurt_data.csv'</span>, header<span class="op">=</span><span class="va">None</span>, skiprows<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(yogurt_data.head())</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>yogurt_data.columns <span class="op">=</span> [<span class="st">'c'</span>, <span class="st">'y1'</span>, <span class="st">'y2'</span>, <span class="st">'y3'</span>, <span class="st">'y4'</span>, <span class="st">'f1'</span>, <span class="st">'f2'</span>, <span class="st">'f3'</span>, <span class="st">'f4'</span>, <span class="st">'p1'</span>, <span class="st">'p2'</span>, <span class="st">'p3'</span>, <span class="st">'p4'</span>]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>yogurt_data_long <span class="op">=</span> pd.melt(yogurt_data, value_vars<span class="op">=</span>[<span class="st">'y1'</span>, <span class="st">'y2'</span>, <span class="st">'y3'</span>, <span class="st">'y4'</span>, <span class="st">'f1'</span>, <span class="st">'f2'</span>, <span class="st">'f3'</span>, <span class="st">'f4'</span>, <span class="st">'p1'</span>, <span class="st">'p2'</span>, <span class="st">'p3'</span>, <span class="st">'p4'</span>], var_name<span class="op">=</span><span class="st">'product'</span>, value_name<span class="op">=</span><span class="st">'choice'</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>yogurt_data_long[<span class="st">'yogurt1'</span>] <span class="op">=</span> yogurt_data_long[<span class="st">'product'</span>].<span class="bu">str</span>.contains(<span class="st">'y1'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>yogurt_data_long[<span class="st">'yogurt2'</span>] <span class="op">=</span> yogurt_data_long[<span class="st">'product'</span>].<span class="bu">str</span>.contains(<span class="st">'y2'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>yogurt_data_long[<span class="st">'yogurt3'</span>] <span class="op">=</span> yogurt_data_long[<span class="st">'product'</span>].<span class="bu">str</span>.contains(<span class="st">'y3'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>yogurt_data_long[<span class="st">'featured'</span>] <span class="op">=</span> yogurt_data_long[<span class="st">'product'</span>].<span class="bu">str</span>.contains(<span class="st">'f'</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>yogurt_data_long[<span class="st">'price'</span>] <span class="op">=</span> yogurt_data_long[<span class="st">'product'</span>].<span class="bu">str</span>.extract(<span class="st">'p(\d+)'</span>, expand<span class="op">=</span><span class="va">False</span>).astype(<span class="bu">float</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>yogurt_data_long <span class="op">=</span> yogurt_data_long.drop([<span class="st">'product'</span>, <span class="st">'choice'</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(yogurt_data_long.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    0   1   2   3   4   5   6   7   8      9      10     11     12
+0  107   1   0   0   0   0   0   0   0  0.108  0.081  0.050  0.079
+1  108   0   1   0   0   0   0   0   0  0.115  0.081  0.043  0.079
+2  109   0   1   0   0   0   0   0   0  0.108  0.063  0.050  0.079
+3  110   1   0   0   0   0   0   0   0  0.108  0.051  0.050  0.079
+4  111   1   0   0   0   0   0   0   0  0.108  0.047  0.050  0.079
+   yogurt1  yogurt2  yogurt3  featured  price
+0        1        0        0         0    NaN
+1        1        0        0         0    NaN
+2        1        0        0         0    NaN
+3        1        0        0         0    NaN
+4        1        0        0         0    NaN</code></pre>
+</div>
+</div>
+<p>The purpose of the code is to reshape a wide-format DataFrame, where each column represents a different variable, into a long-format DataFrame, where each row represents a single observation, and the variable names are stored in a separate column.</p>
+<p>The input is a wide-format pandas DataFrame called ‘df’, which has columns for an identifier (‘id’) and multiple variables (‘product1’, ‘product2’, ‘product3’, ‘other_products’).</p>
+<p>The output is a new long-format DataFrame called ‘df_long’, which has columns for the identifier (‘id’), the variable name (‘variable’), and the value (‘value’). Additionally, it has three new columns (‘is_product1’, ‘is_product2’, ‘is_product3’) that indicate whether the original variable was ‘product1’, ‘product2’, or ‘product3’, respectively.</p>
+<p>The code achieves its purpose through the following steps: a) It uses the pd.melt() function to reshape the wide-format DataFrame ‘df’ into a long-format DataFrame ‘df_long’. The ‘id_vars’ parameter specifies the columns to use as identifiers, and the ‘value_vars’ parameter specifies the columns to “unmelt” or reshape. b) It creates three new columns (‘is_product1’, ‘is_product2’, ‘is_product3’) in ‘df_long’ by comparing the ‘variable’ column with the strings ‘product1’, ‘product2’, and ‘product3’, respectively, using the eq() method. c) It drops the ‘variable’ column from ‘df_long’ since the information is now stored in the new columns.</p>
+<p>The main data transformation happening is the reshaping of the DataFrame from wide to long format. This is a common operation in data analysis when working with datasets that have multiple variables stored in separate columns. The long format makes it easier to perform operations on all variables simultaneously or to analyze data across variables.</p>
+<p>The code also creates additional columns to store information about the original variable names. This can be useful for later analysis or filtering operations based on the variable type.</p>
+<div id="72e57ec7" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a sample DataFrame</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'id'</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>],</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'product1'</span>: [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>],</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'product2'</span>: [<span class="dv">15</span>, <span class="dv">25</span>, <span class="dv">35</span>, <span class="dv">45</span>, <span class="dv">55</span>],</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'product3'</span>: [<span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">60</span>],</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'other_products'</span>: [<span class="dv">25</span>, <span class="dv">35</span>, <span class="dv">45</span>, <span class="dv">55</span>, <span class="dv">65</span>]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming you have a wide-format DataFrame 'df'</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>df_long <span class="op">=</span> pd.melt(df, id_vars<span class="op">=</span>[<span class="st">'id'</span>], value_vars<span class="op">=</span>[<span class="st">'product1'</span>, <span class="st">'product2'</span>, <span class="st">'product3'</span>, <span class="st">'other_products'</span>])</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>df_long <span class="op">=</span> df_long.assign(is_product1<span class="op">=</span>df_long[<span class="st">'variable'</span>].eq(<span class="st">'product1'</span>),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                         is_product2<span class="op">=</span>df_long[<span class="st">'variable'</span>].eq(<span class="st">'product2'</span>),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                         is_product3<span class="op">=</span>df_long[<span class="st">'variable'</span>].eq(<span class="st">'product3'</span>))</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>df_long <span class="op">=</span> df_long.drop(<span class="st">'variable'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    id  value  is_product1  is_product2  is_product3
+0    1     10         True        False        False
+1    2     20         True        False        False
+2    3     30         True        False        False
+3    4     40         True        False        False
+4    5     50         True        False        False
+5    1     15        False         True        False
+6    2     25        False         True        False
+7    3     35        False         True        False
+8    4     45        False         True        False
+9    5     55        False         True        False
+10   1     20        False        False         True
+11   2     30        False        False         True
+12   3     40        False        False         True
+13   4     50        False        False         True
+14   5     60        False        False         True
+15   1     25        False        False        False
+16   2     35        False        False        False
+17   3     45        False        False        False
+18   4     55        False        False        False
+19   5     65        False        False        False</code></pre>
+</div>
+</div>
+<p>The code loglik is a function that calculates the negative log-likelihood for a multinomial logit model. The purpose of this function is to evaluate how well the model’s parameters fit the given data.</p>
+<p>The function takes three inputs:</p>
+<p>params: A numpy array containing the model’s parameter values (beta_1, beta_2, beta_3, beta_f, beta_p). data: A pandas DataFrame containing the original data. feature_matrix: A pandas DataFrame containing the feature matrix. The output of the function is a single float value representing the negative log-likelihood.</p>
+<p>Here’s how the function achieves its purpose:</p>
+<p>It calculates the utilities (V) using the calculate_utilities function (not shown in the provided code) with the params and feature_matrix as inputs. It calculates the choice probabilities (P) by taking the exponential of the utilities (V) and dividing each element by the sum of the exponentials. It finds the probabilities of the chosen alternatives (chosen_probs) by selecting the probabilities corresponding to the maximum values in the ‘yogurt1’, ‘yogurt2’, and ‘yogurt3’ columns of the data DataFrame. It calculates the log-likelihood by summing the natural logarithms of the chosen probabilities. Finally, it returns the negative of the log-likelihood value. The key logic flow in this function is the calculation of choice probabilities using the utilities and the exponential function. This is a common approach in multinomial logit models, where the probabilities are derived from the utilities through a softmax-like transformation. The function also performs data transformations by selecting the chosen probabilities from the data DataFrame and taking the natural logarithm of those probabilities.</p>
+<p>Overall, the loglik function is a crucial component in evaluating the fit of a multinomial logit model by calculating the negative log-likelihood, which is a measure of how well the model’s parameters explain the observed data.</p>
+<div id="0fa4ae5b" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loglik(params: np.ndarray, data: pd.DataFrame, feature_matrix: pd.DataFrame) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Log-likelihood function for the multinomial logit model.</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">        params (numpy.ndarray): The parameter values (beta_1, beta_2, beta_3, beta_f, beta_p).</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">        data (pandas.DataFrame): The original data frame.</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">        feature_matrix (pandas.DataFrame): The feature matrix.</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">        float: The negative log-likelihood value.</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the utilities</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    V <span class="op">=</span> calculate_utilities(params, feature_matrix)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the choice probabilities</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    exp_V <span class="op">=</span> np.exp(V)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> exp_V.ndim <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        sum_exp_V <span class="op">=</span> exp_V.<span class="bu">sum</span>(keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        sum_exp_V <span class="op">=</span> exp_V.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    P <span class="op">=</span> exp_V <span class="op">/</span> sum_exp_V</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the log-likelihood</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    chosen_probs <span class="op">=</span> P[data[[<span class="st">'yogurt1'</span>, <span class="st">'yogurt2'</span>, <span class="st">'yogurt3'</span>]].values.argmax(axis<span class="op">=</span><span class="dv">1</span>)]</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    log_likelihood <span class="op">=</span> np.log(chosen_probs).<span class="bu">sum</span>()</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>log_likelihood</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Purpose: The purpose of this code is to estimate the parameters (coefficients) of a multinomial logit model, which is a type of statistical model used to analyze discrete choice data. In this case, the data seems to be related to consumer preferences for different yogurt products.</p>
+<p>Input: The code takes a pandas DataFrame called yogurt_data_long as input. This DataFrame likely contains information about different yogurt products, such as their prices and other attributes, as well as the choices made by consumers.</p>
+<p>Output: The code outputs the estimated values of the model parameters (coefficients), which are denoted as beta_1, beta_2, beta_3, beta_f, and beta_p.&nbsp;These parameters represent the effects of different factors (e.g., product type, price, featured status) on the probability of a consumer choosing a particular yogurt product.</p>
+<p>How it achieves its purpose: a) The code starts by preprocessing the data using the preprocess_data function. This function creates dummy variables for the yogurt products and adds a ‘price’ column and a ‘featured’ column to the feature matrix. b) The calculate_utilities function calculates the utilities (a measure of preference or satisfaction) for each yogurt product based on the feature matrix and the model parameters. c) The loglik function calculates the log-likelihood, which is a measure of how well the model fits the data. This function uses the utilities calculated in the previous step to compute the choice probabilities and then computes the log-likelihood based on the observed choices in the data. d) The code initializes the model parameters with some starting values and then uses the minimize function from the scipy.optimize module to find the parameter values that maximize the log-likelihood (i.e., provide the best fit to the data). e) Finally, the code prints out the estimated parameter values (Maximum Likelihood Estimates) for the multinomial logit model.</p>
+<p>Important logic flows and data transformations: a) The preprocess_data function creates dummy variables for the yogurt products, which allows the model to account for the different product types. b) The calculate_utilities function computes the utilities by taking a linear combination of the feature matrix and the model parameters. c) The loglik function calculates the choice probabilities using the utilities and the exponential function, and then computes the log-likelihood based on the observed choices in the data. d) The minimize function from scipy.optimize is used to find the parameter values that maximize the log-likelihood, which is a common optimization problem in statistical modeling.</p>
+<div id="b2163138" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Tuple</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> preprocess_data(data: pd.DataFrame) <span class="op">-&gt;</span> Tuple[pd.DataFrame, pd.DataFrame]:</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Preprocess the data by creating dummy variables and feature columns.</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">        data (pandas.DataFrame): The input data frame.</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">        Tuple[pandas.DataFrame, pandas.DataFrame]: The preprocessed feature matrix and the original data frame.</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create dummy variables for products</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    feature_matrix <span class="op">=</span> pd.get_dummies(data[[<span class="st">'yogurt1'</span>, <span class="st">'yogurt2'</span>, <span class="st">'yogurt3'</span>]], drop_first<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Feature Matrix:</span><span class="ch">\n</span><span class="st">"</span>, feature_matrix)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add price column</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    feature_matrix[<span class="st">'price'</span>] <span class="op">=</span> data[<span class="st">'price'</span>]</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create a featured column based on the price column</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    feature_matrix[<span class="st">'featured'</span>] <span class="op">=</span> data[<span class="st">'price'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="dv">1</span> <span class="cf">if</span> x <span class="kw">in</span> [<span class="dv">15</span>, <span class="dv">25</span>, <span class="dv">35</span>, <span class="dv">45</span>, <span class="dv">55</span>] <span class="cf">else</span> <span class="dv">0</span>)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> feature_matrix, data</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_utilities(params: np.ndarray, feature_matrix: pd.DataFrame) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculate the utilities based on the feature matrix and parameters.</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co">        params (numpy.ndarray): The parameter values (beta_1, beta_2, beta_3, beta_f, beta_p).</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co">        feature_matrix (pandas.DataFrame): The feature matrix.</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="co">        numpy.ndarray: The calculated utilities.</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    utilities <span class="op">=</span> np.dot(feature_matrix, params)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Utilities:</span><span class="ch">\n</span><span class="st">"</span>, utilities)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> utilities</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> loglik(params: np.ndarray, data: pd.DataFrame, feature_matrix: pd.DataFrame) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="co">    Log-likelihood function for the multinomial logit model.</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="co">        params (numpy.ndarray): The parameter values (beta_1, beta_2, beta_3, beta_f, beta_p).</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="co">        data (pandas.DataFrame): The original data frame.</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co">        feature_matrix (pandas.DataFrame): The feature matrix.</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="co">        float: The negative log-likelihood value.</span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the utilities</span></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    V <span class="op">=</span> calculate_utilities(params, feature_matrix)</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the choice probabilities</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>    exp_V <span class="op">=</span> np.exp(V)</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> exp_V.ndim <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>        sum_exp_V <span class="op">=</span> exp_V.<span class="bu">sum</span>(keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>        sum_exp_V <span class="op">=</span> exp_V.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>    P <span class="op">=</span> exp_V <span class="op">/</span> sum_exp_V</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Choice Probabilities:</span><span class="ch">\n</span><span class="st">"</span>, P)</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the log-likelihood</span></span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>    chosen_probs <span class="op">=</span> P[data[[<span class="st">'yogurt1'</span>, <span class="st">'yogurt2'</span>, <span class="st">'yogurt3'</span>]].values.argmax(axis<span class="op">=</span><span class="dv">1</span>)]</span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>    log_likelihood <span class="op">=</span> np.log(chosen_probs).<span class="bu">sum</span>()</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Log-likelihood:"</span>, <span class="op">-</span>log_likelihood)</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>log_likelihood</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Preprocess the data</span></span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>feature_matrix, yogurt_data_long <span class="op">=</span> preprocess_data(yogurt_data_long)</span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial parameter values</span></span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>initial_params <span class="op">=</span> np.array([<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="op">-</span><span class="fl">1.0</span>])</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Initial Parameters:"</span>, initial_params)</span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Optimize the log-likelihood function</span></span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> minimize(loglik, initial_params, args<span class="op">=</span>(yogurt_data_long, feature_matrix), method<span class="op">=</span><span class="st">'Nelder-Mead'</span>)</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the MLEs</span></span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Maximum Likelihood Estimates:"</span>)</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"beta_1 (Product 1 intercept):"</span>, result.x[<span class="dv">0</span>])</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"beta_2 (Product 2 intercept):"</span>, result.x[<span class="dv">1</span>])</span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"beta_3 (Product 3 intercept):"</span>, result.x[<span class="dv">2</span>])</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"beta_f (Featured coefficient):"</span>, result.x[<span class="dv">3</span>])</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"beta_p (Price coefficient):"</span>, result.x[<span class="dv">4</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Feature Matrix:
+        yogurt1  yogurt2  yogurt3
+0            1        0        0
+1            1        0        0
+2            1        0        0
+3            1        0        0
+4            1        0        0
+...        ...      ...      ...
+27883        0        0        0
+27884        0        0        0
+27885        0        0        0
+27886        0        0        0
+27887        0        0        0
+
+[27888 rows x 3 columns]
+
+Initial Parameters: [ 0.5  0.5  0.5  0.1 -1. ]
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [ nan  nan  nan ... 0.42 0.42 0.42]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [  nan   nan   nan ... 0.408 0.408 0.408]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [  nan   nan   nan ... 0.402 0.402 0.402]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [ nan  nan  nan ... 0.41 0.41 0.41]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [  nan   nan   nan ... 0.404 0.404 0.404]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [  nan   nan   nan ... 0.401 0.401 0.401]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [  nan   nan   nan ... 0.405 0.405 0.405]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [  nan   nan   nan ... 0.402 0.402 0.402]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [   nan    nan    nan ... 0.4005 0.4005 0.4005]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [   nan    nan    nan ... 0.4025 0.4025 0.4025]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [  nan   nan   nan ... 0.401 0.401 0.401]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [    nan     nan     nan ... 0.40025 0.40025 0.40025]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [    nan     nan     nan ... 0.40125 0.40125 0.40125]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [   nan    nan    nan ... 0.4005 0.4005 0.4005]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [     nan      nan      nan ... 0.400125 0.400125 0.400125]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [     nan      nan      nan ... 0.400625 0.400625 0.400625]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [    nan     nan     nan ... 0.40025 0.40025 0.40025]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [      nan       nan       nan ... 0.4000625 0.4000625 0.4000625]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [      nan       nan       nan ... 0.4003125 0.4003125 0.4003125]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [     nan      nan      nan ... 0.400125 0.400125 0.400125]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40003125 0.40003125 0.40003125]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40015625 0.40015625 0.40015625]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [      nan       nan       nan ... 0.4000625 0.4000625 0.4000625]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40001562 0.40001562 0.40001562]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40007813 0.40007813 0.40007813]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40003125 0.40003125 0.40003125]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000781 0.40000781 0.40000781]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40003906 0.40003906 0.40003906]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40001562 0.40001562 0.40001562]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000391 0.40000391 0.40000391]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40001953 0.40001953 0.40001953]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000781 0.40000781 0.40000781]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000195 0.40000195 0.40000195]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000977 0.40000977 0.40000977]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000391 0.40000391 0.40000391]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000098 0.40000098 0.40000098]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000488 0.40000488 0.40000488]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000195 0.40000195 0.40000195]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000049 0.40000049 0.40000049]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000244 0.40000244 0.40000244]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000098 0.40000098 0.40000098]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000024 0.40000024 0.40000024]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000122 0.40000122 0.40000122]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000049 0.40000049 0.40000049]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000012 0.40000012 0.40000012]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000061 0.40000061 0.40000061]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000024 0.40000024 0.40000024]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000006 0.40000006 0.40000006]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000031 0.40000031 0.40000031]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000012 0.40000012 0.40000012]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000003 0.40000003 0.40000003]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000015 0.40000015 0.40000015]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000006 0.40000006 0.40000006]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000002 0.40000002 0.40000002]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000008 0.40000008 0.40000008]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000003 0.40000003 0.40000003]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000001 0.40000001 0.40000001]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000004 0.40000004 0.40000004]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000002 0.40000002 0.40000002]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000002 0.40000002 0.40000002]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000001 0.40000001 0.40000001]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [       nan        nan        nan ... 0.40000001 0.40000001 0.40000001]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+Choice Probabilities:
+ [nan nan nan ... nan nan nan]
+
+Log-likelihood: nan
+
+Maximum Likelihood Estimates:
+beta_1 (Product 1 intercept): 0.5
+beta_2 (Product 2 intercept): 0.5
+beta_3 (Product 3 intercept): 0.5
+beta_f (Featured coefficient): 0.1
+beta_p (Price coefficient): -1.0</code></pre>
+</div>
+</div>
+<p>Finding the maximum and minimum values from a set of three values (beta_1, beta_2, beta_3) to determine the most-preferred and least-preferred products. Calculating the difference between the most-preferred and least-preferred product utilities (utility_difference). Converting the utility_difference into a dollar value (dollar_value) by dividing it by the negative price coefficient (-beta_p). The code assumes that the input values (result.x array) are already calculated and available. It performs a series of simple arithmetic operations and comparisons to extract the relevant information and present the results in a human-readable format.</p>
+<div id="66006450" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming the MLEs are already calculated and stored in the result.x array</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the MLEs</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>beta_1 <span class="op">=</span> result.x[<span class="dv">0</span>]  <span class="co"># Product 1 intercept</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>beta_2 <span class="op">=</span> result.x[<span class="dv">1</span>]  <span class="co"># Product 2 intercept</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>beta_3 <span class="op">=</span> result.x[<span class="dv">2</span>]  <span class="co"># Product 3 intercept</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>beta_f <span class="op">=</span> result.x[<span class="dv">3</span>]  <span class="co"># Featured coefficient</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>beta_p <span class="op">=</span> result.x[<span class="dv">4</span>]  <span class="co"># Price coefficient</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Find the most-preferred and least-preferred yogurts</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>most_preferred_intercept <span class="op">=</span> <span class="bu">max</span>(beta_1, beta_2, beta_3)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>least_preferred_intercept <span class="op">=</span> <span class="bu">min</span>(beta_1, beta_2, beta_3)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the utility difference</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>utility_difference <span class="op">=</span> most_preferred_intercept <span class="op">-</span> least_preferred_intercept</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert utility difference to dollar value using the price coefficient</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>dollar_value <span class="op">=</span> utility_difference <span class="op">/</span> (<span class="op">-</span>beta_p)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the results</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Most-preferred yogurt intercept:"</span>, most_preferred_intercept)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Least-preferred yogurt intercept:"</span>, least_preferred_intercept)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Utility difference:"</span>, utility_difference)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Price coefficient (beta_p):"</span>, beta_p)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Dollar benefit between most-preferred and least-preferred yogurt: $</span><span class="sc">%.2f</span><span class="st"> per unit"</span> <span class="op">%</span> dollar_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Most-preferred yogurt intercept: 0.5
+Least-preferred yogurt intercept: 0.5
+Utility difference: 0.0
+Price coefficient (beta_p): -1.0
+Dollar benefit between most-preferred and least-preferred yogurt: $0.00 per unit</code></pre>
+</div>
+</div>
+<p>the current market shares of three different yogurt products based on the data available in the yogurt_data_long DataFrame.</p>
+<p>The code takes the yogurt_data_long DataFrame as input, which is assumed to contain columns named ‘yogurt1’, ‘yogurt2’, and ‘yogurt3’. These columns likely represent the sales or consumption data for the three yogurt products.</p>
+<p>The first line current_shares = yogurt_data_long[[‘yogurt1’, ‘yogurt2’, ‘yogurt3’]].mean() calculates the mean (average) value of each column (‘yogurt1’, ‘yogurt2’, and ‘yogurt3’) across all rows in the DataFrame. The resulting current_shares variable is a Pandas Series containing the average values for each yogurt product, representing their respective market shares.</p>
+<p>The subsequent lines print out the calculated market shares for each yogurt product. The print statements display the text “Current Market Shares:” followed by the market share value for each yogurt product, labeled as “Yogurt 1:”, “Yogurt 2:”, and “Yogurt 3:”.</p>
+<p>The output of this code will be the current market share values for the three yogurt products, displayed in a readable format on the console or output stream.</p>
+<p>The code achieves its purpose by leveraging the Pandas library’s functionality to calculate the mean (average) value of specific columns in a DataFrame. It assumes that the data in the ‘yogurt1’, ‘yogurt2’, and ‘yogurt3’ columns represents the sales or consumption data for the respective yogurt products, and that the average of these values can be interpreted as the market share for each product. The lambda function adds 0.1 to the price if the price is one of the values [10, 20, 30, 40, 50], which likely correspond to the prices of yogurt 1. It preprocesses the data with the new prices using the preprocess_data function, which is not shown in the code snippet. It calculates the utilities (V_new) of the three yogurt products with the new prices using the calculate_utilities function and the estimated coefficients (result.x) from the logit model. It calculates the choice probabilities (P_new) for each yogurt product using the utilities (V_new) and the logit formula: P = exp(V) / sum(exp(V)). It calculates the new market shares by taking the mean of the choice probabilities for each yogurt product. Finally, it prints the current and new market shares for the three yogurt products. The code involves data transformations, such as updating the prices in the DataFrame and calculating utilities and choice probabilities based on the logit model. The logic flow involves preprocessing the data, calculating utilities and choice probabilities, and then aggregating the choice probabilities to obtain the market shares.TT</p>
+<div id="bcd40996" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the current market shares</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>current_shares <span class="op">=</span> yogurt_data_long[[<span class="st">'yogurt1'</span>, <span class="st">'yogurt2'</span>, <span class="st">'yogurt3'</span>]].mean()</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Current Market Shares:"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Yogurt 1:"</span>, current_shares[<span class="st">'yogurt1'</span>])</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Yogurt 2:"</span>, current_shares[<span class="st">'yogurt2'</span>])</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Yogurt 3:"</span>, current_shares[<span class="st">'yogurt3'</span>])</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Increase the price of yogurt 1 by $0.10</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>yogurt_data_long[<span class="st">'price'</span>] <span class="op">=</span> yogurt_data_long[<span class="st">'price'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x <span class="op">+</span> <span class="fl">0.1</span> <span class="cf">if</span> x <span class="kw">in</span> [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>] <span class="cf">else</span> x)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Preprocess the data with the new prices</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>feature_matrix_new, _ <span class="op">=</span> preprocess_data(yogurt_data_long)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the utilities with the new prices</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>V_new <span class="op">=</span> calculate_utilities(result.x, feature_matrix_new)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the choice probabilities with the new prices</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>exp_V_new <span class="op">=</span> np.exp(V_new)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> exp_V_new.ndim <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    sum_exp_V_new <span class="op">=</span> exp_V_new.<span class="bu">sum</span>(keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    P_new <span class="op">=</span> exp_V_new <span class="op">/</span> sum_exp_V_new</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    sum_exp_V_new <span class="op">=</span> exp_V_new.<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>, keepdims<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    P_new <span class="op">=</span> exp_V_new <span class="op">/</span> sum_exp_V_new</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the new market shares</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> P_new.ndim <span class="op">==</span> <span class="dv">1</span>:</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    new_yogurt1_share <span class="op">=</span> P_new[<span class="dv">0</span>]</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    new_yogurt2_share <span class="op">=</span> P_new[<span class="dv">1</span>]</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    new_yogurt3_share <span class="op">=</span> P_new[<span class="dv">2</span>]</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    new_yogurt1_share <span class="op">=</span> P_new[:, <span class="dv">0</span>].mean()</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    new_yogurt2_share <span class="op">=</span> P_new[:, <span class="dv">1</span>].mean()</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    new_yogurt3_share <span class="op">=</span> P_new[:, <span class="dv">2</span>].mean()</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">New Market Shares (after increasing the price of yogurt 1 by $0.10):"</span>)</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Yogurt 1:"</span>, new_yogurt1_share)</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Yogurt 2:"</span>, new_yogurt2_share)</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Yogurt 3:"</span>, new_yogurt3_share)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Current Market Shares:
+Yogurt 1: 0.08333333333333333
+Yogurt 2: 0.08333333333333333
+Yogurt 3: 0.08333333333333333
+
+Feature Matrix:
+        yogurt1  yogurt2  yogurt3
+0            1        0        0
+1            1        0        0
+2            1        0        0
+3            1        0        0
+4            1        0        0
+...        ...      ...      ...
+27883        0        0        0
+27884        0        0        0
+27885        0        0        0
+27886        0        0        0
+27887        0        0        0
+
+[27888 rows x 3 columns]
+
+Utilities:
+ [nan nan nan ... 0.4 0.4 0.4]
+
+New Market Shares (after increasing the price of yogurt 1 by $0.10):
+Yogurt 1: nan
+Yogurt 2: nan
+Yogurt 3: nan</code></pre>
+</div>
+</div>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
