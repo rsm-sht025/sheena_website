@@ -2,7 +2,29 @@
 title: "Project 3"
 editor: visual
 ---
+The analysis aims to estimate consumer preferences for different yogurt products based on their features, such as whether they are featured or not, and their prices. It does this by fitting a Multi-nomial Logit (MNL) Model to the data.
 
+The data used for the analysis is a dataset called 'yogurt_data.csv', which contains information about different yogurt products, including their features (whether they are featured or not) and prices, as well as the choices made by consumers.
+
+The first step in the analysis is to load the dataset into a pandas DataFrame and reshape the data from a wide format (where each product is a separate column) to a long format (where each row represents a consumer's choice for a particular product). This is done using the pandas.melt function.
+
+Next, the code defines a log-likelihood function for the MNL Model, which calculates the probability of a consumer choosing each product based on the product's features and the model parameters. The model parameters represent the impact of each feature (e.g., being featured, price) on the utility or preference for a particular yogurt product.
+
+The code then provides an initial guess for the model parameters and uses the scipy.optimize.minimize function to find the set of parameters that maximizes the log-likelihood function (or equivalently, minimizes the negative log-likelihood). This is an iterative process where the model parameters are adjusted until the optimal set is found.
+
+The estimated parameters are then used to calculate the dollar-per-util conversion factor and the dollar benefit between the most-preferred and least-preferred yogurt products. The dollar-per-util conversion factor is calculated by taking the inverse of the estimated price coefficient, and the dollar benefit is calculated by multiplying the difference in utility between the most-preferred and least-preferred products by the dollar-per-util conversion factor.
+
+
+
+The analysis also includes a market share simulation, where the impact of a price change on the market shares of the yogurt products is simulated. This is done by adjusting the price of one product and recalculating the choice probabilities and market shares using the estimated model parameters.
+
+The results of the analysis show that Product 2 has the highest intercept (β2), indicating it is the most preferred yogurt when other factors are equal. Product 3 has the lowest intercept (β3), making it the least preferred under the same conditions. The estimated price coefficient (βₚ = -0.9996) indicates that consumers are sensitive to price changes, with higher prices leading to lower utility or preference for a product.
+
+The dollar-per-util conversion factor is calculated to be approximately 1.0004, and the monetary benefit between the most-preferred yogurt (Product 2) and the least preferred yogurt (Product 3) is approximately $0.37 per ounce. This amount represents the additional value consumers place on Product 2 over Product 3 purely based on brand preference.
+
+The market share simulation initially showed no change in market shares when increasing the price of yogurt 1 by $0.10 per ounce, suggesting potential issues in the simulation logic or the dominance of the high intercepts over the price effect. However, after correcting the approach, the simulation was able to capture the expected decrease in market share for the product with the price increase.
+
+Overall, the analysis provides insights into consumer preferences for different yogurt products based on their features and prices, and demonstrates the use of the Multi-nomial Logit (MNL) Model and optimization techniques to estimate these preferences from data.
 ### 1. Estimating Yogurt Preferences
 
 ### Likelihood for the Multi-nomial Logit (MNL) Model
@@ -268,8 +290,38 @@ initial_market_shares, adjusted_market_shares_corrected
 ```
 
 
-### 2. Estimating Minivan Preferences
 
+### 2. Estimating Minivan Preferences
+###Conjoint analysis is a statistical technique used in marketing research to understand how consumers value different attributes of a product or service. It allows researchers to quantify the relative importance that consumers place on each attribute and the utilities or part-worths they associate with the different levels of those attributes.The name "conjoint" comes from considering two or more attributes jointly in the analysis. Consumers are presented with different hypothetical product profiles that combine different levels of the attributes being studied. By analyzing their preferences or choices among these profiles, the utilities or part-worths for each attribute level can be estimated.Some key aspects of conjoint analysis:Attributes and Levels: The first step is to identify the key attributes of the product (e.g. price, brand, features) and specify the levels for each attribute to be studied.Experimental Design: An experimental design is created that combines the levels into hypothetical product profiles to be evaluated by respondents. Statistical designs like fractional factorial are used to reduce the number of profiles while still capturing the main effects.Data Collection: Survey respondents are shown sets of hypothetical product profiles and asked to rate, rank or choose among them based on their preferences.Modeling: The preference data is analyzed using statistical models like multinomial logit to decompose the respondents' overall evaluations into part-worth utilities for each attribute level.Relative Importance: The part-worth utilities are used to calculate the relative importance of each attribute in determining overall preference.
+Conjoint is considered a decompositional method because it estimates how respondents arrive at an overall judgment (the dependent variable) based on the utilities for each attribute (the independent variables).Some key advantages of conjoint include:Quantifies tradeoffs between attributes Measures preferences for attribute levels, not just attributes Simulates realistic purchase environments with multi-attribute decisions.Conjoint is widely used across many industries for product design, pricing research, market segmentation, and optimizing product features and marketing mixes based on customer preferences.The minivan case illustrated how conjoint can be applied to understand consumer tradeoffs between attributes like price, cargo space, seating and engine type when choosing vehicles
+###The purpose of the code is to analyze a dataset of minivan preferences and build a model that can predict the likelihood of a respondent choosing a particular minivan configuration based on its attributes, such as the number of seats, cargo space, engine type, and price.The input to the code is a CSV file named 'rintro-chapter13conjoint.csv', which contains data about different minivan configurations and respondents' choices among these configurations.The output of the code is a statistical model that estimates the utility or preference for each minivan attribute, as well as the predicted probabilities of choosing different minivan configurations based on their attributes.To achieve its purpose, the code follows these steps:a-It loads the dataset from the CSV file using the pandas library.b-It performs some exploratory data analysis to understand the structure of the dataset, such as the number of respondents, the number of choice tasks each respondent completed, and the number of alternatives presented in each choice task.c- It uses the statsmodels library to build a multinomial logistic regression model, which relates the choice of a minivan to its attributes (number of seats, cargo space, engine type, and price).d-The model estimates the utility or preference for each attribute level (e.g., 7 seats vs. 6 seats, gas engine vs. hybrid engine, etc.) based on the respondents' choices.e- The code then demonstrates how to use the estimated model coefficients to calculate the dollar value associated with a particular attribute, such as the benefit of additional cargo space.Finally, the code sets up a new dataset with hypothetical minivan configurations and uses the estimated model to predict the probability of each configuration being chosen.
+The key data transformations and logic flows in the code include:
+ Converting categorical variables (e.g., engine type) into dummy variables using pandas' get_dummies() function, as required by the regression model.Calculating the total number of respondents and the number of choice tasks per respondent using groupby() and nunique() operations.Estimating the multinomial logistic regression model using the statsmodels library, which involves maximizing the likelihood function to find the best-fitting coefficients for each attribute. Interpreting the model coefficients to understand the relative importance and direction of preference for each attribute.Calculating the dollar value associated with a particular attribute by dividing the utility difference by the negative of the price coefficient and multiplying by 1000.Setting up a new dataset with hypothetical minivan configurations and using the estimated model to predict the probability of each configuration being chosen.
+The code provides a step-by-step approach to analyzing and modeling consumer preferences for product configurations, which can be useful in various marketing and product development applications.The analysis aimed to estimate consumer preferences for different minivan configurations based on attributes like number of seats, cargo space, engine type, and price. The data came from a survey where respondents made choices between different minivan options.
+Key analytics performed included:
+Data Exploration
+Calculated number of respondents (200) and choice tasks per respondent (15)Checked number of alternatives shown in each choice task (3)
+Model Building Built a multinomial logistic regression model using statsmodels library
+Modeled the choice of minivan based on attributes like seats, cargo, engine, price
+Estimated utility coefficients for each attribute level
+Model Interpretation
+Gas engines strongly preferred over electric (coef 1.43)
+More cargo space increases utility (3ft cargo coef 0.44)
+More seats reduces utility (7 seat coef -0.52, 8 seat coef -0.29)
+Higher price decreases utility (price coef -0.16)Valuation Analysis
+Calculated price sensitivity (-$6,284 per utility)
+Estimated $2,756 added value for 3ft vs 2ft cargo space
+Outcomes Summary-The model quantified the relative importance of different minivan attributes to consumers:
+Engine type was most important, with gas engines strongly preferred
+Cargo space was next, with more space increasing desirability
+Number of seats had a negative effect, with fewer seats preferred
+Price sensitivity was high, with higher prices decreasing utility
+This allows minivan manufacturers to optimize designs and pricing based on understanding which attributes drive consumer preferences and by how much.
+Specific outcomes include:Gas and hybrid engines should be prioritized over electric for minivans
+Increasing cargo space from 2ft to 3ft can justify a $2,756 higher price
+6 seat configurations are likely to be most popular
+Pricing should be kept low due to high price sensitivity
+The analysis provides data-driven guidance for developing and marketing new minivan models aligned with consumer preferences and willingness-to-pay for different attributes.
 ```{python}
 import pandas as pd
 
