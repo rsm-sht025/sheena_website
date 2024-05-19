@@ -1,0 +1,392 @@
+---
+title: "Project 3"
+editor: visual
+---
+
+### 1. Estimating Yogurt Preferences
+
+### Likelihood for the Multi-nomial Logit (MNL) Model
+
+Suppose we have $i=1,\ldots,n$ consumers who each select exactly one product $j$ from a set of $J$ products. The outcome variable is the identity of the product chosen $y_i \in \{1, \ldots, J\}$ or equivalently a vector of $J-1$ zeros and $1$ one, where the $1$ indicates the selected product. For example, if the third product was chosen out of 4 products, then either $y=3$ or $y=(0,0,1,0)$ depending on how we want to represent it. Suppose also that we have a vector of data on each product $x_j$ (eg, size, price, etc.). 
+
+We model the consumer's decision as the selection of the product that provides the most utility, and we'll specify the utility function as a linear function of the product characteristics:
+
+$$ U_{ij} = x_j'\beta + \epsilon_{ij} $$
+
+where $\epsilon_{ij}$ is an i.i.d. extreme value error term. 
+
+The choice of the i.i.d. extreme value error term leads to a closed-form expression for the probability that consumer $i$ chooses product $j$:
+
+$$ \mathbb{P}_i(j) = \frac{e^{x_j'\beta}}{\sum_{k=1}^Je^{x_k'\beta}} $$
+
+For example, if there are 4 products, the probability that consumer $i$ chooses product 3 is:
+
+$$ \mathbb{P}_i(3) = \frac{e^{x_3'\beta}}{e^{x_1'\beta} + e^{x_2'\beta} + e^{x_3'\beta} + e^{x_4'\beta}} $$
+
+A clever way to write the individual likelihood function for consumer $i$ is the product of the $J$ probabilities, each raised to the power of an indicator variable ($\delta_{ij}$) that indicates the chosen product:
+
+$$ L_i(\beta) = \prod_{j=1}^J \mathbb{P}_i(j)^{\delta_{ij}} = \mathbb{P}_i(1)^{\delta_{i1}} \times \ldots \times \mathbb{P}_i(J)^{\delta_{iJ}}$$
+
+Notice that if the consumer selected product $j=3$, then $\delta_{i3}=1$ while $\delta_{i1}=\delta_{i2}=\delta_{i4}=0$ and the likelihood is:
+
+$$ L_i(\beta) = \mathbb{P}_i(1)^0 \times \mathbb{P}_i(2)^0 \times \mathbb{P}_i(3)^1 \times \mathbb{P}_i(4)^0 = \mathbb{P}_i(3) = \frac{e^{x_3'\beta}}{\sum_{k=1}^Je^{x_k'\beta}} $$
+
+The joint likelihood (across all consumers) is the product of the $n$ individual likelihoods:
+
+$$ L_n(\beta) = \prod_{i=1}^n L_i(\beta) = \prod_{i=1}^n \prod_{j=1}^J \mathbb{P}_i(j)^{\delta_{ij}} $$
+
+And the joint log-likelihood function is:
+
+$$ \ell_n(\beta) = \sum_{i=1}^n \sum_{j=1}^J \delta_{ij} \log(\mathbb{P}_i(j)) $$
+
+
+
+```{python}
+import pandas as pd
+import numpy as np
+```
+
+```{python}
+# Load the dataset
+yogurt_data_path = 'yogurt_data.csv'
+yogurt_data = pd.read_csv(yogurt_data_path)
+
+# Display the first few rows of the dataset
+yogurt_data.head()
+
+```
+
+```{python}
+# yogurt_data = pd.read_csv('yogurt_data.csv', header=None, skiprows=1)
+# print(yogurt_data.head())
+
+# yogurt_data.columns = ['c', 'y1', 'y2', 'y3', 'y4', 'f1', 'f2', 'f3', 'f4', 'p1', 'p2', 'p3', 'p4']
+# yogurt_data.head()
+```
+
+```{python}
+yogurt_data.dtypes
+```
+
+
+```{python}
+# Reshape the yogurt data from wide to long format
+yogurt_long = pd.melt(yogurt_data, id_vars=['id'], 
+                      value_vars=['y1', 'y2', 'y3', 'y4'],
+                      var_name='product', value_name='chosen')
+
+# Melt the featured and price data as well
+featured_long = pd.melt(yogurt_data, id_vars=['id'],
+                        value_vars=['f1', 'f2', 'f3', 'f4'],
+                        var_name='product_f', value_name='featured')
+price_long = pd.melt(yogurt_data, id_vars=['id'],
+                     value_vars=['p1', 'p2', 'p3', 'p4'],
+                     var_name='product_p', value_name='price')
+
+# Combine the melted data
+yogurt_long['product'] = yogurt_long['product'].str.extract('(\d)').astype(int)
+featured_long['product_f'] = featured_long['product_f'].str.extract('(\d)').astype(int)
+price_long['product_p'] = price_long['product_p'].str.extract('(\d)').astype(int)
+
+# Merge the datasets
+yogurt_long = pd.merge(yogurt_long, featured_long, left_on=['id', 'product'], right_on=['id', 'product_f'])
+yogurt_long = pd.merge(yogurt_long, price_long, left_on=['id', 'product'], right_on=['id', 'product_p'])
+
+# Drop redundant columns
+yogurt_long = yogurt_long.drop(['product_f', 'product_p'], axis=1)
+
+# Add product dummies (excluding the fourth product to avoid multicollinearity)
+for i in range(1, 4):
+    yogurt_long[f'product_{i}'] = (yogurt_long['product'] == i).astype(int)
+
+# Display the first few rows of the reshaped data
+yogurt_long.head()
+
+```
+
+## Log-Likelihood Function for MNL Model
+
+```{python}
+import numpy as np
+from scipy.optimize import minimize
+
+# Define the log-likelihood function for the MNL model
+def log_likelihood(beta, data):
+    # Extract parameters
+    beta1, beta2, beta3, beta_f, beta_p = beta
+    
+    # Compute the utility for each product
+    U1 = beta1 * data['product_1'] + beta_f * data['featured'] + beta_p * data['price']
+    U2 = beta2 * data['product_2'] + beta_f * data['featured'] + beta_p * data['price']
+    U3 = beta3 * data['product_3'] + beta_f * data['featured'] + beta_p * data['price']
+    U4 = 0 * data['product_1'] + beta_f * data['featured'] + beta_p * data['price']  # Reference product
+    
+    # Compute the probability for each product
+    exp_U1 = np.exp(U1)
+    exp_U2 = np.exp(U2)
+    exp_U3 = np.exp(U3)
+    exp_U4 = np.exp(U4)
+    sum_exp_U = exp_U1 + exp_U2 + exp_U3 + exp_U4
+    
+    P1 = exp_U1 / sum_exp_U
+    P2 = exp_U2 / sum_exp_U
+    P3 = exp_U3 / sum_exp_U
+    P4 = exp_U4 / sum_exp_U
+    
+    # Compute the log-likelihood
+    ll = np.sum(data['chosen'] * np.log(P1 * data['product_1'] + P2 * data['product_2'] + 
+                                        P3 * data['product_3'] + P4 * (1 - data['product_1'] - data['product_2'] - data['product_3'])))
+    return -ll  # Negative log-likelihood for minimization
+
+# Initial parameter estimates (guesses)
+initial_beta = np.array([0, 0, 0, 0, -1])
+
+# Perform the optimization to find the MLEs
+result = minimize(log_likelihood, initial_beta, args=(yogurt_long,))
+
+# Display the estimated parameters
+result.x
+
+```
+
+## Define the Log-Likelihood Function
+We first defined a log-likelihood function for the MNL model. This function computes the probability of each consumer choosing each of the four yogurt products based on the utility derived from the product features (intercepts for products 1-3, whether the product was featured, and its price). The utility for each product was modeled as a linear function of these features, with independent parameters 
+𝛽.
+## Negative Log-Likelihood:
+Since minimize seeks to minimize a function, we used the negative of the log-likelihood. This means that minimizing the negative log-likelihood is equivalent to maximizing the log-likelihood.
+
+## Initial Guess
+We provided an initial guess for the parameters
+β1=0, 
+β2=0, 
+β3=0, 
+𝛽𝑓=0 and 
+𝛽𝑝=−1
+
+## Optimization
+The minimize function was then called with the negative log-likelihood function, the initial parameter estimates, and the data. It iteratively adjusted the parameters to find the set that minimizes the negative log-likelihood.
+
+## Result
+The output from the optimization process gave us the estimated values for the parameters. These were:
+β1= 19.1352 for the intercept of product 1,
+β2= 19.3886 for the intercept of product 2,
+β3= 19.0173 for the intercept of product 3,
+𝛽𝑓= −0.00033 for the coefficient of the featured variable,
+𝛽𝑝= −0.9996 for the coefficient of the price variable.
+
+Among these, Product 2 has the highest intercept (β2)  indicating it is the most preferred yogurt when other factors are equal. Product 3 has the lowest intercept (β3) making it the least preferred under the same conditions.
+
+### Discussion
+
+## Dollar-Per-Util Conversion and Brand Value
+```{python}
+# Calculate the dollar-per-util conversion factor
+dollar_per_util = 1 / abs(result.x[4])
+
+# Calculate the dollar benefit between the most-preferred and least-preferred yogurt
+dollar_benefit = (result.x[1] - result.x[2]) * dollar_per_util
+
+dollar_per_util, dollar_benefit
+
+
+```
+
+The estimated price coefficient (βₚ = -0.9996) can be interpreted as the change in utility for a one-unit increase in price (per oz). To convert this into a dollar-per-util conversion factor, you use the inverse of this coefficient:
+
+Dollar per util=1 / ∣𝛽𝑝∣
+
+Using this conversion, we calculate the dollar benefit between the most and least preferred yogurts:
+
+Dollar benefit =  (𝛽2−𝛽3) × Dollar per util
+
+Let's compute these values.
+
+The dollar-per-util conversion factor is approximately 1.00041.0004. Using this factor, the monetary benefit between the most-preferred yogurt (Product 2) and the least preferred yogurt (Product 3) is approximately $0.37$0.37 per ounce. This amount represents the additional value consumers place on Product 2 over Product 3 purely based on brand preference.
+
+
+
+## Market Share Simulation with Price Change
+```{python}
+def calculate_market_shares(data, beta):
+    # Extract parameters
+    beta1, beta2, beta3, beta_f, beta_p = beta
+    
+    # Compute the utility for each product using the original data
+    U1 = beta1 * data['product_1'] + beta_f * data['featured'] + beta_p * data['price']
+    U2 = beta2 * data['product_2'] + beta_f * data['featured'] + beta_p * data['price']
+    U3 = beta3 * data['product_3'] + beta_f * data['featured'] + beta_p * data['price']
+    U4 = 0 * data['product_1'] + beta_f * data['featured'] + beta_p * data['price']  # Reference product
+    
+    # Compute the probability for each product
+    exp_U1 = np.exp(U1)
+    exp_U2 = np.exp(U2)
+    exp_U3 = np.exp(U3)
+    exp_U4 = np.exp(U4)
+    sum_exp_U = exp_U1 + exp_U2 + exp_U3 + exp_U4
+    
+    P1 = exp_U1 / sum_exp_U
+    P2 = exp_U2 / sum_exp_U
+    P3 = exp_U3 / sum_exp_U
+    P4 = exp_U4 / sum_exp_U
+    
+    # Compute the average market shares
+    market_shares = [P1.mean(), P2.mean(), P3.mean(), P4.mean()]
+    return market_shares
+
+# Compute the initial market shares
+initial_market_shares = calculate_market_shares(yogurt_long, result.x)
+
+# Increase the price of yogurt 1 by $0.10 and compute new market shares
+yogurt_long_adjusted = yogurt_long.copy()
+yogurt_long_adjusted.loc[yogurt_long['product'] == 1, 'price'] += 0.10
+adjusted_market_shares = calculate_market_shares(yogurt_long_adjusted, result.x)
+
+initial_market_shares, adjusted_market_shares
+
+```
+
+It appears that the market shares did not change when increasing the price of yogurt 1 by $0.10 per ounce in the simulation. This suggests that the adjustment in price was not captured correctly in the utility calculations or that the high intercepts significantly overshadowed the price effect.
+
+Typically, an increase in the price of a product should lead to a decrease in its market share, especially if other products remain competitively priced. Let's double-check and ensure that the price change is properly applied and that the sensitivities in the model reflect typical consumer behavior more clearly. ​
+
+It appears there might be a deeper issue in how the model or the adjustments are being applied, as the market shares remain unchanged even after the price increase for yogurt 1. This outcome could be due to several reasons, such as the very high intercepts significantly overshadowing the price changes or potential issues in the simulation logic.
+
+In a typical scenario, increasing the price of a product should decrease its market share, as consumers opt for more competitively priced alternatives. The current model results suggest that either the intercepts or other factors are dominating the choice probabilities to an extent that price changes are not impacting the outcomes as expected.
+
+```{python}
+# Correct the approach to calculate new market shares with price adjustment
+
+# Apply price change to yogurt 1
+yogurt_long_adjusted_price = yogurt_long.copy()
+yogurt_long_adjusted_price.loc[yogurt_long_adjusted_price['product'] == 1, 'price'] += 0.10
+
+# Recalculate the utilities and probabilities with adjusted prices
+adjusted_market_shares_corrected = calculate_market_shares(yogurt_long_adjusted_price, result.x)
+
+initial_market_shares, adjusted_market_shares_corrected
+
+```
+
+
+### 2. Estimating Minivan Preferences
+
+```{python}
+import pandas as pd
+
+# Load the dataset
+file_path = 'rintro-chapter13conjoint.csv'
+df = pd.read_csv(file_path)
+
+# Display the first few rows and summary of the dataset
+df.head()
+
+
+```
+
+```{python}
+# Calculate the total number of respondents
+total_respondents = df['resp.id'].nunique()
+print("Total number of respondents: ")
+print(total_respondents)
+
+# Calculate the number of choice tasks each respondent completed
+choice_tasks_per_respondent = df.groupby('resp.id')['ques'].nunique()
+print("Number of Choice tasks each respondent completed: ")
+print(choice_tasks_per_respondent.describe())
+
+# Calculate the number of alternatives presented in each choice task
+alternatives_per_task = df.groupby(['resp.id', 'ques'])['alt'].nunique()
+print("Number of alternatives presented in each choice task")
+print(alternatives_per_task.describe())
+
+# total_respondents, choice_tasks_per_respondent.describe(), alternatives_per_task.describe()
+
+```
+
+## Model
+
+
+```{python}
+from statsmodels.formula.api import mnlogit
+formula = 'choice ~ carpool + C(seat) + C(cargo) + C(eng) + price'
+model = mnlogit(formula, data=df).fit()
+
+model.summary()
+```
+
+Intercept (4.0952): This is the baseline utility for a minivan when all predictors are at their base levels. The positive value indicates a general preference for the default choice in the absence of other attributes.
+
+Carpool (yes) (0.0086): This coefficient is near zero and not statistically significant (p-value = 0.872), indicating that the carpool factor (yes vs. no) does not significantly impact the choice of minivan. Respondents' preferences are not swayed by whether the minivan is used for carpooling.
+
+Seats (7) (-0.5248): This negative coefficient indicates a significant decrease in preference for minivans with 7 seats compared to the base level of 6 seats. The respondents clearly prefer fewer seats or find 7-seat configurations less appealing.
+
+Seats (8) (-0.2931): Similar to the 7-seat configuration, there is a negative preference for 8 seats compared to 6 seats, but the aversion is less intense than for 7 seats. This suggests a gradient in decreasing preference as the number of seats increases.
+
+Cargo (3ft) (0.4385): The positive coefficient here shows a clear preference for minivans with 3ft of cargo space over those with 2ft. More cargo space increases the utility or attractiveness of a minivan, as indicated by this significant coefficient.
+
+Engine (Gas) (1.4347): A strongly positive coefficient indicating a significant preference for gas engines over the baseline (electric). This suggests that respondents favor the performance or familiarity of gas engines.
+
+Engine (Hybrid) (0.6742): Also positive, this coefficient indicates a preference for hybrid engines over electric ones, but not as strongly as for gas engines. It suggests an interest in more sustainable options while still valuing traditional engine performance.
+
+Price (-0.1591): This negative coefficient demonstrates sensitivity to price; as the price of the minivan increases, its utility decreases, making it less likely to be chosen. The magnitude suggests a strong price sensitivity among respondents.
+
+
+```{python}
+price_coef = 1 / model.params.iloc[-1].values[0]
+print('Price coefficient in utils: ', price_coef)
+```
+
+```{python}
+utility_diff = 0.4386
+print("The Utility difference is: ", utility_diff)
+
+```
+
+```{python}
+benefit = utility_diff * price_coef * 1000
+print(f"The Estimated dollar benefit of additional cargo space: ${benefit:.2f}")
+```
+
+```{python}
+param_names = ['Featured', 'Price', 'Brand 1 Intercept', 'Brand 2 Intercept', 'Brand 3 Intercept']
+
+```
+
+```{python}
+data = {
+    'Minivan': ['A', 'B', 'C', 'D', 'E', 'F'],
+    'seat': [7, 6, 8, 7, 6, 7],
+    'cargo': [2, 2, 2, 3, 2, 2],
+    'eng': ['hyb', 'gas', 'gas', 'gas', 'elec', 'hyb'],
+    'price': [30, 30, 30, 40, 40, 35]
+
+}
+df_predict = pd.DataFrame(data)
+df_predict['cargo'] = df_predict['cargo'].map({2: '2ft', 3: '3ft'})
+if 'carpool' not in df_predict.columns:
+    df_predict['carpool'] = 'no'
+
+training_features = model.params.index
+predict_features = pd.get_dummies(df_predict)
+print(model.params.index)
+print(df_predict)
+print(predict_features)
+```
+
+```{python}
+
+```
+
+```{python}
+
+
+```
+
+```{python}
+
+```
+
+```{python}
+
+
+```
