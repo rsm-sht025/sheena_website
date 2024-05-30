@@ -1,7 +1,66 @@
 ---
-title: "Homework 4"
+title: "Project 4"
 editor: visual
 ---
+Introduction
+
+In the context of the credit card industry, understanding the factors that influence customer satisfaction is crucial for companies to retain existing customers and attract new ones. This analysis aims to quantify the relationships between various perceptual factors and customer satisfaction levels, using a dataset containing information about credit card offerings and customer perceptions.
+
+Methodology
+
+The analysis employs a comprehensive approach, calculating and presenting different statistical measures to assess the influence and importance of each perceptual factor on customer satisfaction levels. The code reads a CSV file containing data related to customer perceptions and satisfaction levels, and separates the perceptual factors (features) and the satisfaction levels (target variable) into separate variables.
+
+The following statistical measures are calculated and presented in a DataFrame called 'results':
+
+Pearson Correlations: Measures the linear relationship between each perceptual factor and satisfaction levels.
+Polychoric Correlations: Simulates the correlations between binary variables using Pearson correlations as a proxy.
+Standardized Regression Coefficients: Indicates the change in satisfaction levels associated with a one-unit change in each perceptual factor, while holding other factors constant.
+Shapley Values: Estimates the average marginal contribution of each perceptual factor to the prediction of satisfaction levels, using a Random Forest model.
+Johnson's Epsilon: Assigns weights to each perceptual factor based on their contributions to the overall predictive power of the model.
+Mean Decrease in RF Gini Coefficient: Measures the importance of each perceptual factor in a Random Forest model by calculating the decrease in the Gini impurity criterion when that factor is used for splitting.
+The code also includes an example of implementing Lasso Regression with Cross-Validation as an alternative to the Linear Regression model, providing another perspective on the influence of each perceptual factor on customer satisfaction.
+
+Results and Discussion
+
+The results presented in the example DataFrame provide valuable insights into the relationships between various perceptual factors and customer satisfaction levels in the credit card industry. Some key observations can be made:
+
+The perceptual factors "Makes a difference in my life" and "Is offered by a brand I trust" have the highest Pearson Correlations, Standardized Regression Coefficients, Shapley Values, and Johnson's Epsilon values. This suggests that these factors have a significant influence on customer satisfaction levels.
+
+The factor "Provides outstanding customer service" also exhibits high values across multiple measures, indicating its importance in driving customer satisfaction.
+
+Factors such as "Helps build credit quickly," "Is different from other cards," and "Is used by a lot of people" generally have lower values across the different measures, suggesting a relatively lower impact on customer satisfaction levels.
+
+The Polychoric Correlations, simulating correlations between binary variables, show similar patterns to the Pearson Correlations, indicating that the linear relationships observed are consistent with the binary nature of the data.
+
+The Mean Decrease in RF Gini Coefficient provides an alternative perspective on feature importance, with some variations compared to the other measures.
+
+These results can guide credit card companies in prioritizing their efforts and resources to improve customer satisfaction. Factors with higher values across multiple measures should be given more attention, as they have a greater impact on customer satisfaction levels. Additionally, the analysis can help identify areas for improvement and inform product development, marketing strategies, and customer service initiatives.
+
+It is important to note that while this analysis provides valuable insights, it should be complemented with domain knowledge and further investigation to fully understand the underlying drivers of customer satisfaction in the credit card industry.
+
+The code starts by importing the necessary libraries (pandas, numpy, scikit-learn, and scipy.stats) and loading a CSV file named 
+'data_for_drivers_analysis.csv' into a pandas DataFrame called 'data'. It then extracts the feature columns ('trust', 'build', 'differs', 'easy', 'appealing', 'rewarding', 'popular', 'service', 'impact') and the target column ('satisfaction') from the data.
+
+Next, it calculates the Pearson Correlations between each feature and the target variable, and stores them in a dictionary called 'pearson_corr'. It then standardizes the features using StandardScaler from scikit-learn and performs a Linear Regression to obtain the standardized regression coefficients.
+
+The initial results (Pearson Correlations and Standardized Regression Coefficients) are stored in a DataFrame called 'results'.
+
+After that, the code trains a Random Forest Regression model on the data and uses its feature importances as a proxy for Shapley Values. It calculates Johnson's Relative Weights using the Random Forest feature importances. The Polychoric Correlations are simulated using the Pearson Correlations as a proxy, assuming binary variables. The Usefulness is interpreted as the standardized regression coefficients.
+
+All the calculated measures (Pearson Correlations, Standardized Regression Coefficients, Polychoric Correlations, Shapley Values, Johnson's Epsilon, and Mean Decrease in RF Gini Coefficient) are added to the 'results' DataFrame and displayed.
+
+The final output is a DataFrame called 'results' with the following columns:
+
+Perception: The feature names ('trust', 'build', 'differs', 'easy', 'appealing', 'rewarding', 'popular', 'service', 'impact')
+Pearson Correlations: The Pearson correlation coefficients between each feature and the target variable, expressed as percentages.
+Standardized Regression Coefficients: The standardized regression coefficients from the Linear Regression model, expressed as percentages.
+Polychoric Correlations: The simulated Polychoric Correlations using Pearson Correlations as a proxy, expressed as percentages.
+Shapley Values: The feature importances from the Random Forest model, used as a proxy for Shapley Values, expressed as percentages.
+Johnson's Epsilon: Johnson's Relative Weights calculated using the Random Forest feature importances, expressed as percentages.
+Mean Decrease in RF Gini Coefficient: The mean decrease in the Gini impurity criterion from the Random Forest model, expressed as percentages.
+The code also includes an example of implementing Lasso Regression with Cross-Validation as an alternative to the Linear Regression model. It standardizes the features, creates a LassoCV object with 5-fold cross-validation, and fits the model to the data. The resulting Lasso Regression coefficients are displayed in a separate DataFrame called 'lasso_results'.
+
+Overall, the code aims to provide a comprehensive analysis of the relationships between various perceptual factors and satisfaction levels, by calculating and presenting different statistical measures that quantify the influence and importance of each factor. This analysis can help identify the most significant factors affecting satisfaction levels and guide decision-making processes related to improving driver satisfaction.
 
 ```{python}
 import pandas as pd
