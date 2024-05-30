@@ -2,56 +2,288 @@
 title: "Project 1"
 editor: visual
 ---
+Executive Summary
+
+This analysis aimed to evaluate the effectiveness of different fundraising strategies, specifically the use of matching grants, on donation amounts and rates. The dataset analyzed contained information on charitable donations, including the treatment (fundraising strategy) applied, donation amounts, donor demographics, and other relevant variables.
+
+Key Findings:
+
+Summary Statistics:
+
+The Matching Grant treatment group had a higher average donation amount ($0.97) compared to the Control group ($0.81).
+The donation rate was also higher for the Matching Grant group (2.20%) than the Control group (1.79%).
+Visualizations:
+
+The distribution of donation amounts showed a long-tailed pattern, with most donations being relatively small and a few larger donations.
+Box plots revealed that the Matching Grant group tended to have a wider range of donation amounts compared to the Control group, both overall and when broken down by gender.
+T-test:
+
+The t-test comparing the mean donation amounts between the Control and Matching Grant groups yielded a p-value of 0.055, which is slightly above the conventional significance threshold of 0.05.
+While not statistically significant at the 5% level, the p-value suggests a potential trend that warrants further investigation.
+Regression Analysis:
+
+The linear regression model indicated that the Matching Grant treatment had a statistically significant positive effect on donation amounts (coefficient = 0.173, p-value = 0.045), even after controlling for other demographic variables.
+However, the effect size was relatively small.
+Gender and most other demographic variables did not show statistically significant effects on donation amounts.
+
+Conclusions and Recommendations:
+
+Based on the analysis, the following conclusions can be drawn:
+
+The Matching Grant treatment appears to be slightly more effective than the standard Control letter in increasing donation amounts, as evidenced by the higher average donation and the positive regression coefficient.
+
+While the t-test did not show a statistically significant difference in mean donation amounts between the Control and Matching Grant groups at the 5% level, the p-value was close to the threshold, suggesting a potential trend.
+
+Gender and other demographic variables did not have a significant impact on donation amounts in this analysis.
+
+Recommendations:
+
+Further Research: Given the close p-value in the t-test, it may be beneficial to conduct further research with a larger sample size or additional data to confirm the findings and better understand the impact of matching grants on donation amounts.
+
+Fundraising Strategy: Non-profit organizations could consider incorporating matching grants as part of their fundraising strategy, as the analysis suggests a small but positive impact on donations. However, the effect size should be taken into account when evaluating the cost-effectiveness of implementing such a strategy.
+
+Donor Segmentation: While demographic variables did not significantly influence donation amounts in this analysis, further exploration of donor segmentation and tailored fundraising approaches could be valuable in optimizing fundraising efforts.
+
+Continuous Monitoring and Optimization: Ongoing monitoring and analysis of fundraising campaign performance, coupled with data-driven optimization, can help organizations refine their strategies and maximize the impact of their fundraising efforts.
+
+Overall, this analysis provides insights into the effectiveness of matching grants as a fundraising strategy and highlights the importance of data-driven decision-making in the non-profit sector.
+The purpose of the code is to analyze the impact of different fundraising strategies (treatments) on donation amounts and rates. It calculates summary statistics, visualizes the data, and performs statistical tests to compare the effectiveness of different treatments.
+
+The code takes a dataset as input, which is read from a Stata file (karlan_list_2007 (1).dta). The dataset likely contains information about donations, treatments, and demographic variables.
+
+The code produces several outputs, including:
+
+Summary statistics (average donation, donation rate, and count) for each treatment group
+Visualizations (bar plots and box plots) showing the distribution of donation amounts across different treatments and demographic groups
+Results of a t-test comparing the mean donation amounts between the Control and Matching Grant groups
+Results of a linear regression analysis to identify the effects of different variables (treatment, gender, demographics) on donation amounts
+The code achieves its purpose through the following steps:
+a) It imports the necessary Python libraries (pandas, matplotlib, scipy.stats, and statsmodels.api).
+b) It reads the dataset from the Stata file using pandas.
+c) It calculates summary statistics (average donation, donation rate, and count) for each treatment group using pandas' groupby and aggregate functions.
+d) It creates visualizations (bar plots and box plots) to explore the distribution of donation amounts across different treatments and demographic groups using matplotlib.
+e) It performs a t-test to compare the mean donation amounts between the Control and Matching Grant groups using scipy.stats.ttest_ind.
+f) It prepares the data for regression analysis by selecting relevant columns and dropping rows with missing values.
+g) It defines the independent variables (treatment, gender, demographics) and the dependent variable (donation amount).
+h) It fits a linear regression model using statsmodels.OLS and interprets the regression results.
+
+Important logic flows and data transformations:
+
+Grouping the data by treatment and aggregating to calculate summary statistics
+Filtering the data to include only donors for visualizing donation amount distributions
+Subsetting the data and dropping missing values for regression analysis
+Adding a constant term to the independent variables for the regression model
+The code follows a typical data analysis workflow, starting with data loading, followed by exploratory data analysis (summary statistics and visualizations), and then moving on to statistical testing (t-test) and regression analysis to identify the effects of different variables on the outcome of interest (donation amount).
+
 ```{python}
+import pandas as pd
+# Read in the data
+data = pd.read_stata('/home/jovyan/Desktop/new web 111/sheena_website 2 2/sheena_website 2/projects/project1/karlan_list_2007 (1).dta')
+data.head()
+```
+
+```{python}
+data.columns
+```
+
+```{python}
+# Calculate summary statistics for donation amounts and donation rates for each treatment group
+summary_stats = data.groupby('treatment').agg(
+    avg_donation=('amount', 'mean'),
+    donation_rate=('gave', 'mean'),
+    count=('treatment', 'count')
+).reset_index()
+
+summary_stats
 
 ```
 
+The summary statistics by treatment group are as follows:
+
+Control Group (Standard Letter):
+Average Donation: $0.81
+Donation Rate: 1.79%
 
 
-The experiment aims to investigate the effect of matching donations on charitable giving. It randomly assigns individuals to treatment (matching) and control (no matching) groups and varies the match ratio and threshold to assess their impact on donation behavior.
+Matching Grant Letter:
+Average Donation: $0.97
+Donation Rate: 2.20%
 
-The dataset contains information about the treatment assignment, match ratio, threshold, suggested donation amounts, and various demographic and historical giving variables for each individual.
+```{python}
+import matplotlib.pyplot as plt
 
-The t-test and linear regression results show no significant difference in months since last donation between the treatment and control groups, indicating a balanced randomization. Table 1 in the paper is included to demonstrate the success of the randomization process.
+# Descriptive statistics for key variables
+descriptive_stats = data[['treatment', 'amount', 'female']].describe()
 
-The barplot visually compares the proportion of individuals who donated in the treatment and control groups.
+# Mean donation amount across different treatments
+mean_donations = data.groupby('treatment')['amount'].mean()
 
-The t-test and linear regression results indicate a statistically significant difference in the proportion of individuals who made a donation between the treatment and control groups. This suggests that matching donations positively influences the likelihood of making a charitable contribution.
+# Visualization of mean donation amounts by treatment
+plt.figure(figsize=(10, 6))
+mean_donations.plot(kind='bar')
+plt.title('Mean Donation Amount by Treatment')
+plt.xlabel('Treatment')
+plt.ylabel('Mean Donation Amount (USD)')
+plt.xticks(ticks=[0, 1, 2], labels=['Control', 'Matching Grant', 'Challenge Grant'], rotation=0)
+plt.grid(axis='y')
 
-The probit regression results confirm the findings from the linear regression, showing a significant positive effect of the treatment on the probability of making a donation.
 
-The t-test results suggest that all match rates (1:1, 2:1, and 3:1) significantly increase the likelihood of donating compared to the control group. However, there is no clear evidence that higher match rates (2:1 or 3:1) are more effective than the 1:1 match rate.
+plt.show()
 
-The regression with ratio dummies confirms that all match rates have a significant positive effect on the likelihood of donating. The coefficients for ratio2 and ratio3 are not statistically different from ratio1, suggesting no incremental benefit of higher match rates.
 
-The response rate differences between match ratios, calculated directly from the data and from the regression coefficients, are small and not statistically significant. This suggests that increasing the match ratio beyond 1:1 does not lead to a substantial increase in the likelihood of donating.
+```
 
-The t-test and linear regression results show a significant difference in the average donation amount between the treatment and control groups. However, this analysis includes both donors and non-donors, which may not provide a clear picture of the treatment effect on donation amount.
+```{python}
+# Retry plotting the distribution of donation amounts by treatment group
+import matplotlib.pyplot as plt
 
-The analysis for donors only reveals no significant difference in the average donation amount between the treatment and control groups. The treatment coefficient in the linear regression does not have a causal interpretation, as it is conditional on the decision to donate, which is itself affected by the treatment.
+# Filter out non-donors for the donation amount analysis
+donors = data[data['gave'] == 1]
 
-The histograms of donation amounts for donors in the treatment and control groups show similar distributions, with the average donation amounts (indicated by the red vertical lines) being close to each other.
+# Plot the distribution of donation amounts by treatment group
+plt.figure(figsize=(14, 7))
+plt.boxplot([donors[donors['treatment'] == 0]['amount'], 
+             donors[donors['treatment'] == 1]['amount'], 
+             donors[donors['treatment'] == 2]['amount']], 
+            labels=['Control', 'Matching Grant', 'Challenge Grant'])
 
-The plot demonstrates the Law of Large Numbers, showing that the cumulative average difference between the treatment and control groups converges to the true difference in means (0.022 - 0.018 = 0.004) as the number of draws increases.
+plt.title('Distribution of Donation Amounts by Treatment Group')
+plt.xlabel('Treatment Group')
+plt.ylabel('Donation Amount (USD)')
 
-The histograms illustrate the Central Limit Theorem, showing that as the sample size increases, the distribution of the average difference between the treatment and control groups becomes more normal and centered around the true difference in means (0.004). At smaller sample sizes, zero (the red vertical line) is closer to the middle of the distribution, while at larger sample sizes, zero moves towards the tail, indicating that the observed difference is less likely to be due to chance.
+plt.show()
 
-Summary:
-The analysis of the experiment can be broken down into several key components. First, the data is read into R/Python and described, with a balance test performed to ensure the treatment and control groups are not significantly different on key variables. Next, the effect of matched donations on the response rate of making a donation can be analyzed using bar plots, t-tests, linear regression, and probit regression. The effectiveness of different match rates can be assessed using t-tests and regression, with the response rate differences between match ratios calculated directly from the data and from regression coefficients. The effect of matched donations on the size of the charitable contribution can be analyzed using t-tests and linear regression, both for all individuals and for only those who made a donation. Histograms of donation amounts can be plotted for the treatment and control groups. 
+```
 
-Finally, simulation can be used to demonstrate the Law of Large Numbers and the Central Limit Theorem, with plots of the cumulative average difference and histograms of average differences at different sample sizes. The results of these analyses can provide insights into the effectiveness of matched donations and the impact of different match rates on charitable giving behavior.
+## Donation patterns
+```{python}
+# Plotting the distribution of donation amounts
+plt.figure(figsize=(12, 6))
+plt.hist(data['amount'], bins=50, edgecolor='k', alpha=0.7)
+plt.title('Distribution of Donation Amounts')
+plt.xlabel('Donation Amount (USD)')
+plt.ylabel('Frequency')
+plt.grid(axis='y')
+plt.show()
 
-The experiment conducted by Karlan and List (2007) provides valuable insights into the effects of matching donations on charitable giving behavior. By randomly assigning individuals to treatment and control groups and varying the match ratio and threshold, the researchers were able to isolate the impact of these factors on donation decisions.
+# Creating box plots to compare donation amounts across different treatment groups
+plt.figure(figsize=(12, 6))
+data.boxplot(column='amount', by='treatment', grid=False, showfliers=False)
+plt.title('Donation Amounts by Treatment Group')
+plt.suptitle('')
+plt.xlabel('Treatment Group')
+plt.ylabel('Donation Amount (USD)')
+plt.xticks(ticks=[1, 2], labels=['Control', 'Matching Grant'])
+plt.show()
 
-The analysis of the data reveals that the treatment, which involved offering matching donations, had a significant positive effect on the likelihood of making a charitable contribution. The t-test and linear regression results indicate a statistically significant difference in the proportion of individuals who made a donation between the treatment and control groups. This finding suggests that matching donations can be an effective strategy for encouraging people to give to charity.
+# Creating box plots to compare donation amounts by gender within each treatment group
+plt.figure(figsize=(12, 6))
+data.boxplot(column='amount', by=['treatment', 'female'], grid=False, showfliers=False)
+plt.title('Donation Amounts by Treatment and Gender')
+plt.suptitle('')
+plt.xlabel('Treatment and Gender')
+plt.ylabel('Donation Amount (USD)')
+plt.xticks(ticks=[1, 2, 3, 4], labels=['Control - Male', 'Control - Female', 'Matching Grant - Male', 'Matching Grant - Female'])
+plt.show()
 
-Further investigation into the effects of different match rates (1:1, 2:1, and 3:1) shows that all match rates significantly increase the likelihood of donating compared to the control group. However, the results do not provide clear evidence that higher match rates are more effective than the 1:1 match rate. The regression with ratio dummies confirms this finding, as the coefficients for the 2:1 and 3:1 match rates are not statistically different from the 1:1 match rate. Additionally, the response rate differences between match ratios, calculated directly from the data and from the regression coefficients, are small and not statistically significant. This suggests that increasing the match ratio beyond 1:1 may not lead to a substantial increase in the likelihood of donating.
+```
 
-When examining the impact of matching donations on the size of the charitable contribution, the t-test and linear regression results initially show a significant difference in the average donation amount between the treatment and control groups. However, this analysis includes both donors and non-donors, which may not provide a clear picture of the treatment effect on donation amount. When focusing solely on donors, the analysis reveals no significant difference in the average donation amount between the treatment and control groups. It is important to note that the treatment coefficient in the linear regression for donors does not have a causal interpretation, as it is conditional on the decision to donate, which is itself affected by the treatment.
+Distribution of Donation Amounts:
 
-The histograms of donation amounts for donors in the treatment and control groups show similar distributions, with the average donation amounts being close to each other. This visual representation supports the finding that matching donations may not have a significant impact on the size of the contribution among those who decide to donate.
+The histogram shows the distribution of donation amounts across the dataset, highlighting that most donations are relatively small, with a few larger donations creating a long tail.
+Box Plots of Donation Amounts by Treatment:
 
-The simulation experiments conducted in the study demonstrate the Law of Large Numbers and the Central Limit Theorem. The Law of Large Numbers plot shows that the cumulative average difference between the treatment and control groups converges to the true difference in means as the number of draws increases. The Central Limit Theorem histograms illustrate that as the sample size increases, the distribution of the average difference between the treatment and control groups becomes more normal and centered around the true difference in means. These simulations provide a deeper understanding of the statistical properties underlying the observed results.
+The box plots compare donation amounts across the Control and Matching Grant groups. The median donation amount appears similar, but the Matching Grant group shows a slightly higher range of donation amounts.
+Box Plots of Donation Amounts by Treatment and Gender:
 
-In conclusion, the experiment by Karlan and List (2007) offers evidence that matching donations can be an effective tool for increasing the likelihood of charitable giving. However, the results suggest that higher match rates may not necessarily lead to a significant increase in donation rates or amounts compared to a 1:1 match rate. The findings of this study can inform the strategies employed by charities and policymakers to encourage charitable giving, while also highlighting the importance of careful analysis and interpretation of data when assessing the impact of such interventions.
+These box plots show donation amounts broken down by treatment group and gender. Both male and female donors in the Matching Grant group tend to have a wider range of donation amounts compared to the Control group.
+
+
+## Statistical Testing
+
+```{python}
+from scipy.stats import ttest_ind
+# Extracting donation amounts for each treatment group
+control_group = data[data['treatment'] == 0]['amount']
+matching_grant_group = data[data['treatment'] == 1]['amount']
+challenge_grant_group = data[data['treatment'] == 2]['amount']
+
+# Performing t-test
+t_test_result = ttest_ind(control_group, matching_grant_group, equal_var=False, nan_policy='omit')
+
+t_test_result
+
+
+```
+
+T-test Results
+The t-test comparing the mean donation amounts between the Control and Matching Grant groups yields the following results:
+
+T-statistic: -1.918
+P-value: 0.055
+The p-value of 0.055 is slightly above the conventional significance threshold of 0.05, suggesting that the difference in mean donation amounts between the Control and Matching Grant groups is not statistically significant at the 5% level. However, it is close to the threshold, indicating a potential trend that may warrant further investigation.
+
+
+
+## Regression Analysis
+
+```{python}
+import statsmodels.api as sm
+
+# Prepare the data for regression analysis
+# Using only the relevant columns and dropping rows with missing values
+regression_data = data[['treatment', 'amount', 'female', 'pwhite', 'pblack', 'page18_39', 'ave_hh_sz', 'median_hhincome', 'powner', 'psch_atlstba', 'pop_propurban']].dropna()
+
+# Define the independent variables (adding a constant for the intercept)
+X = regression_data[['treatment', 'female', 'pwhite', 'pblack', 'page18_39', 'ave_hh_sz', 'median_hhincome', 'powner', 'psch_atlstba', 'pop_propurban']]
+X = sm.add_constant(X)
+
+# Define the dependent variable
+y = regression_data['amount']
+
+# Fit the linear regression model
+model = sm.OLS(y, X).fit()
+
+# Display the regression results
+regression_results = model.summary()
+regression_results
+
+```
+
+Regression Analysis Results
+The linear regression model results provide the following insights:
+
+Treatment (Matching Grant):
+
+Coefficient: 0.173
+P-value: 0.045
+The positive coefficient indicates that the Matching Grant treatment has a small but statistically significant effect on donation amounts compared to the Control group.
+Gender (Female):
+
+Coefficient: -0.128
+P-value: 0.157
+The negative coefficient suggests that females tend to donate slightly less than males, although this effect is not statistically significant.
+Other Variables:
+
+Most other demographic variables (e.g., proportion of white residents, median household income) do not show statistically significant effects on donation amounts.
+
+
+### Summary and findings
+
+T-test: The t-test results indicated no statistically significant difference in mean donation amounts between the Control and Matching Grant groups at the 5% level, although the p-value was close to the threshold (0.055).
+
+Regression Analysis: The regression results suggest that the Matching Grant treatment has a statistically significant positive effect on donation amounts, even after controlling for other demographic factors. However, the effect size is small.
+
+
+### Conclusion
+
+The Matching Grant treatment appears to be slightly more effective than the standard Control letter in increasing donation amounts.
+
+Gender and other demographic variables did not have a significant impact on donation amounts in this analysis.
+
+### Recommendation
+
+Further Research: Given the close p-value in the t-test, it may be beneficial to conduct further research with a larger sample size or additional data to confirm these findings.
+
+Fundraising Strategy: Non-profits could consider using matching grants as part of their fundraising strategy, as it shows a small but positive impact on donations.
 
