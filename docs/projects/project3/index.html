@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Sheena Taylor - Project 3</title>
+<title>Sheena Taylor - Project 3: Yogurt Preferences</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -177,7 +177,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Project 3</h1>
+<h1 class="title">Project 3: Yogurt Preferences</h1>
 </div>
 
 
@@ -223,11 +223,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><span class="math display">\[ L_n(\beta) = \prod_{i=1}^n L_i(\beta) = \prod_{i=1}^n \prod_{j=1}^J \mathbb{P}_i(j)^{\delta_{ij}} \]</span></p>
 <p>And the joint log-likelihood function is:</p>
 <p><span class="math display">\[ \ell_n(\beta) = \sum_{i=1}^n \sum_{j=1}^J \delta_{ij} \log(\mathbb{P}_i(j)) \]</span></p>
-<div id="f9ae88c8" class="cell" data-execution_count="1">
+<div id="32edcf32" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="79f38aef" class="cell" data-execution_count="2">
+<div id="52f9a3d0" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the dataset</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>yogurt_data_path <span class="op">=</span> <span class="st">'yogurt_data.csv'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>yogurt_data <span class="op">=</span> pd.read_csv(yogurt_data_path)</span>
@@ -344,14 +344,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="d55d787b" class="cell" data-execution_count="3">
+<div id="969a19d3" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># yogurt_data = pd.read_csv('yogurt_data.csv', header=None, skiprows=1)</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># print(yogurt_data.head())</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># yogurt_data.columns = ['c', 'y1', 'y2', 'y3', 'y4', 'f1', 'f2', 'f3', 'f4', 'p1', 'p2', 'p3', 'p4']</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># yogurt_data.head()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="a8d3eca9" class="cell" data-execution_count="4">
+<div id="492d0685" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>yogurt_data.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>id      int64
@@ -370,7 +370,7 @@ p4    float64
 dtype: object</code></pre>
 </div>
 </div>
-<div id="8e1ba72a" class="cell" data-execution_count="5">
+<div id="4da3846b" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reshape the yogurt data from wide to long format</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>yogurt_long <span class="op">=</span> pd.melt(yogurt_data, id_vars<span class="op">=</span>[<span class="st">'id'</span>], </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                      value_vars<span class="op">=</span>[<span class="st">'y1'</span>, <span class="st">'y2'</span>, <span class="st">'y3'</span>, <span class="st">'y4'</span>],</span>
@@ -485,7 +485,7 @@ dtype: object</code></pre>
 </section>
 <section id="log-likelihood-function-for-mnl-model" class="level2">
 <h2 class="anchored" data-anchor-id="log-likelihood-function-for-mnl-model">Log-Likelihood Function for MNL Model</h2>
-<div id="50e140a4" class="cell" data-execution_count="6">
+<div id="e3379af4" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -553,7 +553,7 @@ dtype: object</code></pre>
 </section>
 <section id="dollar-per-util-conversion-and-brand-value" class="level2">
 <h2 class="anchored" data-anchor-id="dollar-per-util-conversion-and-brand-value">Dollar-Per-Util Conversion and Brand Value</h2>
-<div id="6694dc3c" class="cell" data-execution_count="7">
+<div id="0493f510" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the dollar-per-util conversion factor</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dollar_per_util <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> <span class="bu">abs</span>(result.x[<span class="dv">4</span>])</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -574,7 +574,7 @@ dtype: object</code></pre>
 </section>
 <section id="market-share-simulation-with-price-change" class="level2">
 <h2 class="anchored" data-anchor-id="market-share-simulation-with-price-change">Market Share Simulation with Price Change</h2>
-<div id="02520d40" class="cell" data-execution_count="8">
+<div id="6a710530" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_market_shares(data, beta):</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract parameters</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    beta1, beta2, beta3, beta_f, beta_p <span class="op">=</span> beta</span>
@@ -625,7 +625,7 @@ dtype: object</code></pre>
 <p>Typically, an increase in the price of a product should lead to a decrease in its market share, especially if other products remain competitively priced. Let’s double-check and ensure that the price change is properly applied and that the sensitivities in the model reflect typical consumer behavior more clearly. ​</p>
 <p>It appears there might be a deeper issue in how the model or the adjustments are being applied, as the market shares remain unchanged even after the price increase for yogurt 1. This outcome could be due to several reasons, such as the very high intercepts significantly overshadowing the price changes or potential issues in the simulation logic.</p>
 <p>In a typical scenario, increasing the price of a product should decrease its market share, as consumers opt for more competitively priced alternatives. The current model results suggest that either the intercepts or other factors are dominating the choice probabilities to an extent that price changes are not impacting the outcomes as expected.</p>
-<div id="8ae64234" class="cell" data-execution_count="9">
+<div id="58430a43" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct the approach to calculate new market shares with price adjustment</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply price change to yogurt 1</span></span>
@@ -650,7 +650,7 @@ dtype: object</code></pre>
 <section id="estimating-minivan-preferences" class="level3">
 <h3 class="anchored" data-anchor-id="estimating-minivan-preferences">2. Estimating Minivan Preferences</h3>
 <p>###Conjoint analysis is a statistical technique used in marketing research to understand how consumers value different attributes of a product or service. It allows researchers to quantify the relative importance that consumers place on each attribute and the utilities or part-worths they associate with the different levels of those attributes.The name “conjoint” comes from considering two or more attributes jointly in the analysis. Consumers are presented with different hypothetical product profiles that combine different levels of the attributes being studied. By analyzing their preferences or choices among these profiles, the utilities or part-worths for each attribute level can be estimated.Some key aspects of conjoint analysis:Attributes and Levels: The first step is to identify the key attributes of the product (e.g.&nbsp;price, brand, features) and specify the levels for each attribute to be studied.Experimental Design: An experimental design is created that combines the levels into hypothetical product profiles to be evaluated by respondents. Statistical designs like fractional factorial are used to reduce the number of profiles while still capturing the main effects.Data Collection: Survey respondents are shown sets of hypothetical product profiles and asked to rate, rank or choose among them based on their preferences.Modeling: The preference data is analyzed using statistical models like multinomial logit to decompose the respondents’ overall evaluations into part-worth utilities for each attribute level.Relative Importance: The part-worth utilities are used to calculate the relative importance of each attribute in determining overall preference. Conjoint is considered a decompositional method because it estimates how respondents arrive at an overall judgment (the dependent variable) based on the utilities for each attribute (the independent variables).Some key advantages of conjoint include:Quantifies tradeoffs between attributes Measures preferences for attribute levels, not just attributes Simulates realistic purchase environments with multi-attribute decisions.Conjoint is widely used across many industries for product design, pricing research, market segmentation, and optimizing product features and marketing mixes based on customer preferences.The minivan case illustrated how conjoint can be applied to understand consumer tradeoffs between attributes like price, cargo space, seating and engine type when choosing vehicles ###The purpose of the code is to analyze a dataset of minivan preferences and build a model that can predict the likelihood of a respondent choosing a particular minivan configuration based on its attributes, such as the number of seats, cargo space, engine type, and price.The input to the code is a CSV file named ‘rintro-chapter13conjoint.csv’, which contains data about different minivan configurations and respondents’ choices among these configurations.The output of the code is a statistical model that estimates the utility or preference for each minivan attribute, as well as the predicted probabilities of choosing different minivan configurations based on their attributes.To achieve its purpose, the code follows these steps:a-It loads the dataset from the CSV file using the pandas library.b-It performs some exploratory data analysis to understand the structure of the dataset, such as the number of respondents, the number of choice tasks each respondent completed, and the number of alternatives presented in each choice task.c- It uses the statsmodels library to build a multinomial logistic regression model, which relates the choice of a minivan to its attributes (number of seats, cargo space, engine type, and price).d-The model estimates the utility or preference for each attribute level (e.g., 7 seats vs.&nbsp;6 seats, gas engine vs.&nbsp;hybrid engine, etc.) based on the respondents’ choices.e- The code then demonstrates how to use the estimated model coefficients to calculate the dollar value associated with a particular attribute, such as the benefit of additional cargo space.Finally, the code sets up a new dataset with hypothetical minivan configurations and uses the estimated model to predict the probability of each configuration being chosen. The key data transformations and logic flows in the code include: Converting categorical variables (e.g., engine type) into dummy variables using pandas’ get_dummies() function, as required by the regression model.Calculating the total number of respondents and the number of choice tasks per respondent using groupby() and nunique() operations.Estimating the multinomial logistic regression model using the statsmodels library, which involves maximizing the likelihood function to find the best-fitting coefficients for each attribute. Interpreting the model coefficients to understand the relative importance and direction of preference for each attribute.Calculating the dollar value associated with a particular attribute by dividing the utility difference by the negative of the price coefficient and multiplying by 1000.Setting up a new dataset with hypothetical minivan configurations and using the estimated model to predict the probability of each configuration being chosen. The code provides a step-by-step approach to analyzing and modeling consumer preferences for product configurations, which can be useful in various marketing and product development applications.The analysis aimed to estimate consumer preferences for different minivan configurations based on attributes like number of seats, cargo space, engine type, and price. The data came from a survey where respondents made choices between different minivan options. Key analytics performed included: Data Exploration Calculated number of respondents (200) and choice tasks per respondent (15)Checked number of alternatives shown in each choice task (3) Model Building Built a multinomial logistic regression model using statsmodels library Modeled the choice of minivan based on attributes like seats, cargo, engine, price Estimated utility coefficients for each attribute level Model Interpretation Gas engines strongly preferred over electric (coef 1.43) More cargo space increases utility (3ft cargo coef 0.44) More seats reduces utility (7 seat coef -0.52, 8 seat coef -0.29) Higher price decreases utility (price coef -0.16)Valuation Analysis Calculated price sensitivity (-$6,284 per utility) Estimated $2,756 added value for 3ft vs 2ft cargo space Outcomes Summary-The model quantified the relative importance of different minivan attributes to consumers: Engine type was most important, with gas engines strongly preferred Cargo space was next, with more space increasing desirability Number of seats had a negative effect, with fewer seats preferred Price sensitivity was high, with higher prices decreasing utility This allows minivan manufacturers to optimize designs and pricing based on understanding which attributes drive consumer preferences and by how much. Specific outcomes include:Gas and hybrid engines should be prioritized over electric for minivans Increasing cargo space from 2ft to 3ft can justify a $2,756 higher price 6 seat configurations are likely to be most popular Pricing should be kept low due to high price sensitivity The analysis provides data-driven guidance for developing and marketing new minivan models aligned with consumer preferences and willingness-to-pay for different attributes.</p>
-<div id="10e72021" class="cell" data-execution_count="10">
+<div id="0a59f10e" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the dataset</span></span>
@@ -745,7 +745,7 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<div id="208fd83b" class="cell" data-execution_count="11">
+<div id="15de9148" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the total number of respondents</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>total_respondents <span class="op">=</span> df[<span class="st">'resp.id'</span>].nunique()</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Total number of respondents: "</span>)</span>
@@ -791,7 +791,7 @@ Name: alt, dtype: float64</code></pre>
 </section>
 <section id="model" class="level2">
 <h2 class="anchored" data-anchor-id="model">Model</h2>
-<div id="f288eb05" class="cell" data-execution_count="12">
+<div id="905896a3" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.formula.api <span class="im">import</span> mnlogit</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>formula <span class="op">=</span> <span class="st">'choice ~ carpool + C(seat) + C(cargo) + C(eng) + price'</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> mnlogit(formula, data<span class="op">=</span>df).fit()</span>
@@ -826,13 +826,13 @@ Name: alt, dtype: float64</code></pre>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">Date:</td>
-<td>Sun, 19 May 2024</td>
+<td>Thu, 30 May 2024</td>
 <td data-quarto-table-cell-role="th">Pseudo R-squ.:</td>
 <td>0.1223</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>11:42:53</td>
+<td>13:13:31</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-5028.0</td>
 </tr>
@@ -945,31 +945,31 @@ Name: alt, dtype: float64</code></pre>
 <p>Engine (Gas) (1.4347): A strongly positive coefficient indicating a significant preference for gas engines over the baseline (electric). This suggests that respondents favor the performance or familiarity of gas engines.</p>
 <p>Engine (Hybrid) (0.6742): Also positive, this coefficient indicates a preference for hybrid engines over electric ones, but not as strongly as for gas engines. It suggests an interest in more sustainable options while still valuing traditional engine performance.</p>
 <p>Price (-0.1591): This negative coefficient demonstrates sensitivity to price; as the price of the minivan increases, its utility decreases, making it less likely to be chosen. The magnitude suggests a strong price sensitivity among respondents.</p>
-<div id="5c578ad5" class="cell" data-execution_count="13">
+<div id="b3ce97bd" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>price_coef <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> model.params.iloc[<span class="op">-</span><span class="dv">1</span>].values[<span class="dv">0</span>]</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Price coefficient in utils: '</span>, price_coef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Price coefficient in utils:  -6.2838236131875895</code></pre>
 </div>
 </div>
-<div id="80087071" class="cell" data-execution_count="14">
+<div id="2475f5b5" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>utility_diff <span class="op">=</span> <span class="fl">0.4386</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"The Utility difference is: "</span>, utility_diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The Utility difference is:  0.4386</code></pre>
 </div>
 </div>
-<div id="e4b98e7e" class="cell" data-execution_count="15">
+<div id="65aed2b7" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>benefit <span class="op">=</span> utility_diff <span class="op">*</span> price_coef <span class="op">*</span> <span class="dv">1000</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The Estimated dollar benefit of additional cargo space: $</span><span class="sc">{</span>benefit<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The Estimated dollar benefit of additional cargo space: $-2756.09</code></pre>
 </div>
 </div>
-<div id="bd7a8fbe" class="cell" data-execution_count="16">
+<div id="758310d7" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>param_names <span class="op">=</span> [<span class="st">'Featured'</span>, <span class="st">'Price'</span>, <span class="st">'Brand 1 Intercept'</span>, <span class="st">'Brand 2 Intercept'</span>, <span class="st">'Brand 3 Intercept'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="ac2f2a01" class="cell" data-execution_count="17">
+<div id="48df9206" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Minivan'</span>: [<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>, <span class="st">'D'</span>, <span class="st">'E'</span>, <span class="st">'F'</span>],</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'seat'</span>: [<span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">7</span>],</span>

@@ -1,9 +1,8 @@
 ---
-title: "Project 1"
+title: "Project 1: Fundraising Strategies"
 editor: visual
 ---
 Executive Summary
-
 This analysis aimed to evaluate the effectiveness of different fundraising strategies, specifically the use of matching grants, on donation amounts and rates. The dataset analyzed contained information on charitable donations, including the treatment (fundraising strategy) applied, donation amounts, donor demographics, and other relevant variables.
 
 Key Findings:

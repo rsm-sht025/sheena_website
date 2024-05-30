@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Sheena Taylor - Project 1</title>
+<title>Sheena Taylor - Project 1: Fundraising Strategies</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -168,7 +168,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Project 1</h1>
+<h1 class="title">Project 1: Fundraising Strategies</h1>
 </div>
 
 
@@ -185,8 +185,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Executive Summary</p>
-<p>This analysis aimed to evaluate the effectiveness of different fundraising strategies, specifically the use of matching grants, on donation amounts and rates. The dataset analyzed contained information on charitable donations, including the treatment (fundraising strategy) applied, donation amounts, donor demographics, and other relevant variables.</p>
+<p>Executive Summary This analysis aimed to evaluate the effectiveness of different fundraising strategies, specifically the use of matching grants, on donation amounts and rates. The dataset analyzed contained information on charitable donations, including the treatment (fundraising strategy) applied, donation amounts, donor demographics, and other relevant variables.</p>
 <p>Key Findings:</p>
 <p>Summary Statistics:</p>
 <p>The Matching Grant treatment group had a higher average donation amount ($0.97) compared to the Control group ($0.81). The donation rate was also higher for the Matching Grant group (2.20%) than the Control group (1.79%). Visualizations:</p>
@@ -209,7 +208,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Summary statistics (average donation, donation rate, and count) for each treatment group Visualizations (bar plots and box plots) showing the distribution of donation amounts across different treatments and demographic groups Results of a t-test comparing the mean donation amounts between the Control and Matching Grant groups Results of a linear regression analysis to identify the effects of different variables (treatment, gender, demographics) on donation amounts The code achieves its purpose through the following steps: a) It imports the necessary Python libraries (pandas, matplotlib, scipy.stats, and statsmodels.api). b) It reads the dataset from the Stata file using pandas. c) It calculates summary statistics (average donation, donation rate, and count) for each treatment group using pandas’ groupby and aggregate functions. d) It creates visualizations (bar plots and box plots) to explore the distribution of donation amounts across different treatments and demographic groups using matplotlib. e) It performs a t-test to compare the mean donation amounts between the Control and Matching Grant groups using scipy.stats.ttest_ind. f) It prepares the data for regression analysis by selecting relevant columns and dropping rows with missing values. g) It defines the independent variables (treatment, gender, demographics) and the dependent variable (donation amount). h) It fits a linear regression model using statsmodels.OLS and interprets the regression results.</p>
 <p>Important logic flows and data transformations:</p>
 <p>Grouping the data by treatment and aggregating to calculate summary statistics Filtering the data to include only donors for visualizing donation amount distributions Subsetting the data and dropping missing values for regression analysis Adding a constant term to the independent variables for the regression model The code follows a typical data analysis workflow, starting with data loading, followed by exploratory data analysis (summary statistics and visualizations), and then moving on to statistical testing (t-test) and regression analysis to identify the effects of different variables on the outcome of interest (donation amount).</p>
-<div id="bca05aac" class="cell" data-execution_count="1">
+<div id="1f88648d" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in the data</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_stata(<span class="st">'/home/jovyan/Desktop/new web 111/sheena_website 2 2/sheena_website 2/projects/project1/karlan_list_2007 (1).dta'</span>)</span>
@@ -373,7 +372,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="ef2b45e0" class="cell" data-execution_count="2">
+<div id="f386c9be" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>Index(['treatment', 'control', 'ratio', 'ratio2', 'ratio3', 'size', 'size25',
@@ -388,7 +387,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       dtype='object')</code></pre>
 </div>
 </div>
-<div id="ab8720ee" class="cell" data-execution_count="3">
+<div id="37956399" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate summary statistics for donation amounts and donation rates for each treatment group</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>summary_stats <span class="op">=</span> data.groupby(<span class="st">'treatment'</span>).agg(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    avg_donation<span class="op">=</span>(<span class="st">'amount'</span>, <span class="st">'mean'</span>),</span>
@@ -435,7 +434,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The summary statistics by treatment group are as follows:</p>
 <p>Control Group (Standard Letter): Average Donation: $0.81 Donation Rate: 1.79%</p>
 <p>Matching Grant Letter: Average Donation: $0.97 Donation Rate: 2.20%</p>
-<div id="02a4417e" class="cell" data-execution_count="4">
+<div id="ecf6374a" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Descriptive statistics for key variables</span></span>
@@ -463,7 +462,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="509d98c6" class="cell" data-execution_count="5">
+<div id="b6785ab4" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Retry plotting the distribution of donation amounts by treatment group</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -492,7 +491,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="donation-patterns" class="level2">
 <h2 class="anchored" data-anchor-id="donation-patterns">Donation patterns</h2>
-<div id="2d6b8034" class="cell" data-execution_count="6">
+<div id="1b416fa9" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting the distribution of donation amounts</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.hist(data[<span class="st">'amount'</span>], bins<span class="op">=</span><span class="dv">50</span>, edgecolor<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
@@ -556,7 +555,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="statistical-testing" class="level2">
 <h2 class="anchored" data-anchor-id="statistical-testing">Statistical Testing</h2>
-<div id="dcfa80d6" class="cell" data-execution_count="7">
+<div id="8b68c7fe" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> ttest_ind</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Extracting donation amounts for each treatment group</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>control_group <span class="op">=</span> data[data[<span class="st">'treatment'</span>] <span class="op">==</span> <span class="dv">0</span>][<span class="st">'amount'</span>]</span>
@@ -576,7 +575,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="regression-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="regression-analysis">Regression Analysis</h2>
-<div id="dce29b38" class="cell" data-execution_count="8">
+<div id="d2707f08" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the data for regression analysis</span></span>
@@ -626,7 +625,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>10:47:07</td>
+<td>13:10:55</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-1.6877e+05</td>
 </tr>

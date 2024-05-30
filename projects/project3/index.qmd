@@ -1,5 +1,5 @@
 ---
-title: "Project 3"
+title: "Project 3: Yogurt Preferences"
 editor: visual
 ---
 The analysis aims to estimate consumer preferences for different yogurt products based on their features, such as whether they are featured or not, and their prices. It does this by fitting a Multi-nomial Logit (MNL) Model to the data.
