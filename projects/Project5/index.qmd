@@ -1,0 +1,464 @@
+---
+title: "Project 5: K-Means Clustering"
+editor: visual
+---
+
+### K-Means
+@sheena_website The purpose of this code is to read a CSV file containing the Iris dataset and display the first few rows of the data to understand its structure and contents.
+
+The input it takes is the file path of the CSV file containing the Iris dataset. In this case, the file path is stored in the variable file_path and is set to 'iris.csv'.
+
+The output it produces is the first few rows of the Iris dataset displayed in the console or notebook environment.
+
+Here's how the code achieves its purpose:
+
+The code imports the pandas library, which is a popular data manipulation library in Python.
+It assigns the file path of the CSV file to the variable file_path.
+The pd.read_csv() function from the pandas library is used to read the CSV file specified by file_path. This function loads the data from the CSV file into a pandas DataFrame object, which is a tabular data structure similar to a spreadsheet.
+The DataFrame object containing the Iris dataset is assigned to the variable iris_data.
+Finally, the iris_data.head() method is called, which displays the first few rows (by default, 5 rows) of the DataFrame.
+The important logic flow in this code is straightforward: it reads a CSV file containing the Iris dataset and displays the first few rows of the data. No complex data transformations or algorithms are involved in this particular code snippet.
+Overall, this code is a simple way to load and preview a dataset from a CSV file using the pandas library in Python. It is a common first step in data analysis or machine learning projects, as it allows the programmer to get a quick understanding of the dataset's structure and contents before proceeding with further analysis or processing.
+
+
+
+ 
+
+```{python}
+import pandas as pd
+
+# Load the Iris dataset
+file_path = 'iris.csv'
+iris_data = pd.read_csv(file_path)
+
+# Display the first few rows of the dataset to understand its structure
+iris_data.head()
+
+```
+
+
+### Implementing K-Means Algorithm
+To implement the K-Means algorithm, we will follow these steps:
+
+1. Initialize Centroids: Randomly select 
+𝑘
+k points as initial centroids.
+
+2. Assign Clusters: Assign each point to the nearest centroid, forming 
+𝑘
+k clusters.
+
+3. Update Centroids: Calculate the mean of the points in each cluster to update the centroids.
+   
+4. Repeat Steps 2 and 3: Continue until the centroids no longer change significantly or for a fixed number of iterations.
+
+The purpose of this code is to group a set of data points into clusters based on their similarity. It takes a dataset as input, which is a collection of data points represented by numerical values. The output it produces is a set of cluster labels, where each data point is assigned to a specific cluster, and the coordinates of the cluster centroids, which are the central points of each cluster.
+
+To achieve its purpose, the code follows these steps:
+
+It defines four functions: initialize_centroids, assign_clusters, update_centroids, and kmeans.
+The initialize_centroids function randomly selects a specified number of data points from the dataset to be the initial centroids (central points) of the clusters.
+The assign_clusters function calculates the distance between each data point and all the centroids, and assigns each data point to the cluster with the nearest centroid.
+The update_centroids function recalculates the centroids by taking the mean of all the data points assigned to each cluster.
+The kmeans function is the main function that orchestrates the K-Means algorithm. It starts by initializing the centroids, and then iterates over the following steps:
+a. Assign each data point to the nearest centroid using assign_clusters.
+b. Update the centroids based on the new cluster assignments using update_centroids.
+c. Repeat steps a and b until the centroids no longer change significantly or a maximum number of iterations is reached.
+The important logic flow in this code is the iterative process of assigning data points to clusters and updating the centroids based on the new assignments. This process continues until the centroids stabilize, indicating that the clusters have converged to a stable state.
+
+After implementing the K-Means algorithm, the code applies it to a dataset called "Iris" and visualizes the resulting clusters using the plot_clusters function. It also calculates and plots two metrics, WCSS (Within-Cluster-Sum-of-Squares) and Silhouette Score, to evaluate the quality of the clustering for different numbers of clusters (k values).
+
+The code then compares the custom K-Means implementation with the built-in KMeans function from the scikit-learn library, plotting the WCSS and Silhouette Score for both implementations.
+
+Overall, this code provides a hands-on implementation of the K-Means clustering algorithm, allowing the user to understand the underlying logic and apply it to a real dataset. It also demonstrates how to evaluate the clustering results using different metrics and compare the performance with a built-in library function.
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import silhouette_score, silhouette_samples
+
+def initialize_centroids(X, k):
+    """Randomly initialize centroids"""
+    indices = np.random.choice(len(X), k, replace=False)
+    return X[indices]
+
+def assign_clusters(X, centroids):
+    """Assign clusters based on the nearest centroid"""
+    distances = np.linalg.norm(X[:, np.newaxis] - centroids, axis=2)
+    return np.argmin(distances, axis=1)
+
+def update_centroids(X, labels, k):
+    """Update centroids by computing the mean of the points in each cluster"""
+    centroids = np.array([X[labels == i].mean(axis=0) for i in range(k)])
+    return centroids
+
+def kmeans(X, k, max_iters=100):
+    """K-Means clustering algorithm"""
+    centroids = initialize_centroids(X, k)
+    for _ in range(max_iters):
+        labels = assign_clusters(X, centroids)
+        new_centroids = update_centroids(X, labels, k)
+        if np.all(centroids == new_centroids):
+            break
+        centroids = new_centroids
+    return centroids, labels
+
+# Extract the features from the dataset
+X = iris_data.iloc[:, :-1].values
+
+# Test the K-Means implementation on the Iris dataset with k=3
+k = 3
+centroids, labels = kmeans(X, k)
+
+# Plot the results
+def plot_clusters(X, labels, centroids, k):
+    plt.figure(figsize=(10, 6))
+    colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k']
+    for i in range(k):
+        points = X[labels == i]
+        plt.scatter(points[:, 0], points[:, 1], s=50, c=colors[i], label=f'Cluster {i+1}')
+    plt.scatter(centroids[:, 0], centroids[:, 1], s=200, c='black', marker='X', label='Centroids')
+    plt.xlabel('Sepal Length')
+    plt.ylabel('Sepal Width')
+    plt.legend()
+    plt.title('K-Means Clustering on Iris Dataset')
+    plt.show()
+
+plot_clusters(X, labels, centroids, k)
+
+print(centroids)
+
+```
+
+###  Metrics Calculation
+
+The purpose of this code is to group a set of data points into clusters based on their similarity. It takes a dataset as input, which is a collection of data points represented by numerical values. The output it produces is a set of cluster labels, where each data point is assigned to a specific cluster, and the coordinates of the cluster centroids, which are the central points of each cluster.
+
+The code takes a dataset as input, which is a collection of numerical data points. In this case, the input dataset is called "X" and is assumed to be a NumPy array or a similar data structure.
+
+The output of the code is twofold: (1) a set of cluster labels, where each data point is assigned to a specific cluster, and (2) the coordinates of the cluster centroids, which represent the central points of each cluster.
+
+To achieve its purpose, the code follows these steps:
+a. It defines four functions: initialize_centroids, assign_clusters, update_centroids, and kmeans.
+b. The initialize_centroids function randomly selects a specified number of data points from the dataset to be the initial centroids (central points) of the clusters.
+c. The assign_clusters function calculates the distance between each data point and all the centroids, and assigns each data point to the cluster with the nearest centroid.
+d. The update_centroids function recalculates the centroids by taking the mean of all the data points assigned to each cluster.
+e. The kmeans function is the main function that orchestrates the K-Means algorithm. It starts by initializing the centroids, and then iterates over the following steps:
+i. Assign each data point to the nearest centroid using assign_clusters.
+ii. Update the centroids based on the new cluster assignments using update_centroids.
+iii. Repeat steps i and ii until the centroids no longer change significantly or a maximum number of iterations is reached.
+
+The important logic flow in this code is the iterative process of assigning data points to clusters and updating the centroids based on the new assignments. This process continues until the centroids stabilize, indicating that the clusters have converged to a stable state.
+
+The code follows a straightforward algorithm to group data points into clusters based on their similarity. It starts by randomly selecting initial centroids, then iteratively assigns data points to the nearest centroids and updates the centroids based on the new assignments. This process continues until the centroids no longer change significantly, at which point the final cluster assignments and centroid coordinates are returned.
+
+```{python}
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+# Function to calculate WCSS
+def calculate_wcss(X, labels, centroids):
+    wcss = 0
+    for i in range(len(centroids)):
+        cluster_points = X[labels == i]
+        wcss += np.sum((cluster_points - centroids[i]) ** 2)
+    return wcss
+
+# Lists to store the metrics for different k values
+k_values = range(2, 8)
+wcss_values = []
+silhouette_scores = []
+
+for k in k_values:
+    # Custom K-Means implementation
+    centroids, labels = kmeans(X, k)
+    wcss = calculate_wcss(X, labels, centroids)
+    silhouette_avg = silhouette_score(X, labels)
+    
+    wcss_values.append(wcss)
+    silhouette_scores.append(silhouette_avg)
+
+# Plot the WCSS and Silhouette scores
+plt.figure(figsize=(12, 6))
+
+# Plot WCSS
+plt.subplot(1, 2, 1)
+plt.plot(k_values, wcss_values, 'bo-')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('WCSS')
+plt.title('WCSS vs. Number of Clusters')
+
+# Plot Silhouette scores
+plt.subplot(1, 2, 2)
+plt.plot(k_values, silhouette_scores, 'bo-')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('Silhouette Score')
+plt.title('Silhouette Score vs. Number of Clusters')
+
+plt.tight_layout()
+plt.show()
+
+
+```
+
+## Observations
+
+WCSS (Within-Cluster-Sum-of-Squares): Typically decreases as the number of clusters increases. This is because adding more clusters generally results in smaller, more compact clusters.
+
+Silhouette Score: Measures how similar an object is to its own cluster compared to other clusters. Higher silhouette scores indicate better-defined clusters.
+
+From the plots:
+
+WCSS: As expected, WCSS decreases with increasing k. However, the rate of decrease might diminish after a certain point, suggesting an optimal number of clusters.
+
+Silhouette Score: A higher silhouette score is better, indicating that the clusters are well-separated. The peak in silhouette score can suggest the optimal number of clusters.
+
+## Suggested Number of Clusters:
+The silhouette score plot suggests that the optimal number of clusters is around 𝑘=3, as it has the highest silhouette score.
+
+
+### Comparing with builtin Kmeans function in scikit-learn
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+# Using scikit-learn's KMeans
+wcss_values_builtin = []
+silhouette_scores_builtin = []
+
+for k in k_values:
+    kmeans_builtin = KMeans(n_clusters=k, random_state=42)
+    labels_builtin = kmeans_builtin.fit_predict(X)
+    wcss_builtin = kmeans_builtin.inertia_
+    silhouette_avg_builtin = silhouette_score(X, labels_builtin)
+    
+    wcss_values_builtin.append(wcss_builtin)
+    silhouette_scores_builtin.append(silhouette_avg_builtin)
+
+# Plot the WCSS and Silhouette scores for built-in KMeans
+plt.figure(figsize=(12, 6))
+
+# Plot WCSS
+plt.subplot(1, 2, 1)
+plt.plot(k_values, wcss_values_builtin, 'ro-', label='Built-in KMeans')
+plt.plot(k_values, wcss_values, 'bo-', label='Custom KMeans')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('WCSS')
+plt.title('WCSS vs. Number of Clusters')
+plt.legend()
+
+# Plot Silhouette scores
+plt.subplot(1, 2, 2)
+plt.plot(k_values, silhouette_scores_builtin, 'ro-', label='Built-in KMeans')
+plt.plot(k_values, silhouette_scores, 'bo-', label='Custom KMeans')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('Silhouette Score')
+plt.title('Silhouette Score vs. Number of Clusters')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+
+
+```
+
+WCSS (Within-Cluster-Sum-of-Squares):
+
+Both the custom K-Means and the built-in KMeans show a similar trend in WCSS, decreasing as the number of clusters increases.
+
+The WCSS values from the built-in KMeans are slightly lower, indicating more optimal clustering, which is expected due to the built-in optimizations.
+
+
+Silhouette Score:
+
+The silhouette scores for both implementations follow a similar trend, with peaks around k=2 and k=3.
+
+The scores from the built-in KMeans are generally higher, suggesting better-defined clusters.
+
+Suggested Number of Clusters:
+Custom K-Means: The highest silhouette score suggests k=3 as the optimal number of clusters.
+
+Built-in KMeans: Also indicates k=3 as optimal, with higher silhouette scores.
+
+## Conclusion
+Both implementations suggest that k=3 is the optimal number of clusters for the Iris dataset.
+
+The built-in KMeans performs slightly better in terms of WCSS and silhouette scores.
+
+### Latent-Class MNL
+
+```{python}
+import pandas as pd 
+import statsmodels.api as sm
+import numpy as np
+import matplotlib.pyplot as plt
+# Load the Yogurt dataset
+yogurt_file_path = 'yogurt_data.csv'
+yogurt_data = pd.read_csv(yogurt_file_path)
+
+# Display the first few rows of the dataset to understand its structure
+yogurt_data.head()
+
+
+```
+
+```{python}
+# Ensure the indices match correctly by resetting the index
+yogurt_data_reset = yogurt_data.reset_index(drop=True)
+
+# Convert the data to long format
+long_data = yogurt_data_reset.melt(id_vars=['id'], value_vars=['y1', 'y2', 'y3', 'y4'],
+                                   var_name='choice', value_name='chosen')
+
+# Extract the choice index from the column name
+long_data['choice_idx'] = long_data['choice'].str[-1].astype(int)
+
+# Add price and feature columns by correctly mapping the indices
+long_data['price'] = long_data.apply(lambda row: yogurt_data_reset.loc[row.name // 4, f'p{row.choice_idx}'], axis=1)
+long_data['feature'] = long_data.apply(lambda row: yogurt_data_reset.loc[row.name // 4, f'f{row.choice_idx}'], axis=1)
+
+# Drop the unchosen rows
+long_data = long_data[long_data['chosen'] == 1]
+
+# Add a constant term for the intercept
+long_data['intercept'] = 1
+
+# Define the independent variables (features and price)
+X = long_data[['intercept', 'price']]
+y = long_data['choice_idx']
+
+# Fit the multinomial logit model
+mnl_model = sm.MNLogit(y, X)
+mnl_results = mnl_model.fit()
+
+# Display the summary of the model
+mnl_results.summary()
+
+
+```
+
+Parameter Estimates:
+Intercepts:
+Choice 2: 8.803
+Choice 3: 10.306
+Choice 4: 9.414
+
+Price Coefficients:
+Choice 2: -93.293
+Choice 3: -150.555
+Choice 4: -108.019
+
+All parameters are significant with p<0.001.
+
+Interpretation:
+Higher intercepts suggest a higher baseline preference for these choices when price is not considered.
+
+Negative coefficients for price indicate that as the price increases, the likelihood of choosing that option decreases.
+
+```{python}
+from sklearn.mixture import GaussianMixture
+
+def fit_latent_class_mnl(X, y, n_classes):
+    """Fit a latent-class MNL model with a specified number of classes."""
+    bic_values = []
+    models = []
+    
+    for n in n_classes:
+        # Fit a Gaussian Mixture Model to identify latent classes
+        gmm = GaussianMixture(n_components=n, random_state=42)
+        gmm.fit(X)
+        bic_values.append(gmm.bic(X))
+        models.append(gmm)
+    
+    return bic_values, models
+
+# Define the range of classes to fit
+n_classes = range(2, 8)
+
+# Fit the latent-class MNL model for different numbers of classes
+bic_values, models = fit_latent_class_mnl(X, y, n_classes)
+
+# Plot BIC values to determine the optimal number of classes
+plt.figure(figsize=(10, 6))
+plt.plot(n_classes, bic_values, marker='o')
+plt.xlabel('Number of Latent Classes')
+plt.ylabel('BIC')
+plt.title('BIC vs. Number of Latent Classes')
+plt.show()
+
+
+```
+
+Observations:
+The BIC values decrease as the number of classes increases, but the rate of decrease may diminish after a certain number of classes.
+
+Suggested Number of Classes:
+Based on the plot, we might consider the optimal number of latent classes where the BIC value shows a noticeable "elbow" or the smallest value.
+
+
+```{python}
+# Re-fit the Gaussian Mixture Model to identify the optimal number of classes
+from sklearn.mixture import GaussianMixture
+
+def fit_gmm_and_select_optimal(X, n_classes_range):
+    bic_values = []
+    models = []
+
+    for n in n_classes_range:
+        gmm = GaussianMixture(n_components=n, random_state=42)
+        gmm.fit(X)
+        bic_values.append(gmm.bic(X))
+        models.append(gmm)
+    
+    optimal_idx = np.argmin(bic_values)
+    return models[optimal_idx], bic_values
+
+# Define the range of classes to fit
+n_classes_range = range(2, 8)
+
+# Fit the Gaussian Mixture Models and select the optimal one based on BIC
+optimal_gmm, bic_values = fit_gmm_and_select_optimal(X, n_classes_range)
+
+# Predict the latent classes for each observation using the optimal GMM
+latent_classes = optimal_gmm.predict(X)
+
+# Add the latent class assignments to the dataset
+long_data = long_data.reset_index(drop=True)
+long_data['latent_class'] = latent_classes
+
+# Prepare data for fitting separate MNL models for each latent class
+class_parameters = {}
+
+# Fit MNL model for each latent class
+for lc in np.unique(latent_classes):
+    class_data = long_data[long_data['latent_class'] == lc]
+    X_class = class_data[['intercept', 'price']]
+    y_class = class_data['choice_idx']
+    
+    try:
+        mnl_model_class = sm.MNLogit(y_class, X_class)
+        mnl_results_class = mnl_model_class.fit(disp=False)
+        class_parameters[lc] = mnl_results_class
+    except Exception as e:
+        print(f"Error fitting MNL model for latent class {lc}: {e}")
+
+# Display the parameter estimates for each latent class
+for lc, results in class_parameters.items():
+    print(f"Latent Class {lc + 1} Parameter Estimates:")
+    print(results.summary())
+    print("\n" + "-"*80 + "\n")
+
+
+```
+
+
+## Interpretation:
+
+Latent Class 1: Shows significant price sensitivity for choice 2, while choice 4 has a significant positive intercept but non-significant price sensitivity.
+
+Latent Class 2: Moderate price sensitivity, but coefficients are not significant, suggesting weaker effects of price on choices.
+
+Latent Class 4: Shows significant negative intercepts indicating lower baseline preference, with non-significant price sensitivity.
+
+## Conclusion:
+
+The latent-class MNL model provides insights into the heterogeneity of preferences across different segments. The segments identified by the latent-class model exhibit different sensitivities to price and different baseline preferences, highlighting the value of considering latent classes in modeling consumer choice behavior.

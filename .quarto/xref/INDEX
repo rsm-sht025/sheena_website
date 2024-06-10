@@ -29,5 +29,17 @@
   },
   "projects/project4/index.qmd": {
     "index.html": "ab47b02d"
+  },
+  "projects/project1/Project5/index.qmd": {
+    "index.html": "bd9648b2"
+  },
+  "projects/project1/Project5/hw5_questions.qmd": {
+    "hw5_questions.html": "c34ab5dc"
+  },
+  "projects/Project5/hw5_questions.qmd": {
+    "hw5_questions.html": "95cc491e"
+  },
+  "projects/Project5/index.qmd": {
+    "index.html": "880b739e"
   }
 }
