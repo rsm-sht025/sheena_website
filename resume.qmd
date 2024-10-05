@@ -3,4 +3,4 @@ title: "Resume"
 editor: visual
 ---
 
-{{< pdf files/resume.pdf width=100% height=800 >}}
+{{< pdf files/sheena_website 2 2/__MACOSX/sheena_website 2/files/ST2024GRAD.pdf width=100% height=800 >}}
