@@ -15,7 +15,7 @@ embed-pdf: true
 
 ## Detailed Analysis Report
 
-<div style="margin: 2rem 0; padding: 1.5rem; background: linear-gradient(135deg, #fff4f0 0%, #fffaf9 100%); border-left: 5px solid #e74c3c; border-radius: 8px;">
+<div style="margin: 2rem 0; padding: 1.5rem; background: linear-gradient(135deg, #f0f6ff 0%, #f9fcff 100%); border-left: 5px solid #2980b9; border-radius: 8px;">
 
 **Comprehensive business analysis document covering market positioning, financial performance, and strategic recommendations.**
 
