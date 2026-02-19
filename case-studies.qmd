@@ -23,13 +23,15 @@ subtitle: "Data-Driven Outcomes & Measurable Impact"
 .case-study-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2.5rem;
+  gap: 2rem;
   margin-top: 2rem;
+  grid-auto-rows: 1fr;
 }
 
 @media (max-width: 768px) {
   .case-study-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
@@ -39,6 +41,9 @@ subtitle: "Data-Driven Outcomes & Measurable Impact"
   background: #f9f9f9;
   border-radius: 4px;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 [data-bs-theme="dark"] .case-study-card {
@@ -141,7 +146,7 @@ subtitle: "Data-Driven Outcomes & Measurable Impact"
 
 .cta-button {
   display: inline-block;
-  margin-top: 1rem;
+  margin-top: auto;
   padding: 0.75rem 1.5rem;
   background: #2980b9;
   color: white;
@@ -158,8 +163,8 @@ subtitle: "Data-Driven Outcomes & Measurable Impact"
 </style>
 
 <div class="case-study-header">
-<h2>How We Deliver Results</h2>
-<p>Real problems. Data-driven solutions. Quantified outcomes.</p>
+<h2>Real Impact</h2>
+<p>Data-driven solutions that deliver quantified outcomes.</p>
 </div>
 
 <div class="case-study-grid">

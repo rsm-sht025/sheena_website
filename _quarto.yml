@@ -17,8 +17,6 @@ website:
         text: Insights
       - href: tools.qmd
         text: Tools
-      - href: projects.qmd
-        text: Portfolio
       - href: visualizations.qmd
         text: Visualizations
       
