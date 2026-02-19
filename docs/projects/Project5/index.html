@@ -149,10 +149,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Tools</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../projects.html"> 
-<span class="menu-text">Portfolio</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../../visualizations.html"> 
 <span class="menu-text">Visualizations</span></a>
   </li>  
@@ -197,7 +193,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The input it takes is the file path of the CSV file containing the Iris dataset. In this case, the file path is stored in the variable file_path and is set to ‘iris.csv’.</p>
 <p>The output it produces is the first few rows of the Iris dataset displayed in the console or notebook environment.</p>
 <p>The code imports the pandas library, which is a popular data manipulation library in Python. It assigns the file path of the CSV file to the variable file_path. function from the pandas library is used to read the CSV file specified by file_path. This function loads the data from the CSV file into a pandas DataFrame object, which is a tabular data structure similar to a spreadsheet. The DataFrame object containing the Iris dataset is assigned to the variable iris_data. Finally, the iris_data.head() method is called, which displays the first few rows (by default, 5 rows) of the DataFrame. The important logic flow in this code is straightforward: it reads a CSV file containing the Iris dataset and displays the first few rows of the data. No complex data transformations or algorithms are involved in this particular code snippet. Overall, this code is a simple way to load and preview a dataset from a CSV file using the pandas library in Python. It is a common first step in data analysis or machine learning projects, as it allows the programmer to get a quick understanding of the dataset’s structure and contents before proceeding with further analysis or processing.</p>
-<div id="0a7c690e" class="cell" data-execution_count="1">
+<div id="598a9369" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Iris dataset</span></span>
@@ -284,7 +280,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>To evaluate the clustering performance, I will employ various metrics, such as the WCSS and Silhouette Score. The WCSS quantifies the compactness of clusters, with lower values indicating tighter clusters. The Silhouette Score measures the separation between clusters, with higher values suggesting better-defined clusters.</p>
 <p>By analyzing these metrics across different values of k, I can determine the optimal number of clusters that best represents the inherent structure of the data. Additionally, I will compare the performance of my custom implementation with established libraries like scikit-learn to validate the results and ensure robustness.</p>
 <p>Throughout the analysis, I will maintain a scientific mindset, exploring the data from multiple angles and leveraging visualizations to communicate findings effectively. The K-Means algorithm is a powerful tool in a data scientist’s toolkit, enabling us to extract valuable insights from complex datasets and drive data-driven decision-making processes.</p>
-<div id="991e258b" class="cell" data-execution_count="2">
+<div id="308fee43" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> silhouette_score, silhouette_samples</span>
@@ -347,8 +343,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[5.88360656 2.74098361 4.38852459 1.43442623]
- [6.85384615 3.07692308 5.71538462 2.05384615]
+<pre><code>[[6.85384615 3.07692308 5.71538462 2.05384615]
+ [5.88360656 2.74098361 4.38852459 1.43442623]
  [5.006      3.428      1.462      0.246     ]]</code></pre>
 </div>
 </div>
@@ -361,7 +357,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>To achieve its purpose, the code follows these steps: a. It defines four functions: initialize_centroids, assign_clusters, update_centroids, and kmeans. b. The initialize_centroids function randomly selects a specified number of data points from the dataset to be the initial centroids (central points) of the clusters. c.&nbsp;The assign_clusters function calculates the distance between each data point and all the centroids, and assigns each data point to the cluster with the nearest centroid. d.&nbsp;The update_centroids function recalculates the centroids by taking the mean of all the data points assigned to each cluster. e. The kmeans function is the main function that orchestrates the K-Means algorithm. It starts by initializing the centroids, and then iterates over the following steps: i. Assign each data point to the nearest centroid using assign_clusters. ii. Update the centroids based on the new cluster assignments using update_centroids. iii. Repeat steps i and ii until the centroids no longer change significantly or a maximum number of iterations is reached.</p>
 <p>The important logic flow in this code is the iterative process of assigning data points to clusters and updating the centroids based on the new assignments. This process continues until the centroids stabilize, indicating that the clusters have converged to a stable state.</p>
 <p>The code follows a straightforward algorithm to group data points into clusters based on their similarity. It starts by randomly selecting initial centroids, then iteratively assigns data points to the nearest centroids and updates the centroids based on the new assignments. This process continues until the centroids no longer change significantly, at which point the final cluster assignments and centroid coordinates are returned.</p>
-<div id="7624d5b5" class="cell" data-execution_count="3">
+<div id="b31313b3" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> silhouette_score</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -431,7 +427,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Based on the silhouette score plot, the optimal number of clusters appears to be around 𝑘=3, as itex ibitas the highest silhouette score.</p>
 <section id="comparing-with-builtin-kmeans-function-in-scikit-learn" class="level3">
 <h3 class="anchored" data-anchor-id="comparing-with-builtin-kmeans-function-in-scikit-learn">Comparing with builtin Kmeans function in scikit-learn</h3>
-<div id="d8a3170c" class="cell" data-execution_count="4">
+<div id="922de598" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Using scikit-learn's KMeans</span></span>
@@ -520,7 +516,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 <p>Both implementations suggest that k=3 is the optimal number of clusters for the Iris dataset, based on the analysis of the within-cluster sum of squares (WCSS) and silhouette scores. The built-in KMeans algorithm from the scikit-learn library exhibits marginally superior performance in terms of these evaluation metrics.</p>
 <section id="latent-class-mnl" class="level3">
 <h3 class="anchored" data-anchor-id="latent-class-mnl">Latent-Class MNL</h3>
-<div id="96a76db1" class="cell" data-execution_count="5">
+<div id="bbe764ef" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -643,7 +639,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 </div>
 </div>
 </div>
-<div id="18e25264" class="cell" data-execution_count="6">
+<div id="508a3dbd" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure the indices match correctly by resetting the index</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>yogurt_data_reset <span class="op">=</span> yogurt_data.reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -710,7 +706,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>18:09:44</td>
+<td>18:49:39</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-2194.5</td>
 </tr>
@@ -820,7 +816,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 <p>Price Coefficients: Choice 2: -93.293 Choice 3: -150.555 Choice 4: -108.019</p>
 <p>All parameters are statistically significant at the p&lt;0.001 level.</p>
 <p>Interpretation: The positive intercept values suggest a higher baseline preference for choices 2, 3, and 4 when the price attribute is not considered. However, the negative price coefficients indicate that as the price increases, the likelihood of selecting each of these choices decreases. This finding aligns with the economic principle of demand theory, where higher prices lead to lower demand for a product or service, ceteris paribus.</p>
-<div id="fb0ce62f" class="cell" data-execution_count="7">
+<div id="9555334b" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.mixture <span class="im">import</span> GaussianMixture</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_latent_class_mnl(X, y, n_classes):</span>
@@ -863,7 +859,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 <p>Here’s how the code achieves its purpose: It first fits a Gaussian Mixture Model (GMM) to the independent variables (X) to identify the optimal number of latent classes based on the Bayesian Information Criterion (BIC). Using the optimal number of latent classes, it re-fits the GMM and assigns each observation to a latent class using the predict method. The code then creates a dictionary called “class_parameters” to store the MNL model results for each latent class. It iterates over the unique latent classes and does the following for each class: a. It selects the data belonging to that latent class from the “long_data” dataset. b. It extracts the independent variables (X_class) and the dependent variable (y_class) for that class. c.&nbsp;It attempts to fit an MNL model using the statsmodels library, passing y_class as the dependent variable and X_class as the independent variables. d.&nbsp;If the model fitting is successful, it stores the MNL model results in the “class_parameters” dictionary, with the latent class as the key. Finally, it prints the parameter estimates (summary) for each latent class stored in the “class_parameters” dictionary. The important logic flow in this code is the iterative process of fitting separate MNL models for each identified latent class. It first identifies the latent classes using a GMM, then fits a separate MNL model for each class, allowing for different parameter estimates and preferences across the segments.</p>
 <p>The code performs a data transformation by converting the original dataset into a “long” format, where each row represents a choice made by an individual. This transformation is necessary for fitting the MNL model, which models the choice probabilities across multiple alternatives.</p>
 <p>Overall, this code aims to capture the heterogeneity in consumer preferences or behaviors by identifying latent classes within the data and fitting separate MNL models for each class, providing insights into the preferences and behaviors of different segments.</p>
-<div id="0b108015" class="cell" data-execution_count="8">
+<div id="96eba32b" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-fit the Gaussian Mixture Model to identify the optimal number of classes</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.mixture <span class="im">import</span> GaussianMixture</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -924,7 +920,7 @@ Dep. Variable:             choice_idx   No. Observations:                 1326
 Model:                        MNLogit   Df Residuals:                     1322
 Method:                           MLE   Df Model:                            2
 Date:                Wed, 18 Feb 2026   Pseudo R-squ.:                 0.03389
-Time:                        18:09:44   Log-Likelihood:                -1024.9
+Time:                        18:49:39   Log-Likelihood:                -1024.9
 converged:                       True   LL-Null:                       -1060.8
 Covariance Type:            nonrobust   LLR p-value:                 2.430e-16
 ================================================================================
@@ -948,7 +944,7 @@ Dep. Variable:             choice_idx   No. Observations:                  198
 Model:                        MNLogit   Df Residuals:                      192
 Method:                           MLE   Df Model:                            3
 Date:                Wed, 18 Feb 2026   Pseudo R-squ.:                 0.02727
-Time:                        18:09:44   Log-Likelihood:                -260.95
+Time:                        18:49:39   Log-Likelihood:                -260.95
 converged:                       True   LL-Null:                       -268.27
 Covariance Type:            nonrobust   LLR p-value:                  0.002163
 ================================================================================
@@ -977,7 +973,7 @@ Dep. Variable:             choice_idx   No. Observations:                   35
 Model:                        MNLogit   Df Residuals:                       31
 Method:                           MLE   Df Model:                            2
 Date:                Wed, 18 Feb 2026   Pseudo R-squ.:                 0.04012
-Time:                        18:09:44   Log-Likelihood:                -29.866
+Time:                        18:49:39   Log-Likelihood:                -29.866
 converged:                       True   LL-Null:                       -31.114
 Covariance Type:            nonrobust   LLR p-value:                    0.2870
 ================================================================================
@@ -1001,7 +997,7 @@ Dep. Variable:             choice_idx   No. Observations:                  104
 Model:                        MNLogit   Df Residuals:                      103
 Method:                           MLE   Df Model:                            0
 Date:                Wed, 18 Feb 2026   Pseudo R-squ.:               6.759e-11
-Time:                        18:09:44   Log-Likelihood:                -32.921
+Time:                        18:49:39   Log-Likelihood:                -32.921
 converged:                       True   LL-Null:                       -32.921
 Covariance Type:            nonrobust   LLR p-value:                       nan
 ================================================================================
