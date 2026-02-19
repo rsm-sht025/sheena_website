@@ -1,0 +1,41 @@
+---
+title: "Visualizations"
+---
+
+<div style="margin-bottom: 3rem; padding: 2rem; text-align: center; border-bottom: 2px solid #ecf0f1;">
+<p style="font-size: 1.2rem; color: #2980b9; font-weight: 600; letter-spacing: 0.5px;">DATA INSIGHTS</p>
+<h1 style="font-size: 2.8rem; margin: 0.5rem 0; font-weight: 800;">Key Visualizations</h1>
+<p style="font-size: 1.1rem; color: #555; margin-top: 1rem; line-height: 1.8;">Selected charts and visualizations from research projects highlighting key findings and analytical insights.</p>
+</div>
+
+## Fundraising Impact Analysis
+
+Distribution of donation amounts across treatment groups, revealing the effect of matching grant interventions on donor behavior.
+
+![Donation Distribution by Treatment](projects/project1/index_files/figure-html/cell-5-output-1.png)
+
+---
+
+## Patent Holdings by Region
+
+Comparative analysis of patent distribution across geographic regions and demographic segments.
+
+![Regional Patent Distribution](projects/project2/index_files/figure-html/cell-6-output-1.png)
+
+![Patent Trends](projects/project2/index_files/figure-html/cell-10-output-1.png)
+
+---
+
+## Operational Performance Metrics
+
+Key driver analysis revealing the relative importance of factors influencing business outcomes.
+
+![Performance Drivers](projects/project2/index_files/figure-html/cell-24-output-1.png)
+
+---
+
+<div style="margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #f0f6ff 0%, #f9fcff 100%); border-left: 5px solid #2980b9; border-radius: 8px; text-align: center;">
+
+**Explore the full analyses** — Visit the [Portfolio](/projects.html) page to access complete project documentation with detailed methodology and findings.
+
+</div>
