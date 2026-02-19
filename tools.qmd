@@ -1,36 +1,58 @@
 ---
 title: "Tools & Resources"
-subtitle: "Procurement Intelligence & AI-Powered Supplier Management"
+subtitle: "Procurement Intelligence & Supplier Management"
 ---
 
 <style>
-.tools-section {
-  margin: 3rem 0;
-  padding: 2rem;
-  border-radius: 8px;
-  background: #f9f9f9;
+.tools-container {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-[data-bs-theme="dark"] .tools-section {
-  background: #1e1e1e;
+.tool-section {
+  padding: 3rem 0;
+  border-bottom: 1px solid #e5e5e5;
 }
 
-.tools-section h2 {
-  color: #2980b9;
-  border-bottom: 3px solid #2980b9;
-  padding-bottom: 1rem;
-  margin-top: 0;
+[data-bs-theme="dark"] .tool-section {
+  border-bottom-color: #333;
 }
 
-/* Cost Calculator Styles */
+.tool-section:last-child {
+  border-bottom: none;
+}
+
+.tool-section h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: #1a1a1a;
+}
+
+[data-bs-theme="dark"] .tool-section h2 {
+  color: #f5f5f5;
+}
+
+.tool-description {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #4a4a4a;
+  margin-bottom: 2rem;
+}
+
+[data-bs-theme="dark"] .tool-description {
+  color: #d0d0d0;
+}
+
+/* Cost Calculator */
 .calculator-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .calculator-grid {
     grid-template-columns: 1fr;
   }
@@ -43,8 +65,9 @@ subtitle: "Procurement Intelligence & AI-Powered Supplier Management"
 .calc-input-group label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #333;
+  font-size: 0.95rem;
 }
 
 [data-bs-theme="dark"] .calc-input-group label {
@@ -54,7 +77,7 @@ subtitle: "Procurement Intelligence & AI-Powered Supplier Management"
 .calc-input-group input {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
+  border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
 }
@@ -71,21 +94,35 @@ subtitle: "Procurement Intelligence & AI-Powered Supplier Management"
   box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.1);
 }
 
+.calc-input-group small {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+[data-bs-theme="dark"] .calc-input-group small {
+  color: #999;
+}
+
 .calculator-results {
-  background: #e8f4f8;
-  padding: 1.5rem;
-  border-radius: 4px;
-  border-left: 5px solid #2980b9;
+  background: #f5f5f5;
+  padding: 2rem;
+  border-radius: 6px;
 }
 
 [data-bs-theme="dark"] .calculator-results {
-  background: #1a2f36;
+  background: #1e1e1e;
 }
 
 .result-item {
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(41, 128, 185, 0.3);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+[data-bs-theme="dark"] .result-item {
+  border-bottom-color: #333;
 }
 
 .result-item:last-child {
@@ -94,9 +131,10 @@ subtitle: "Procurement Intelligence & AI-Powered Supplier Management"
 
 .result-label {
   font-size: 0.85rem;
-  color: #666;
+  color: #888;
   text-transform: uppercase;
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.3rem;
 }
 
 [data-bs-theme="dark"] .result-label {
@@ -105,19 +143,19 @@ subtitle: "Procurement Intelligence & AI-Powered Supplier Management"
 
 .result-value {
   font-size: 1.6rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #2980b9;
 }
 
 .calculator-button {
   display: inline-block;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 2rem;
   background: #2980b9;
   color: white;
   border: none;
   border-radius: 4px;
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 500;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.3s ease;
   width: 100%;
@@ -126,28 +164,26 @@ subtitle: "Procurement Intelligence & AI-Powered Supplier Management"
 
 .calculator-button:hover {
   background: #1f5fa6;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(41, 128, 185, 0.3);
 }
 
-/* Chatbot Styles */
-.chatbot-container {
+/* Chatbot */
+.chatbot-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
 }
 
-@media (max-width: 768px) {
-  .chatbot-container {
+@media (max-width: 900px) {
+  .chatbot-grid {
     grid-template-columns: 1fr;
   }
 }
 
 .chatbot-box {
   background: #f5f5f5;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
   padding: 1.5rem;
   height: 500px;
   display: flex;
@@ -165,14 +201,16 @@ subtitle: "Procurement Intelligence & AI-Powered Supplier Management"
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .chat-message {
   padding: 0.75rem 1rem;
-  border-radius: 4px;
-  max-width: 85%;
+  border-radius: 6px;
+  max-width: 90%;
   word-wrap: break-word;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .chat-message.user {
@@ -200,7 +238,7 @@ subtitle: "Procurement Intelligence & AI-Powered Supplier Management"
 .chat-input-area input {
   flex: 1;
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
+  border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 0.95rem;
 }
@@ -217,7 +255,7 @@ subtitle: "Procurement Intelligence & AI-Powered Supplier Management"
   color: white;
   border: none;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -226,264 +264,4 @@ subtitle: "Procurement Intelligence & AI-Powered Supplier Management"
   background: #1f5fa6;
 }
 
-.chatbot-info {
-  background: #e8f4f8;
-  padding: 1rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  line-height: 1.6;
-}
 
-[data-bs-theme="dark"] .chatbot-info {
-  background: #1a2f36;
-  color: #ddd;
-}
-
-.use-case-list {
-  margin-top: 1rem;
-}
-
-.use-case-list li {
-  margin-bottom: 0.5rem;
-}
-
-.feature-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-@media (max-width: 768px) {
-  .feature-list {
-    grid-template-columns: 1fr;
-  }
-}
-
-.feature-item {
-  padding: 1rem;
-  background: #e8f4f8;
-  border-left: 4px solid #2980b9;
-  border-radius: 4px;
-}
-
-[data-bs-theme="dark"] .feature-item {
-  background: #1a2f36;
-}
-
-.feature-item strong {
-  display: block;
-  color: #2980b9;
-  margin-bottom: 0.25rem;
-}
-
-.feature-item p {
-  margin: 0;
-  font-size: 0.9rem;
-}
-</style>
-
-<div class="tools-section">
-
-## Procurement Spend Analyzer
-
-Strategic procurement isn't just about cutting costs—it's about understanding your **cost structure, supplier leverage, and optimization opportunities**.
-
-This calculator helps you model potential savings across multiple procurement levers:
-
-<div class="calculator-grid">
-<div>
-<div class="calc-input-group">
-<label for="currentSpend">Current Annual Spend ($)</label>
-<input type="number" id="currentSpend" placeholder="e.g., 10000000" value="10000000">
-</div>
-
-<div class="calc-input-group">
-<label for="consolidationSavings">Supplier Consolidation Opportunity (%)</label>
-<input type="number" id="consolidationSavings" placeholder="e.g., 8" value="8" min="0" max="100">
-<small style="color: #666;">Typical range: 5-15% from eliminating tail spend & redundancy</small>
-</div>
-
-<div class="calc-input-group">
-<label for="negotiationSavings">Negotiation Opportunity (%)</label>
-<input type="number" id="negotiationSavings" placeholder="e.g., 5" value="5" min="0" max="100">
-<small style="color: #666;">Typical range: 3-10% from renegotiating terms with key suppliers</small>
-</div>
-
-<div class="calc-input-group">
-<label for="processOptimization">Process Optimization Opportunity (%)</label>
-<input type="number" id="processOptimization" placeholder="e.g., 4" value="4" min="0" max="100">
-<small style="color: #666;">Typical range: 2-8% from automation, better ordering, reduced waste</small>
-</div>
-
-<button class="calculator-button" onclick="calculateSavings()">Calculate Opportunity</button>
-</div>
-
-<div class="calculator-results" id="resultsContainer" style="display: none;">
-<div class="result-item">
-<div class="result-label">Total Annual Savings Opportunity</div>
-<div class="result-value" id="totalSavings">$0</div>
-</div>
-
-<div class="result-item">
-<div class="result-label">From Supplier Consolidation</div>
-<div class="result-value" id="consolidationAmount" style="color: #27ae60; font-size: 1.3rem;">$0</div>
-</div>
-
-<div class="result-item">
-<div class="result-label">From Negotiation & Terms</div>
-<div class="result-value" id="negotiationAmount" style="color: #27ae60; font-size: 1.3rem;">$0</div>
-</div>
-
-<div class="result-item">
-<div class="result-label">From Process Optimization</div>
-<div class="result-value" id="optimizationAmount" style="color: #27ae60; font-size: 1.3rem;">$0</div>
-</div>
-
-<div class="result-item">
-<div class="result-label">New Optimized Spend</div>
-<div class="result-value" id="newSpend" style="font-size: 1.3rem;">$0</div>
-</div>
-</div>
-</div>
-
-<script>
-function calculateSavings() {
-  const currentSpend = parseFloat(document.getElementById('currentSpend').value) || 0;
-  const consolidation = parseFloat(document.getElementById('consolidationSavings').value) || 0;
-  const negotiation = parseFloat(document.getElementById('negotiationSavings').value) || 0;
-  const optimization = parseFloat(document.getElementById('processOptimization').value) || 0;
-  
-  const consolidationAmount = currentSpend * (consolidation / 100);
-  const negotiationAmount = currentSpend * (negotiation / 100);
-  const optimizationAmount = currentSpend * (optimization / 100);
-  const totalSavings = consolidationAmount + negotiationAmount + optimizationAmount;
-  const newSpend = currentSpend - totalSavings;
-  
-  document.getElementById('totalSavings').textContent = '$' + totalSavings.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  document.getElementById('consolidationAmount').textContent = '$' + consolidationAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  document.getElementById('negotiationAmount').textContent = '$' + negotiationAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  document.getElementById('optimizationAmount').textContent = '$' + optimizationAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  document.getElementById('newSpend').textContent = '$' + newSpend.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  
-  document.getElementById('resultsContainer').style.display = 'block';
-}
-</script>
-
-</div>
-
-<div class="tools-section">
-
-## AI Contract & Supplier Management Assistant
-
-Managing complex supplier relationships, contracts, and compliance at scale requires more than spreadsheets. This AI assistant helps you navigate contract terms, identify supplier risks, and optimize procurement strategy.
-
-<div class="chatbot-container">
-<div>
-<div class="chatbot-box">
-<div class="chat-messages" id="chatMessages">
-<div class="chat-message ai">Hi! I'm Sheena's Procurement AI Assistant. I can help you with:<br/>• Contract term analysis<br/>• Supplier risk assessment<br/>• Cost optimization strategies<br/>• Compliance & legal review<br/><br/>What would you like to explore?</div>
-</div>
-<div class="chat-input-area">
-<input type="text" id="chatInput" placeholder="Ask me about supplier management..." onkeypress="if(event.key==='Enter') sendMessage()">
-<button onclick="sendMessage()">Send</button>
-</div>
-</div>
-</div>
-
-<div>
-<div class="chatbot-info">
-<strong>💡 What This AI Assistant Can Help With:</strong>
-<ul class="use-case-list">
-<li><strong>Contract Analysis:</strong> Identify unfavorable terms, hidden costs, renewal obligations</li>
-<li><strong>Supplier Risk:</strong> Financial stability assessment, concentration risk, geopolitical exposure</li>
-<li><strong>Negotiation Strategy:</strong> Leverage points, benchmarking against market rates, alternative suppliers</li>
-<li><strong>Cost Optimization:</strong> Volume consolidation opportunities, renegotiation windows, alternative sourcing</li>
-<li><strong>Compliance:</strong> Environmental standards, labor practices, regulatory requirements</li>
-<li><strong>Strategic Planning:</strong> Dual-sourcing strategy, supplier diversification, supply chain resilience</li>
-</ul>
-</div>
-
-<div style="margin-top: 1.5rem;">
-<strong>Key Features:</strong>
-<div class="feature-list">
-<div class="feature-item">
-<strong>📊 Data Analysis</strong>
-<p>Analyze spend patterns and identify optimization opportunities across your supplier base</p>
-</div>
-<div class="feature-item">
-<strong>⚖️ Terms Assessment</strong>
-<p>Review contract language and identify areas for renegotiation</p>
-</div>
-<div class="feature-item">
-<strong>🎯 Risk Identification</strong>
-<p>Spot supplier vulnerabilities and supply chain concentrations before they become problems</p>
-</div>
-<div class="feature-item">
-<strong>💰 Savings Opportunity</strong>
-<p>Quantify potential savings and create action plans for procurement teams</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-<script>
-const sampleResponses = {
-  'contract': 'When reviewing supplier contracts, focus on: (1) Payment terms—30/60/90 day net vs. prepayment impacts cash flow significantly; (2) Renewal clauses—auto-renewal language can lock you in; (3) Price adjustment mechanisms—are you protected against commodity price spikes?; (4) Termination for convenience—can you exit without penalty?; (5) Liability caps—are you adequately protected?\n\nI can help analyze specific contract language if you share key terms.',
-  'supplier': 'Supplier risk assessment requires looking at: (1) Financial health—check recent financials, credit ratings; (2) Concentration—what % of your spend is with this supplier?; (3) Geographic exposure—are there geopolitical risks?; (4) Alternative sources—can you switch if needed?; (5) SLA compliance—are they meeting service levels?\n\nWhat specific supplier concerns do you have?',
-  'cost': 'Common cost optimization levers: (1) Consolidation—reduce fragmented spend across too many suppliers (typical savings: 5-15%); (2) Negotiation—renegotiate with top suppliers using competitive bids (typical savings: 3-10%); (3) Process improvement—automation, better forecasting, reduced waste (typical savings: 2-8%); (4) Alternative sourcing—identify new suppliers or categories (typical savings: 10-20%)\n\nUse our Spend Analyzer above to model your opportunity.',
-  'negotiate': 'Procurement leverage comes from: (1) Data—use spend intelligence to show volume/multi-year commitment value; (2) Timing—renegotiate near renewal windows; (3) Alternatives—have competitive bids ready; (4) Terms—focus on payment terms, volumes, exclusivity, not just price; (5) Scope—can you bundle categories for better leverage?\n\nWhat category are you negotiating?',
-  'default': 'Great question! I can help with contract analysis, supplier risk assessment, cost optimization, negotiation strategy, compliance review, or supply chain planning. What aspect would you like to explore?'
-};
-
-function sendMessage() {
-  const input = document.getElementById('chatInput');
-  const message = input.value.trim();
-  
-  if (!message) return;
-  
-  // Add user message
-  const messagesDiv = document.getElementById('chatMessages');
-  const userMsg = document.createElement('div');
-  userMsg.className = 'chat-message user';
-  userMsg.textContent = message;
-  messagesDiv.appendChild(userMsg);
-  
-  input.value = '';
-  
-  // Simulate AI response with delay
-  setTimeout(() => {
-    const lowerMessage = message.toLowerCase();
-    let response = sampleResponses['default'];
-    
-    if (lowerMessage.includes('contract') || lowerMessage.includes('terms')) {
-      response = sampleResponses['contract'];
-    } else if (lowerMessage.includes('supplier') || lowerMessage.includes('risk')) {
-      response = sampleResponses['supplier'];
-    } else if (lowerMessage.includes('cost') || lowerMessage.includes('saving')) {
-      response = sampleResponses['cost'];
-    } else if (lowerMessage.includes('negot') || lowerMessage.includes('leverage')) {
-      response = sampleResponses['negotiate'];
-    }
-    
-    const aiMsg = document.createElement('div');
-    aiMsg.className = 'chat-message ai';
-    aiMsg.textContent = response;
-    messagesDiv.appendChild(aiMsg);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }, 500);
-}
-</script>
-
-</div>
-
----
-
-## How to Use These Tools
-
-**Spend Analyzer**: Use this to understand your total addressable savings opportunity. Input your current spend and typical opportunity percentages for your industry (happy to discuss benchmarks). This helps you set realistic targets for procurement initiatives.
-
-**AI Assistant**: This is available 24/7 to help your team think through supplier strategy, contract terms, risk assessment, and cost optimization. It's a trained assistant for procurement decision-making, not a replacement for legal counsel, but it helps frame the right questions.
-
-Both tools are designed to help you **move faster on data-driven procurement decisions** and articulate the business case for supply chain investments.
