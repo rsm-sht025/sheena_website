@@ -1,0 +1,161 @@
+---
+title: "Insights"
+subtitle: "Data Infrastructure & Strategic Intelligence"
+---
+
+<style>
+.insight-card {
+  border-left: 5px solid #2980b9;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  background: #f9f9f9;
+  border-radius: 4px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.insight-card:hover {
+  box-shadow: 0 4px 12px rgba(41, 128, 185, 0.15);
+  transform: translateY(-2px);
+}
+
+[data-bs-theme="dark"] .insight-card {
+  background: #1e1e1e;
+}
+
+.insight-date {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+[data-bs-theme="dark"] .insight-date {
+  color: #aaa;
+}
+
+.insight-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+  color: #2980b9;
+}
+
+.insight-excerpt {
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+
+.read-more {
+  color: #2980b9;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.read-more:hover {
+  text-decoration: underline;
+}
+</style>
+
+## The Evolution of Data Infrastructure
+
+### Semiconductor Economics: The 2026 Landscape
+
+**January 2026**
+
+The semiconductor shortage narrative has fundamentally shifted. Rather than scarcity, we're seeing **overcapacity and margin compression**, particularly in mature node manufacturing. What does this mean for procurement teams?
+
+- **Buyer leverage returns**: After years of suppliers dictating terms, procurement organizations are regaining negotiating power
+- **Multi-sourcing becomes viable**: Companies can now diversify beyond sole-source arrangements without premium penalties
+- **Design-to-cost pressure increases**: The race to optimize wafer utilization pushes innovation toward cost-efficient architectures
+
+**Strategic Implication:** This is the moment to renegotiate long-term supply agreements. The next 18 months will determine competitive positioning through 2028.
+
+---
+
+### Data Center Sprawl to Space: The Physics Problem
+
+**January 2026**
+
+Hyperscalers are running into a hard constraint: **grid capacity and thermal density**. AWS, Google, and Microsoft are all accelerating space-based infrastructure pilots—not as science fiction, but as economic necessity.
+
+The math is brutal:
+- Ground-based data center: 20-50 MW power requirements per facility
+- Edge computing in orbit: Latency advantage + distributed thermal load
+- Network economics: Starlink/Amazon Kuiper infrastructure makes space-to-ground bandwidth competitive
+
+**What's changing for supply chain leaders:**
+- Suppliers pivoting to satellite-grade components (radiation hardening, thermal tolerance)
+- Contracts shifting from "data center per region" to "constellation models"
+- New risk vectors: orbital debris, space regulatory frameworks, geopolitical competition
+
+**The procurement angle:** Companies that lock in satellite component suppliers *now* will have 24-month lead times on competitors. This is where 2026 winners emerge.
+
+---
+
+### Environmental Cost of Computing: The Hidden Spend Driver
+
+**February 2026**
+
+Scope 3 emissions reporting is forcing CFOs to quantify the environmental cost of cloud infrastructure. **Water consumption for cooling is becoming a material P&L item.**
+
+- Data centers consume 3-5% of global electricity
+- Water usage: 0.5-1 gallon per kWh for cooling
+- The EPA now tracks data center water intensity as a regulatory metric
+
+**Why this matters for spend management:**
+- Renewable energy credits (RECs) are now line-item procurement decisions
+- Hyperscaler pricing is bifurcating: "green" vs. "conventional" compute now has cost delta
+- Supply contracts increasingly include carbon intensity clauses
+
+**Strategic opportunity:** Organizations that optimize for water/carbon efficiency (not just $/compute) will access preferential pricing and supplier partnerships through 2026-2027.
+
+---
+
+### Microelectronics Manufacturing: The Reshoring Wave
+
+**February 2026**
+
+CHIPS Act incentives are materializing. $39B in commitments already allocated, with another $110B in proposed funding. The U.S. is rebuilding domestic advanced node capacity.
+
+**What this means:**
+- New suppliers entering the market (TSMC Arizona, Intel Foundry Services, domestic fabs)
+- Supply chain geography shifting from Asia-centric to North America-distributed
+- First-mover advantage in qualifying new manufacturers expires in 6-12 months
+
+**Procurement strategy shift:**
+- Dual-source arrangements with new North American suppliers
+- Geographic risk diversification becomes a cost lever (not premium)
+- Supplier financial stability becomes critical (new fabs are capital-intensive, vulnerable to downturn)
+
+---
+
+### AI Infrastructure: The Margin Conversation Nobody's Having Yet
+
+**February 2026**
+
+The AI boom has created brutal competition for high-bandwidth memory (HBM) and advanced packaging. **Gross margins on AI accelerators are compressing 20-30% YoY** as production scales.
+
+- Supply of HBM is still the constraint
+- Advanced packaging (chiplets, 3D stacking) becoming table stakes
+- Lead times for custom silicon: 18-24 months (vs. 12-14 months 12 months ago)
+
+**What forward-thinking procurement teams are doing:**
+- Locking in AI accelerator pricing NOW before next round of margin compression
+- Diversifying across NVIDIA, AMD, custom silicon (Google TPU, AWS Trainium)
+- Building relationships with packaging suppliers (AMKOR, ASE, JCET)
+
+This is the window for procurement leverage. Post-2026, capacity will normalize and pricing power shifts back to suppliers.
+
+---
+
+## Key Takeaway
+
+**Infrastructure is no longer about availability. It's about cost structure, environmental impact, and geopolitical resilience.**
+
+The procurement teams that are winning right now are:
+1. **Negotiating supplier contracts with environmental/geographic diversification clauses**
+2. **Locking in pricing on emerging capacity (space, new fabs, AI accelerators)**
+3. **Quantifying the true cost of compute** (including water, carbon, supply chain risk)
+4. **Building relationships with non-traditional suppliers** before capacity normalizes
+
+The data-driven procurement advantage in 2026 isn't about better spreadsheets. It's about understanding **where capacity is shifting and locking in terms before your competitors do.**

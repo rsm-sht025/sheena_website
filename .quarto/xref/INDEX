@@ -47,5 +47,14 @@
   },
   "visualizations.qmd": {
     "visualizations.html": "fa34d8c4"
+  },
+  "tools.qmd": {
+    "tools.html": "a601c36d"
+  },
+  "case-studies.qmd": {
+    "case-studies.html": "56de066b"
+  },
+  "insights.qmd": {
+    "insights.html": "202287ec"
   }
 }

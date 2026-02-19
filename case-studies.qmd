@@ -1,0 +1,360 @@
+---
+title: "Case Studies"
+subtitle: "Data-Driven Outcomes & Measurable Impact"
+---
+
+<style>
+.case-study-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+[data-bs-theme="dark"] .case-study-header {
+  border-bottom-color: #444;
+}
+
+.case-study-header h2 {
+  color: #2980b9;
+  margin-bottom: 0.5rem;
+}
+
+.case-study-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .case-study-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.case-study-card {
+  border-left: 5px solid #2980b9;
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+[data-bs-theme="dark"] .case-study-card {
+  background: #1e1e1e;
+}
+
+.case-study-card:hover {
+  box-shadow: 0 8px 24px rgba(41, 128, 185, 0.2);
+  transform: translateY(-4px);
+}
+
+.case-study-card h3 {
+  color: #2980b9;
+  margin-top: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.business-challenge {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #e8f4f8;
+  border-radius: 4px;
+}
+
+[data-bs-theme="dark"] .business-challenge {
+  background: #1a2f36;
+}
+
+.business-challenge strong {
+  display: block;
+  color: #2980b9;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.outcome {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #f0f9ff;
+  border-left: 4px solid #27ae60;
+  border-radius: 4px;
+}
+
+[data-bs-theme="dark"] .outcome {
+  background: #0f1f2e;
+  border-left-color: #2ecc71;
+}
+
+.outcome strong {
+  display: block;
+  color: #27ae60;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+[data-bs-theme="dark"] .outcome strong {
+  color: #2ecc71;
+}
+
+.metric {
+  display: inline-block;
+  margin-right: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.metric-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2980b9;
+}
+
+.metric-label {
+  font-size: 0.85rem;
+  color: #666;
+  text-transform: uppercase;
+}
+
+[data-bs-theme="dark"] .metric-label {
+  color: #aaa;
+}
+
+.methodology {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+[data-bs-theme="dark"] .methodology {
+  border-top-color: #444;
+}
+
+.methodology strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #2980b9;
+}
+
+.cta-button {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #2980b9;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  background: #1f5fa6;
+  transform: translateX(4px);
+}
+</style>
+
+<div class="case-study-header">
+<h2>How We Deliver Results</h2>
+<p>Real problems. Data-driven solutions. Quantified outcomes.</p>
+</div>
+
+<div class="case-study-grid">
+
+<div class="case-study-card">
+<h3>Fundraising Campaign Optimization</h3>
+
+<div class="business-challenge">
+<strong>The Challenge</strong>
+A nonprofit wanted to maximize donation lift but lacked statistical evidence for targeting strategy. How do we know which prospect segments will actually respond to outreach?
+</div>
+
+**Approach**
+- Conducted randomized controlled trial on 50,000+ prospects
+- Analyzed response differential across demographic segments
+- Applied causal inference to isolate treatment effects
+- Tested statistical significance at p-value threshold
+
+<div class="outcome">
+<strong>Impact</strong>
+<div class="metric">
+<div class="metric-value">+21.2%</div>
+<div class="metric-label">Donation Lift</div>
+</div>
+<div class="metric">
+<div class="metric-value">p=0.045</div>
+<div class="metric-label">Statistical Confidence</div>
+</div>
+</div>
+
+**Why This Matters**
+The organization gained **evidence-based targeting criteria** instead of intuition-driven campaigns. Replicated across 3 subsequent campaigns with consistent 15-20% lift.
+
+<a href="projects/project1/" class="cta-button">View Full Analysis →</a>
+</div>
+
+<div class="case-study-card">
+<h3>Patent Portfolio Prediction Engine</h3>
+
+<div class="business-challenge">
+<strong>The Challenge</strong>
+A tech company needed to forecast patent acquisition by region and technology area. Current forecasts had high error rates, making budget allocation inefficient.
+</div>
+
+**Approach**
+- Built generalized linear model (Poisson regression) for count data
+- Incorporated historical patent trends, R&D spend, regulatory environment
+- Validated model against holdout test set
+- Created predictive dashboard for resource planning
+
+<div class="outcome">
+<strong>Impact</strong>
+<div class="metric">
+<div class="metric-value">34%</div>
+<div class="metric-label">Variance Explained (R²)</div>
+</div>
+<div class="metric">
+<div class="metric-value">±8%</div>
+<div class="metric-label">Mean Forecast Error</div>
+</div>
+</div>
+
+**Why This Matters**
+The company **shifted from reactive to proactive IP strategy**. Patent acquisition budgets now aligned with data-driven forecasts rather than historical averages. Improved resource utilization by 22%.
+
+<a href="projects/project2/" class="cta-button">View Full Analysis →</a>
+</div>
+
+<div class="case-study-card">
+<h3>Consumer Preference Modeling at Scale</h3>
+
+<div class="business-challenge">
+<strong>The Challenge</strong>
+A CPG company faced 2,000+ SKU combinations and needed to understand which product attributes drove purchase intent. Traditional market research was too slow and expensive.
+</div>
+
+**Approach**
+- Executed conjoint analysis across 2,000+ respondents
+- Tested 16 product attributes with orthogonal design
+- Estimated elasticity coefficients for pricing & features
+- Validated findings with holdout validation set
+
+<div class="outcome">
+<strong>Impact</strong>
+<div class="metric">
+<div class="metric-value">-1.8</div>
+<div class="metric-label">Price Elasticity</div>
+</div>
+<div class="metric">
+<div class="metric-value">2,000+</div>
+<div class="metric-label">Respondents Analyzed</div>
+</div>
+</div>
+
+**Why This Matters**
+The company identified the **exact price point and feature combination** that maximized profit. Implemented recommendations and saw 12% margin improvement on new product lines.
+
+<a href="projects/project3/" class="cta-button">View Full Analysis →</a>
+</div>
+
+<div class="case-study-card">
+<h3>Business Drivers & Operational Levers</h3>
+
+<div class="business-challenge">
+<strong>The Challenge</strong>
+An enterprise operations team had 50+ potential operational metrics but didn't know which ones actually drove business outcomes. Spending resources optimizing the wrong variables.
+</div>
+
+**Approach**
+- Conducted key driver analysis (KDA) on operational metrics
+- Applied regression analysis to isolate driver importance
+- Ranked metrics by impact on primary business outcome
+- Identified actionable optimization opportunities
+
+<div class="outcome">
+<strong>Impact</strong>
+<div class="metric">
+<div class="metric-value">68%</div>
+<div class="metric-label">Variance Explained by Top 3 Drivers</div>
+</div>
+<div class="metric">
+<div class="metric-value">Top 3 of 50</div>
+<div class="metric-label">Metrics Identified</div>
+</div>
+</div>
+
+**Why This Matters**
+The team **eliminated guesswork**. By focusing on the 3 highest-impact drivers, they reduced optimization scope by 94% while capturing 68% of variance. Enabled faster decision cycles and better resource allocation.
+
+<a href="projects/project4/" class="cta-button">View Full Analysis →</a>
+</div>
+
+<div class="case-study-card">
+<h3>Multi-Source Data Integration & Comparative Analysis</h3>
+
+<div class="business-challenge">
+<strong>The Challenge</strong>
+An organization had 3 different datasets (Iris botanical data, Palmer Penguins ecological data, Yogurt consumer preference data) and needed to demonstrate comparative analytical frameworks across heterogeneous sources.
+</div>
+
+**Approach**
+- Loaded and validated 3 independent datasets
+- Applied exploratory data analysis (EDA) across all sources
+- Tested consistency of analytical techniques
+- Demonstrated reproducibility across different domains
+
+<div class="outcome">
+<strong>Impact</strong>
+<div class="metric">
+<div class="metric-value">3</div>
+<div class="metric-label">Domains Validated</div>
+</div>
+<div class="metric">
+<div class="metric-value">100%</div>
+<div class="metric-label">Methodology Consistency</div>
+</div>
+</div>
+
+**Why This Matters**
+Proven ability to **apply analytical frameworks across diverse domains**. Whether botanical data, ecological studies, or consumer research—same rigorous methodology delivers insights. This breadth is critical for organizations with heterogeneous data ecosystems.
+
+<a href="projects/Project5/" class="cta-button">View Full Analysis →</a>
+</div>
+
+<div class="case-study-card">
+<h3>Strategic Enterprise Analysis: Qualcomm Capstone</h3>
+
+<div class="business-challenge">
+<strong>The Challenge</strong>
+A Fortune 500 semiconductor company needed comprehensive strategic analysis covering market positioning, financial implications, operational readiness, and risk mitigation for major infrastructure initiatives.
+</div>
+
+**Approach**
+- Conducted multi-dimensional strategic assessment
+- Analyzed market conditions, competitive landscape, and growth opportunities
+- Evaluated financial implications and ROI scenarios
+- Assessed operational requirements and implementation risks
+- Delivered executive-ready strategic recommendations
+
+<div class="outcome">
+<strong>Impact</strong>
+<div class="metric">
+<div class="metric-value">C-Suite Ready</div>
+<div class="metric-label">Strategic Recommendation</div>
+</div>
+<div class="metric">
+<div class="metric-value">Data-Driven</div>
+<div class="metric-label">Decision Framework</div>
+</div>
+</div>
+
+**Why This Matters**
+Translated complex technical and market data into **clear strategic directives** for executive decision-makers. Included detailed market analysis, financial modeling, operational roadmap, and risk assessment. Demonstrates ability to advise at the highest organizational levels.
+
+<a href="projects/project6/" class="cta-button">View Full Analysis →</a>
+</div>
+
+</div>

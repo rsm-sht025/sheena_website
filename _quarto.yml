@@ -11,6 +11,12 @@ website:
         text: Home
       - href: about.qmd
         text: About
+      - href: case-studies.qmd
+        text: Case Studies
+      - href: insights.qmd
+        text: Insights
+      - href: tools.qmd
+        text: Tools
       - href: projects.qmd
         text: Portfolio
       - href: visualizations.qmd
