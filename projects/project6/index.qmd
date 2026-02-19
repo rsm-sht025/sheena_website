@@ -19,9 +19,9 @@ embed-pdf: true
 
 **Comprehensive business analysis document covering market positioning, financial performance, and strategic recommendations.**
 
-</div>
+[📄 Download Detailed Report](Detailed%20Report-2.docx) - Full analysis in Word format
 
-{{< pdf "Detailed Report-2.docx" >}}
+</div>
 
 ---
 
