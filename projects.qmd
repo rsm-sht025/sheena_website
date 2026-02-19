@@ -1,7 +1,187 @@
 ---
-title: "Portfolio"
-listing:
-  contents: projects
-  type: grid
- 
+title: "Projects"
 ---
+
+A selection of data analytics projects showcasing statistical analysis, predictive modeling, and business insights.
+
+## Featured Projects
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6}
+### [Project 1: Fundraising Strategies](/projects/project1/)
+**Statistical Analysis of Donation Effectiveness**
+
+Evaluated the effectiveness of matching grants on donation amounts and rates using t-tests and regression analysis. Found that matching grant treatments had a statistically significant positive effect on donations.
+
+**Methods:** T-tests, Linear Regression, Statistical Testing  
+**Data:** Charitable donation records with demographic variables
+
+[View Project →](/projects/project1/)
+:::
+
+::: {.g-col-12 .g-col-md-6}
+### [Project 2: Patent Analysis](/projects/project2/)
+**Predictive Modeling of Patent Holdings**
+
+Explored the relationship between age, region, and customer status on patent holdings using Poisson regression. Built models to predict patent counts based on multiple factors.
+
+**Methods:** Poisson Regression, EDA, Distribution Analysis  
+**Data:** Patent and customer status data
+
+[View Project →](/projects/project2/)
+:::
+
+::: {.g-col-12 .g-col-md-6}
+### [Project 3: Conjoint Analysis](/projects/project3/)
+**Consumer Preference Analysis**
+
+Analyzed consumer preferences through conjoint analysis to identify key drivers of product choice and willingness to pay across different yogurt product attributes.
+
+**Methods:** Conjoint Analysis, Preference Modeling  
+**Data:** Consumer choice experiments
+
+[View Project →](/projects/project3/)
+:::
+
+::: {.g-col-12 .g-col-md-6}
+### [Project 4: Drivers Analysis](/projects/project4/)
+**Key Driver Regression**
+
+Identified the primary factors driving business outcomes through key driver analysis, isolating which variables have the strongest impact on performance metrics.
+
+**Methods:** Key Driver Analysis, Regression Modeling  
+**Data:** Business performance metrics
+
+[View Project →](/projects/project4/)
+:::
+
+::: {.g-col-12 .g-col-md-6}
+### [Project 5: Data Exploration](/projects/Project5/)
+**Multi-Dataset Exploratory Analysis**
+
+Comprehensive exploratory data analysis comparing patterns across multiple datasets including iris and penguin measurements. Identified key statistical patterns and relationships.
+
+**Methods:** EDA, Distribution Analysis, Statistical Summaries  
+**Data:** Iris, Palmer Penguins, Yogurt datasets
+
+[View Project →](/projects/Project5/)
+:::
+
+::: {.g-col-12 .g-col-md-6}
+### [Project 6: Qualcomm Capstone Analysis](/projects/project6/)
+**Strategic Business Analysis & Optimization**
+
+In-depth analysis of Qualcomm's business operations, competitive positioning, and strategic opportunities. Integrated financial data, market trends, and operational metrics to identify key performance drivers and recommend actionable strategies.
+
+**Methods:** Strategic Analysis, Financial Modeling, Comparative Benchmarking  
+**Deliverables:** Detailed report and executive presentation
+
+[View Project →](/projects/project6/)
+:::
+
+:::
+
+<style>
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.g-col-12 {
+  grid-column: span 1;
+}
+
+.g-col-md-6 {
+  grid-column: span 1;
+}
+
+@media (min-width: 768px) {
+  .g-col-md-6 {
+    grid-column: span 1;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid h3 {
+  color: #2980b9;
+  border-bottom: none;
+  margin-top: 0;
+  font-size: 1.3rem;
+}
+
+.grid h3 a {
+  color: #2980b9;
+}
+
+.grid h3 a:hover {
+  color: #1a5fa0;
+}
+
+.grid > div {
+  background: #f9f9f9;
+  padding: 1.8rem;
+  border-radius: 8px;
+  border-left: 4px solid #2980b9;
+  transition: all 0.3s ease;
+}
+
+.grid > div:hover {
+  box-shadow: 0 4px 12px rgba(41,128,185,0.15);
+  transform: translateY(-2px);
+}
+
+[data-bs-theme="dark"] .grid > div {
+  background: #2a2a2a;
+  border-left-color: #3498db;
+}
+
+.grid > div strong {
+  color: #1a1a1a;
+}
+
+[data-bs-theme="dark"] .grid > div strong {
+  color: #ffffff;
+}
+
+.grid > div p {
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+[data-bs-theme="dark"] .grid > div p {
+  color: #d0d0d0;
+}
+
+.grid a[href$="/"] {
+  display: inline-block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #2980b9;
+  transition: all 0.2s ease;
+}
+
+.grid a[href$="/"]::after {
+  content: "";
+  display: inline-block;
+  margin-left: 0.3rem;
+}
+
+.grid a[href$="/"]:hover {
+  color: #1a5fa0;
+  text-decoration: none;
+}
+</style>
