@@ -210,8 +210,37 @@ ul.task-list li input[type="checkbox"] {
   font-weight: 700;
 }
 
+.card-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .card-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.approach-section {
+  padding-right: 0.5rem;
+}
+
+.impact-section {
+  padding-left: 0.5rem;
+  border-left: 2px solid #e0e0e0;
+  padding-left: 1.5rem;
+}
+
+[data-bs-theme="dark"] .impact-section {
+  border-left-color: #444;
+}
+
 .business-challenge {
-  margin: 1.5rem 0;
+  margin: 0 0 1rem 0;
   padding: 1rem;
   background: #e8f4f8;
   border-radius: 4px;
@@ -237,26 +266,9 @@ ul.task-list li input[type="checkbox"] {
   border-radius: 4px;
 }
 
-[data-bs-theme="dark"] .outcome {
-  background: #0f1f2e;
-  border-left-color: #2ecc71;
-}
-
-.outcome strong {
-  display: block;
-  color: #27ae60;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-}
-
-[data-bs-theme="dark"] .outcome strong {
-  color: #2ecc71;
-}
-
 .metric {
   display: inline-block;
-  margin-right: 1.5rem;
+  margin-right: 1rem;
   margin-top: 0.5rem;
 }
 
@@ -325,9 +337,12 @@ Fundraising Campaign Optimization
 <div class="business-challenge">
 <p><strong>The Challenge</strong> A nonprofit wanted to maximize donation lift but lacked statistical evidence for targeting strategy. How do we know which prospect segments will actually respond to outreach?</p>
 </div>
-<p><strong>Approach</strong> - Conducted randomized controlled trial on 50,000+ prospects - Analyzed response differential across demographic segments - Applied causal inference to isolate treatment effects - Tested statistical significance at p-value threshold</p>
-<div class="outcome">
-<strong>Impact</strong>
+<div class="card-content">
+<div class="approach-section">
+<p><strong style="color: #2980b9;">Approach</strong> - Conducted randomized controlled trial on 50,000+ prospects - Analyzed response differential across demographic segments - Applied causal inference to isolate treatment effects - Tested statistical significance at p-value threshold</p>
+</div>
+<div class="impact-section">
+<strong style="color: #27ae60;">Impact</strong>
 <div class="metric">
 <div class="metric-value">
 +21.2%
@@ -345,6 +360,7 @@ Statistical Confidence
 </div>
 </div>
 </div>
+</div>
 <p><strong>Why This Matters</strong> The organization gained <strong>evidence-based targeting criteria</strong> instead of intuition-driven campaigns. Replicated across 3 subsequent campaigns with consistent 15-20% lift.</p>
 <p><a href="projects/project1/" class="cta-button">View Full Analysis →</a></p>
 </div>
@@ -355,9 +371,12 @@ Patent Portfolio Prediction Engine
 <div class="business-challenge">
 <p><strong>The Challenge</strong> A tech company needed to forecast patent acquisition by region and technology area. Current forecasts had high error rates, making budget allocation inefficient.</p>
 </div>
-<p><strong>Approach</strong> - Built generalized linear model (Poisson regression) for count data - Incorporated historical patent trends, R&amp;D spend, regulatory environment - Validated model against holdout test set - Created predictive dashboard for resource planning</p>
-<div class="outcome">
-<strong>Impact</strong>
+<div class="card-content">
+<div class="approach-section">
+<p><strong style="color: #2980b9;">Approach</strong> - Built generalized linear model (Poisson regression) for count data - Incorporated historical patent trends, R&amp;D spend, regulatory environment - Validated model against holdout test set - Created predictive dashboard for resource planning</p>
+</div>
+<div class="impact-section">
+<strong style="color: #27ae60;">Impact</strong>
 <div class="metric">
 <div class="metric-value">
 34%
@@ -375,6 +394,7 @@ Mean Forecast Error
 </div>
 </div>
 </div>
+</div>
 <p><strong>Why This Matters</strong> The company <strong>shifted from reactive to proactive IP strategy</strong>. Patent acquisition budgets now aligned with data-driven forecasts rather than historical averages. Improved resource utilization by 22%.</p>
 <p><a href="projects/project2/" class="cta-button">View Full Analysis →</a></p>
 </div>
@@ -385,9 +405,12 @@ Consumer Preference Modeling at Scale
 <div class="business-challenge">
 <p><strong>The Challenge</strong> A CPG company faced 2,000+ SKU combinations and needed to understand which product attributes drove purchase intent. Traditional market research was too slow and expensive.</p>
 </div>
-<p><strong>Approach</strong> - Executed conjoint analysis across 2,000+ respondents - Tested 16 product attributes with orthogonal design - Estimated elasticity coefficients for pricing &amp; features - Validated findings with holdout validation set</p>
-<div class="outcome">
-<strong>Impact</strong>
+<div class="card-content">
+<div class="approach-section">
+<p><strong style="color: #2980b9;">Approach</strong> - Executed conjoint analysis across 2,000+ respondents - Tested 16 product attributes with orthogonal design - Estimated elasticity coefficients for pricing &amp; features - Validated findings with holdout validation set</p>
+</div>
+<div class="impact-section">
+<strong style="color: #27ae60;">Impact</strong>
 <div class="metric">
 <div class="metric-value">
 -1.8
@@ -405,6 +428,7 @@ Respondents Analyzed
 </div>
 </div>
 </div>
+</div>
 <p><strong>Why This Matters</strong> The company identified the <strong>exact price point and feature combination</strong> that maximized profit. Implemented recommendations and saw 12% margin improvement on new product lines.</p>
 <p><a href="projects/project3/" class="cta-button">View Full Analysis →</a></p>
 </div>
@@ -415,9 +439,12 @@ Business Drivers &amp; Operational Levers
 <div class="business-challenge">
 <p><strong>The Challenge</strong> An enterprise operations team had 50+ potential operational metrics but didn’t know which ones actually drove business outcomes. Spending resources optimizing the wrong variables.</p>
 </div>
-<p><strong>Approach</strong> - Conducted key driver analysis (KDA) on operational metrics - Applied regression analysis to isolate driver importance - Ranked metrics by impact on primary business outcome - Identified actionable optimization opportunities</p>
-<div class="outcome">
-<strong>Impact</strong>
+<div class="card-content">
+<div class="approach-section">
+<p><strong style="color: #2980b9;">Approach</strong> - Conducted key driver analysis (KDA) on operational metrics - Applied regression analysis to isolate driver importance - Ranked metrics by impact on primary business outcome - Identified actionable optimization opportunities</p>
+</div>
+<div class="impact-section">
+<strong style="color: #27ae60;">Impact</strong>
 <div class="metric">
 <div class="metric-value">
 68%
@@ -435,6 +462,7 @@ Metrics Identified
 </div>
 </div>
 </div>
+</div>
 <p><strong>Why This Matters</strong> The team <strong>eliminated guesswork</strong>. By focusing on the 3 highest-impact drivers, they reduced optimization scope by 94% while capturing 68% of variance. Enabled faster decision cycles and better resource allocation.</p>
 <p><a href="projects/project4/" class="cta-button">View Full Analysis →</a></p>
 </div>
@@ -445,9 +473,12 @@ Multi-Source Data Integration &amp; Comparative Analysis
 <div class="business-challenge">
 <p><strong>The Challenge</strong> An organization had 3 different datasets (Iris botanical data, Palmer Penguins ecological data, Yogurt consumer preference data) and needed to demonstrate comparative analytical frameworks across heterogeneous sources.</p>
 </div>
-<p><strong>Approach</strong> - Loaded and validated 3 independent datasets - Applied exploratory data analysis (EDA) across all sources - Tested consistency of analytical techniques - Demonstrated reproducibility across different domains</p>
-<div class="outcome">
-<strong>Impact</strong>
+<div class="card-content">
+<div class="approach-section">
+<p><strong style="color: #2980b9;">Approach</strong> - Loaded and validated 3 independent datasets - Applied exploratory data analysis (EDA) across all sources - Tested consistency of analytical techniques - Demonstrated reproducibility across different domains</p>
+</div>
+<div class="impact-section">
+<strong style="color: #27ae60;">Impact</strong>
 <div class="metric">
 <div class="metric-value">
 3
@@ -465,6 +496,7 @@ Methodology Consistency
 </div>
 </div>
 </div>
+</div>
 <p><strong>Why This Matters</strong> Proven ability to <strong>apply analytical frameworks across diverse domains</strong>. Whether botanical data, ecological studies, or consumer research—same rigorous methodology delivers insights. This breadth is critical for organizations with heterogeneous data ecosystems.</p>
 <p><a href="projects/Project5/" class="cta-button">View Full Analysis →</a></p>
 </div>
@@ -475,9 +507,12 @@ Strategic Enterprise Analysis: Qualcomm Capstone
 <div class="business-challenge">
 <p><strong>The Challenge</strong> A Fortune 500 semiconductor company needed comprehensive strategic analysis covering market positioning, financial implications, operational readiness, and risk mitigation for major infrastructure initiatives.</p>
 </div>
-<p><strong>Approach</strong> - Conducted multi-dimensional strategic assessment - Analyzed market conditions, competitive landscape, and growth opportunities - Evaluated financial implications and ROI scenarios - Assessed operational requirements and implementation risks - Delivered executive-ready strategic recommendations</p>
-<div class="outcome">
-<strong>Impact</strong>
+<div class="card-content">
+<div class="approach-section">
+<p><strong style="color: #2980b9;">Approach</strong> - Conducted multi-dimensional strategic assessment - Analyzed market conditions, competitive landscape, and growth opportunities - Evaluated financial implications and ROI scenarios - Assessed operational requirements and implementation risks</p>
+</div>
+<div class="impact-section">
+<strong style="color: #27ae60;">Impact</strong>
 <div class="metric">
 <div class="metric-value">
 C-Suite Ready
@@ -492,6 +527,7 @@ Data-Driven
 </div>
 <div class="metric-label">
 Decision Framework
+</div>
 </div>
 </div>
 </div>
