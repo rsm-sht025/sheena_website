@@ -11,7 +11,7 @@ title: "Portfolio"
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6}
-### [01 — Fundraising Strategies](/projects/project1/)
+### [Fundraising Strategies](/projects/project1/)
 
 <div class="project-meta">Statistical Significance Testing & Causal Analysis</div>
 
@@ -29,7 +29,7 @@ Quantified the effectiveness of matching grant interventions on charitable donat
 :::
 
 ::: {.g-col-12 .g-col-md-6}
-### [02 — Patent Holdings Prediction](/projects/project2/)
+### [Patent Holdings Prediction](/projects/project2/)
 
 <div class="project-meta">Generalized Linear Modeling & Count Regression</div>
 
@@ -47,7 +47,7 @@ Developed predictive model for patent portfolio composition across geographic an
 :::
 
 ::: {.g-col-12 .g-col-md-6}
-### [03 — Consumer Preference Modeling](/projects/project3/)
+### [Consumer Preference Modeling](/projects/project3/)
 
 <div class="project-meta">Conjoint Analysis & Discrete Choice Modeling</div>
 
@@ -65,7 +65,7 @@ Decomposed consumer preferences for product attributes through factorial experim
 :::
 
 ::: {.g-col-12 .g-col-md-6}
-### [04 — Business Drivers Analysis](/projects/project4/)
+### [Business Drivers Analysis](/projects/project4/)
 
 <div class="project-meta">Key Driver Regression & Impact Assessment</div>
 
@@ -83,7 +83,7 @@ Isolated primary performance drivers through multi-stage regression analysis. Qu
 :::
 
 ::: {.g-col-12 .g-col-md-6}
-### [05 — Multi-Source Data Integration](/projects/Project5/)
+### [Multi-Source Data Integration](/projects/Project5/)
 
 <div class="project-meta">Comparative EDA & Statistical Summaries</div>
 
@@ -101,7 +101,7 @@ Synthesized exploratory analysis across three curated datasets to identify struc
 :::
 
 ::: {.g-col-12 .g-col-md-6}
-### [06 — Qualcomm Strategic Analysis](/projects/project6/)
+### [Qualcomm Strategic Analysis](/projects/project6/)
 
 <div class="project-meta">Enterprise Strategic Analysis & Financial Modeling</div>
 
@@ -128,28 +128,15 @@ Comprehensive organizational assessment integrating market intelligence, financi
   margin-top: 3rem;
 }
 
-.g-col-12 {
-  grid-column: span 1;
-}
-
-.g-col-md-6 {
-  grid-column: span 1;
-}
+.g-col-12 { grid-column: span 1; }
+.g-col-md-6 { grid-column: span 1; }
 
 @media (min-width: 768px) {
-  .g-col-md-6 {
-    grid-column: span 1;
-  }
-  
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+  .grid { grid-template-columns: 1fr; }
 }
 
 .grid h3 {
@@ -167,9 +154,7 @@ Comprehensive organizational assessment integrating market intelligence, financi
   transition: color 0.2s ease;
 }
 
-.grid h3 a:hover {
-  color: #1a5fa0;
-}
+.grid h3 a:hover { color: #1a5fa0; }
 
 .project-meta {
   color: #7f8c8d;
@@ -201,18 +186,14 @@ Comprehensive organizational assessment integrating market intelligence, financi
   border-left-color: #3498db;
 }
 
-[data-bs-theme="dark"] .grid > div:hover {
-  border-left-color: #5dade2;
-}
+[data-bs-theme="dark"] .grid > div:hover { border-left-color: #5dade2; }
 
 .grid > div strong {
   color: #1a1a1a;
   font-weight: 700;
 }
 
-[data-bs-theme="dark"] .grid > div strong {
-  color: #ffffff;
-}
+[data-bs-theme="dark"] .grid > div strong { color: #ffffff; }
 
 .grid > div p {
   color: #444;
@@ -221,9 +202,7 @@ Comprehensive organizational assessment integrating market intelligence, financi
   margin-bottom: 1.2rem;
 }
 
-[data-bs-theme="dark"] .grid > div p {
-  color: #d0d0d0;
-}
+[data-bs-theme="dark"] .grid > div p { color: #d0d0d0; }
 
 .grid a[href$="/"] {
   display: inline-block;
@@ -235,9 +214,7 @@ Comprehensive organizational assessment integrating market intelligence, financi
   border-top: 1px solid #ecf0f1;
 }
 
-[data-bs-theme="dark"] .grid a[href$="/"] {
-  border-top-color: #404040;
-}
+[data-bs-theme="dark"] .grid a[href$="/"] { border-top-color: #404040; }
 
 .grid a[href$="/"]:hover {
   color: #1a5fa0;
@@ -254,42 +231,5 @@ Comprehensive organizational assessment integrating market intelligence, financi
   margin-bottom: 0.4rem;
   line-height: 1.6;
   font-size: 0.95rem;
-}
-</style>
-  color: #1a1a1a;
-}
-
-[data-bs-theme="dark"] .grid > div strong {
-  color: #ffffff;
-}
-
-.grid > div p {
-  color: #555;
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-[data-bs-theme="dark"] .grid > div p {
-  color: #d0d0d0;
-}
-
-.grid a[href$="/"] {
-  display: inline-block;
-  margin-top: 1rem;
-  font-weight: 600;
-  color: #2980b9;
-  transition: all 0.2s ease;
-}
-
-.grid a[href$="/"]::after {
-  content: "";
-  display: inline-block;
-  margin-left: 0.3rem;
-}
-
-.grid a[href$="/"]:hover {
-  color: #1a5fa0;
-  text-decoration: none;
 }
 </style>
