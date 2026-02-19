@@ -1,6 +1,6 @@
 ---
 title: "Sheena Taylor"
-subtitle: "Data Analytics & AI Strategy"
+subtitle: "Spend Analyst | $117M+ Global Spend | Contracts Specialist | MSBA (UCSD) | Ex-Apple & Intuit | Qualcomm Capstone Research | Transforming Tech Infrastructure via Data-Driven Risk Mitigation"
 image: files/profile.jpg
 about:
   template: trestles
