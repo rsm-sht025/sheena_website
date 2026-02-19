@@ -69,10 +69,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -100,6 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
@@ -140,6 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -177,7 +181,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The input it takes is the file path of the CSV file containing the Iris dataset. In this case, the file path is stored in the variable file_path and is set to ‘iris.csv’.</p>
 <p>The output it produces is the first few rows of the Iris dataset displayed in the console or notebook environment.</p>
 <p>The code imports the pandas library, which is a popular data manipulation library in Python. It assigns the file path of the CSV file to the variable file_path. function from the pandas library is used to read the CSV file specified by file_path. This function loads the data from the CSV file into a pandas DataFrame object, which is a tabular data structure similar to a spreadsheet. The DataFrame object containing the Iris dataset is assigned to the variable iris_data. Finally, the iris_data.head() method is called, which displays the first few rows (by default, 5 rows) of the DataFrame. The important logic flow in this code is straightforward: it reads a CSV file containing the Iris dataset and displays the first few rows of the data. No complex data transformations or algorithms are involved in this particular code snippet. Overall, this code is a simple way to load and preview a dataset from a CSV file using the pandas library in Python. It is a common first step in data analysis or machine learning projects, as it allows the programmer to get a quick understanding of the dataset’s structure and contents before proceeding with further analysis or processing.</p>
-<div id="d6d8d9f3" class="cell" data-execution_count="1">
+<div id="3908aaa2" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Iris dataset</span></span>
@@ -264,7 +268,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>To evaluate the clustering performance, I will employ various metrics, such as the WCSS and Silhouette Score. The WCSS quantifies the compactness of clusters, with lower values indicating tighter clusters. The Silhouette Score measures the separation between clusters, with higher values suggesting better-defined clusters.</p>
 <p>By analyzing these metrics across different values of k, I can determine the optimal number of clusters that best represents the inherent structure of the data. Additionally, I will compare the performance of my custom implementation with established libraries like scikit-learn to validate the results and ensure robustness.</p>
 <p>Throughout the analysis, I will maintain a scientific mindset, exploring the data from multiple angles and leveraging visualizations to communicate findings effectively. The K-Means algorithm is a powerful tool in a data scientist’s toolkit, enabling us to extract valuable insights from complex datasets and drive data-driven decision-making processes.</p>
-<div id="f41d2894" class="cell" data-execution_count="2">
+<div id="1b94cf1f" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> silhouette_score, silhouette_samples</span>
@@ -327,9 +331,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[[5.9016129  2.7483871  4.39354839 1.43387097]
- [5.006      3.428      1.462      0.246     ]
- [6.85       3.07368421 5.74210526 2.07105263]]</code></pre>
+<pre><code>[[5.88360656 2.74098361 4.38852459 1.43442623]
+ [6.85384615 3.07692308 5.71538462 2.05384615]
+ [5.006      3.428      1.462      0.246     ]]</code></pre>
 </div>
 </div>
 </section>
@@ -341,7 +345,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>To achieve its purpose, the code follows these steps: a. It defines four functions: initialize_centroids, assign_clusters, update_centroids, and kmeans. b. The initialize_centroids function randomly selects a specified number of data points from the dataset to be the initial centroids (central points) of the clusters. c.&nbsp;The assign_clusters function calculates the distance between each data point and all the centroids, and assigns each data point to the cluster with the nearest centroid. d.&nbsp;The update_centroids function recalculates the centroids by taking the mean of all the data points assigned to each cluster. e. The kmeans function is the main function that orchestrates the K-Means algorithm. It starts by initializing the centroids, and then iterates over the following steps: i. Assign each data point to the nearest centroid using assign_clusters. ii. Update the centroids based on the new cluster assignments using update_centroids. iii. Repeat steps i and ii until the centroids no longer change significantly or a maximum number of iterations is reached.</p>
 <p>The important logic flow in this code is the iterative process of assigning data points to clusters and updating the centroids based on the new assignments. This process continues until the centroids stabilize, indicating that the clusters have converged to a stable state.</p>
 <p>The code follows a straightforward algorithm to group data points into clusters based on their similarity. It starts by randomly selecting initial centroids, then iteratively assigns data points to the nearest centroids and updates the centroids based on the new assignments. This process continues until the centroids no longer change significantly, at which point the final cluster assignments and centroid coordinates are returned.</p>
-<div id="03e4a2a6" class="cell" data-execution_count="3">
+<div id="628a02fb" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> silhouette_score</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -411,7 +415,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Based on the silhouette score plot, the optimal number of clusters appears to be around 𝑘=3, as itex ibitas the highest silhouette score.</p>
 <section id="comparing-with-builtin-kmeans-function-in-scikit-learn" class="level3">
 <h3 class="anchored" data-anchor-id="comparing-with-builtin-kmeans-function-in-scikit-learn">Comparing with builtin Kmeans function in scikit-learn</h3>
-<div id="3103ad69" class="cell" data-execution_count="4">
+<div id="29a89f68" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Using scikit-learn's KMeans</span></span>
@@ -500,7 +504,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 <p>Both implementations suggest that k=3 is the optimal number of clusters for the Iris dataset, based on the analysis of the within-cluster sum of squares (WCSS) and silhouette scores. The built-in KMeans algorithm from the scikit-learn library exhibits marginally superior performance in terms of these evaluation metrics.</p>
 <section id="latent-class-mnl" class="level3">
 <h3 class="anchored" data-anchor-id="latent-class-mnl">Latent-Class MNL</h3>
-<div id="cffab525" class="cell" data-execution_count="5">
+<div id="af8e7780" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -623,7 +627,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 </div>
 </div>
 </div>
-<div id="f771c039" class="cell" data-execution_count="6">
+<div id="3ecf5515" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure the indices match correctly by resetting the index</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>yogurt_data_reset <span class="op">=</span> yogurt_data.reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -690,7 +694,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">Time:</td>
-<td>17:54:29</td>
+<td>17:56:16</td>
 <td data-quarto-table-cell-role="th">Log-Likelihood:</td>
 <td>-2194.5</td>
 </tr>
@@ -800,7 +804,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 <p>Price Coefficients: Choice 2: -93.293 Choice 3: -150.555 Choice 4: -108.019</p>
 <p>All parameters are statistically significant at the p&lt;0.001 level.</p>
 <p>Interpretation: The positive intercept values suggest a higher baseline preference for choices 2, 3, and 4 when the price attribute is not considered. However, the negative price coefficients indicate that as the price increases, the likelihood of selecting each of these choices decreases. This finding aligns with the economic principle of demand theory, where higher prices lead to lower demand for a product or service, ceteris paribus.</p>
-<div id="92a93a9c" class="cell" data-execution_count="7">
+<div id="609d50a3" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.mixture <span class="im">import</span> GaussianMixture</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_latent_class_mnl(X, y, n_classes):</span>
@@ -843,7 +847,7 @@ The default value of `n_init` will change from 10 to 'auto' in 1.4. Set the valu
 <p>Here’s how the code achieves its purpose: It first fits a Gaussian Mixture Model (GMM) to the independent variables (X) to identify the optimal number of latent classes based on the Bayesian Information Criterion (BIC). Using the optimal number of latent classes, it re-fits the GMM and assigns each observation to a latent class using the predict method. The code then creates a dictionary called “class_parameters” to store the MNL model results for each latent class. It iterates over the unique latent classes and does the following for each class: a. It selects the data belonging to that latent class from the “long_data” dataset. b. It extracts the independent variables (X_class) and the dependent variable (y_class) for that class. c.&nbsp;It attempts to fit an MNL model using the statsmodels library, passing y_class as the dependent variable and X_class as the independent variables. d.&nbsp;If the model fitting is successful, it stores the MNL model results in the “class_parameters” dictionary, with the latent class as the key. Finally, it prints the parameter estimates (summary) for each latent class stored in the “class_parameters” dictionary. The important logic flow in this code is the iterative process of fitting separate MNL models for each identified latent class. It first identifies the latent classes using a GMM, then fits a separate MNL model for each class, allowing for different parameter estimates and preferences across the segments.</p>
 <p>The code performs a data transformation by converting the original dataset into a “long” format, where each row represents a choice made by an individual. This transformation is necessary for fitting the MNL model, which models the choice probabilities across multiple alternatives.</p>
 <p>Overall, this code aims to capture the heterogeneity in consumer preferences or behaviors by identifying latent classes within the data and fitting separate MNL models for each class, providing insights into the preferences and behaviors of different segments.</p>
-<div id="af837e66" class="cell" data-execution_count="8">
+<div id="74484c70" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-fit the Gaussian Mixture Model to identify the optimal number of classes</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.mixture <span class="im">import</span> GaussianMixture</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -904,7 +908,7 @@ Dep. Variable:             choice_idx   No. Observations:                 1326
 Model:                        MNLogit   Df Residuals:                     1322
 Method:                           MLE   Df Model:                            2
 Date:                Wed, 18 Feb 2026   Pseudo R-squ.:                 0.03389
-Time:                        17:54:29   Log-Likelihood:                -1024.9
+Time:                        17:56:17   Log-Likelihood:                -1024.9
 converged:                       True   LL-Null:                       -1060.8
 Covariance Type:            nonrobust   LLR p-value:                 2.430e-16
 ================================================================================
@@ -928,7 +932,7 @@ Dep. Variable:             choice_idx   No. Observations:                  198
 Model:                        MNLogit   Df Residuals:                      192
 Method:                           MLE   Df Model:                            3
 Date:                Wed, 18 Feb 2026   Pseudo R-squ.:                 0.02727
-Time:                        17:54:29   Log-Likelihood:                -260.95
+Time:                        17:56:17   Log-Likelihood:                -260.95
 converged:                       True   LL-Null:                       -268.27
 Covariance Type:            nonrobust   LLR p-value:                  0.002163
 ================================================================================
@@ -957,7 +961,7 @@ Dep. Variable:             choice_idx   No. Observations:                   35
 Model:                        MNLogit   Df Residuals:                       31
 Method:                           MLE   Df Model:                            2
 Date:                Wed, 18 Feb 2026   Pseudo R-squ.:                 0.04012
-Time:                        17:54:29   Log-Likelihood:                -29.866
+Time:                        17:56:17   Log-Likelihood:                -29.866
 converged:                       True   LL-Null:                       -31.114
 Covariance Type:            nonrobust   LLR p-value:                    0.2870
 ================================================================================
@@ -981,7 +985,7 @@ Dep. Variable:             choice_idx   No. Observations:                  104
 Model:                        MNLogit   Df Residuals:                      103
 Method:                           MLE   Df Model:                            0
 Date:                Wed, 18 Feb 2026   Pseudo R-squ.:               6.759e-11
-Time:                        17:54:29   Log-Likelihood:                -32.921
+Time:                        17:56:17   Log-Likelihood:                -32.921
 converged:                       True   LL-Null:                       -32.921
 Covariance Type:            nonrobust   LLR p-value:                       nan
 ================================================================================
@@ -1031,6 +1035,150 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
   toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -1425,4 +1573,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

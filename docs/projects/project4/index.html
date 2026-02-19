@@ -69,10 +69,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -100,6 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<style>html{ scroll-behavior: smooth; }</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
@@ -140,6 +143,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
           </div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -194,11 +198,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The final output is a DataFrame called ‘results’ with the following columns:</p>
 <p>Perception: The feature names (‘trust’, ‘build’, ‘differs’, ‘easy’, ‘appealing’, ‘rewarding’, ‘popular’, ‘service’, ‘impact’) Pearson Correlations: The Pearson correlation coefficients between each feature and the target variable, expressed as percentages. Standardized Regression Coefficients: The standardized regression coefficients from the Linear Regression model, expressed as percentages. Polychoric Correlations: The simulated Polychoric Correlations using Pearson Correlations as a proxy, expressed as percentages. Shapley Values: The feature importances from the Random Forest model, used as a proxy for Shapley Values, expressed as percentages. Johnson’s Epsilon: Johnson’s Relative Weights calculated using the Random Forest feature importances, expressed as percentages. Mean Decrease in RF Gini Coefficient: The mean decrease in the Gini impurity criterion from the Random Forest model, expressed as percentages. The code also includes an example of implementing Lasso Regression with Cross-Validation as an alternative to the Linear Regression model. It standardizes the features, creates a LassoCV object with 5-fold cross-validation, and fits the model to the data. The resulting Lasso Regression coefficients are displayed in a separate DataFrame called ‘lasso_results’.</p>
 <p>Overall, the code aims to provide a comprehensive analysis of the relationships between various perceptual factors and satisfaction levels, by calculating and presenting different statistical measures that quantify the influence and importance of each factor. This analysis can help identify the most significant factors affecting satisfaction levels and guide decision-making processes related to improving driver satisfaction.</p>
-<div id="942e44a7" class="cell" data-execution_count="1">
+<div id="ef073d90" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="9f161ac3" class="cell" data-execution_count="2">
+<div id="5cb3830a" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the CSV file to examine the data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>file_path <span class="op">=</span> <span class="st">'data_for_drivers_analysis.csv'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(file_path)</span>
@@ -312,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>We’ll start by performing the calculations for the Pearson Correlations and the Standardized Multiple Regression Coefficients. Polychoric Correlations: This requires specialized packages that may not be available in Python, but we can simulate it with the Pearson correlation for simplicity, assuming binary variables.</p>
-<div id="9d71c67b" class="cell" data-execution_count="3">
+<div id="f86cdc46" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
@@ -427,7 +431,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Johnson’s Relative Weights: This technique assigns weights to predictors based on their contributions to the R-squared value of the regression.</p>
 <p>Mean Decrease in the Gini Coefficient: This will be calculated using a random forest model.</p>
 <p>Let’s proceed step by step. First, we’ll calculate the Polychoric Correlations (simulated using Pearson correlations), then Usefulness, Shapley values, and finally, Johnson’s relative weights and Mean Decrease in the Gini Coefficient.</p>
-<div id="c974cb54" class="cell" data-execution_count="4">
+<div id="35417be1" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#import ace_tools as tools</span></span>
@@ -495,9 +499,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>25.6%</td>
 <td>13.6%</td>
 <td>25.6%</td>
-<td>16.1%</td>
-<td>16.1%</td>
-<td>16.1%</td>
+<td>14.3%</td>
+<td>14.3%</td>
+<td>14.3%</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
@@ -505,9 +509,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>19.2%</td>
 <td>2.3%</td>
 <td>19.2%</td>
-<td>9.9%</td>
-<td>9.9%</td>
-<td>9.9%</td>
+<td>10.2%</td>
+<td>10.2%</td>
+<td>10.2%</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
@@ -525,9 +529,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>21.3%</td>
 <td>2.6%</td>
 <td>21.3%</td>
-<td>10.0%</td>
-<td>10.0%</td>
-<td>10.0%</td>
+<td>9.7%</td>
+<td>9.7%</td>
+<td>9.7%</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
@@ -535,9 +539,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>20.8%</td>
 <td>4.0%</td>
 <td>20.8%</td>
-<td>8.2%</td>
-<td>8.2%</td>
-<td>8.2%</td>
+<td>8.4%</td>
+<td>8.4%</td>
+<td>8.4%</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
@@ -545,9 +549,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>19.5%</td>
 <td>0.6%</td>
 <td>19.5%</td>
-<td>10.6%</td>
-<td>10.6%</td>
-<td>10.6%</td>
+<td>10.5%</td>
+<td>10.5%</td>
+<td>10.5%</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">6</td>
@@ -555,9 +559,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>17.1%</td>
 <td>1.9%</td>
 <td>17.1%</td>
-<td>9.8%</td>
-<td>9.8%</td>
-<td>9.8%</td>
+<td>9.6%</td>
+<td>9.6%</td>
+<td>9.6%</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">7</td>
@@ -565,9 +569,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>25.1%</td>
 <td>10.4%</td>
 <td>25.1%</td>
-<td>13.1%</td>
-<td>13.1%</td>
-<td>13.1%</td>
+<td>13.7%</td>
+<td>13.7%</td>
+<td>13.7%</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">8</td>
@@ -575,9 +579,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>25.5%</td>
 <td>15.0%</td>
 <td>25.5%</td>
-<td>13.2%</td>
-<td>13.2%</td>
-<td>13.2%</td>
+<td>14.5%</td>
+<td>14.5%</td>
+<td>14.5%</td>
 </tr>
 </tbody>
 </table>
@@ -596,7 +600,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Incorporate Domain Knowledge: Use domain knowledge to guide feature engineering and model selection. Iterate and Refine: Model building is an iterative process. Continuously refine your features and model based on performance metrics and diagnostic plots.</p>
 <section id="implementing-regularized-regression-example-with-lasso-regression" class="level2">
 <h2 class="anchored" data-anchor-id="implementing-regularized-regression-example-with-lasso-regression">Implementing Regularized Regression (Example with Lasso Regression)</h2>
-<div id="c7e8f53e" class="cell" data-execution_count="5">
+<div id="9f10a065" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LassoCV</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> cross_val_score</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -709,6 +713,150 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
   toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -1103,4 +1251,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

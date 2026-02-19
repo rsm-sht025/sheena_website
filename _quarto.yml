@@ -17,9 +17,12 @@ website:
 
 format:
   html:
-    theme: lux
+    theme: 
+      light: cosmo
+      dark: darkly
     toc: false
     css: styles.css
+    smooth-scroll: true
 
 
 
