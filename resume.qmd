@@ -1,6 +1,10 @@
 ---
 title: "Resume"
-editor: visual
+toc: false
 ---
 
-{{< pdf files/sheena_website 2 2/__MACOSX/sheena_website 2/files/ST2024GRAD.pdf width=100% height=800 >}}
+{{< pdf files/"Sheena Taylor Resume.pdf" width=100% height=800 >}}
+
+\[Download my full resume (PDF)\](files/"Sheena Taylor Resume.pdf")
+
+---

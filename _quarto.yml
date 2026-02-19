@@ -5,19 +5,21 @@ project:
 website:
   title: "Sheena Taylor"
   navbar:
+    background: primary
     left:
+      - href: index.qmd
+        text: Home
       - href: about.qmd
         text: About
-      - href: resume.qmd  
-        text: Resume  
-      - href: projects.qmd  
-        text: Projects      
+      - href: projects.qmd
+        text: Projects
+      
 
 format:
   html:
-    theme: journal
+    theme: lux
+    toc: false
     css: styles.css
-    toc: true
 
 
 

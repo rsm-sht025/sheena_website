@@ -1,30 +1,37 @@
 ---
 title: "Sheena Taylor"
-image: "files/profile.jpg"
+subtitle: "MS Business Analytics UCSD"
+image: files/profile.jpg
 about:
-  template: jolla
+  template: trestles
   links:
     - icon: envelope
-      href: mailto:sht025@ucsd.edu
+      text: Email
+      href: mailto:sheenataylor497@gmail.com
     - icon: linkedin
+      text: LinkedIn
       href: https://www.linkedin.com/in/sheenataylor
 ---
 
+I specialize in bridging the gap between deep data analytics and high-stakes infrastructure operations for industry leaders like Apple, Intuit, and Qualcomm.
 
-Welcome to my website! 
 
-I'm Sheena Taylor - a Possibility Thinker, Data-Driven Leader and No Fluff Deal Closer. 
-I'm passionate about using data to drive business growth, and I'm always up for a challenge and most known to be resourceful, brilliant, gorgeous, talented, and fabulous!
 
-"Playing small does not serve the world!"
-- Nelson Mandela as president of the Republic of South Africa.
+Generative AI & LLMs: Deep technical understanding of Large Language Model (LLM) ecosystems, including Gemini, Anthropic (Claude), and OpenAI (GPT) architectures, with a focus on enterprise-level integration.
 
-“If you can't fly then run, if you can't run then walk, if you can't walk then crawl, but whatever you do you have to keep moving forward.” ― Martin Luther King Jr.
+A common mistake in the current landscape is the rush to digitalize or spend on redundant AI solutions when the answer is often already in your data. 
 
-Fun Fact: Did you know that only 3% of tech workers are Black women? As a Black woman in tech, I'm proud to be part of this underrepresented group, breaking barriers for future generations.
+### Career Highlights
 
-As a data scientist, my values revolve around curiosity, critical thinking, and a relentless pursuit of insights. I believe in using data to uncover hidden patterns, tell compelling stories, and drive informed decision-making.
-Let me crunch the numbers and craft a narrative that resonates with your target audience. With my analytical prowess and storytelling skills, I can help you unlock the power of data and captivate your customers. Together, we'll embark on a journey of data-driven discovery, where numbers come alive and business thrives.
+* Sourcing: Managed 67M annual global spend Virtual Expert Platform at Intuit.
+* Operations: Achieved a 1.5M annual cost reduction while leading technical teams at Apple.
+* Supply Chain: Restructured microelectronics strategies for patented chip technologies, reducing time-to-market costs by up to 94%.
+* Predictive Modeling: Improved Qualcomm cycle-time forecasting accuracy from 60% to 85%.
 
-Skills: Based on Lominger Comptencies- action oriented, dealing with ambiguity, approachability, boss relationships, building effective teams, business acumen, career ambition, caring about direct reports,compassion, composure, conflict management, confronting direct reports, creativity decision quality, dealing with paradoxes, delegation, developing direct reports and others, directing others,fairness to direct reports, functional or technical skills, hiring and staffing, humor, informing, innovation management, integrity and trust, intellectual horsepower, interpersonal savvy, learning on the fly managerial courage, managing and measuring work, managing diversity, managing vision and purpose, managing through systems, motivating others, negotiating, organizational agility, organizing, patience, peer relationships, perseverance, personal disclosure, personal learning, perspective, planning, political savvy, presentation skills, priority settings, problem solving, process management, self-development, self-knowledge, sizing up people, standing alone, strategic agility, technical learning, time management, timely decision making, total work systems, understanding others, work/life balance, and written communication.
+
+
+
+
+
+
 
