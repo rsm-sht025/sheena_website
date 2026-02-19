@@ -1,5 +1,28 @@
 ---
 title: "Project 6: Qualcomm Capstone Analysis"
+embed-pdf: true
+---
+
+## Executive Presentation
+
+<div style="margin: 2rem 0; padding: 1.5rem; background: linear-gradient(135deg, #f0f6ff 0%, #f9fcff 100%); border-left: 5px solid #2980b9; border-radius: 8px;">
+
+**Strategic presentation summarizing key findings and recommendations for Qualcomm leadership.**
+
+</div>
+
+{{< pdf "Qualcomm Capstone Final Presentation.pdf" >}}
+
+## Detailed Analysis Report
+
+<div style="margin: 2rem 0; padding: 1.5rem; background: linear-gradient(135deg, #fff4f0 0%, #fffaf9 100%); border-left: 5px solid #e74c3c; border-radius: 8px;">
+
+**Comprehensive business analysis document covering market positioning, financial performance, and strategic recommendations.**
+
+</div>
+
+{{< pdf "Detailed Report-2.docx" >}}
+
 ---
 
 ## Executive Summary
@@ -10,39 +33,12 @@ Comprehensive business analysis and strategic recommendations for Qualcomm, expl
 
 This capstone project represents an in-depth analysis of Qualcomm's business operations, competitive landscape, and strategic opportunities. The analysis integrates financial data, market trends, and operational metrics to identify key drivers of business performance and recommend actionable strategies.
 
-## Key Deliverables
+## Key Analysis Areas
 
-### Detailed Analysis Report
-The comprehensive report examines multiple dimensions of Qualcomm's business including:
 - **Market Analysis**: Competitive positioning and industry trends
 - **Financial Performance**: Revenue drivers and profitability metrics
 - **Operational Efficiency**: Process optimization opportunities
 - **Strategic Recommendations**: Data-backed growth strategies
-
-### Executive Presentation
-A polished presentation summarizing findings and strategic recommendations for leadership stakeholders.
-
-## Methodology
-
-- Multi-source data integration and analysis
-- Comparative benchmarking against industry peers
-- Financial modeling and forecasting
-- Strategic impact assessment
-- Stakeholder alignment planning
-
-## Key Insights
-
-The analysis provides actionable intelligence on:
-1. Market positioning relative to competitors
-2. Operational efficiency improvements
-3. Revenue optimization opportunities
-4. Risk mitigation strategies
-5. Growth acceleration pathways
-
-## Files
-
-- [Detailed Report-2.docx](Detailed%20Report-2.docx) - Complete analysis and recommendations
-- [Qualcomm Capstone Final Presentation.pdf](Qualcomm%20Capstone%20Final%20Presentation.pdf) - Executive presentation
 
 ---
 
