@@ -264,4 +264,268 @@ subtitle: "Procurement Intelligence & Supplier Management"
   background: #1f5fa6;
 }
 
+.chatbot-info {
+  background: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+[data-bs-theme="dark"] .chatbot-info {
+  background: #1e1e1e;
+  color: #ddd;
+}
+
+.info-list {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.info-list li {
+  margin-bottom: 0.75rem;
+}
+
+.info-list strong {
+  color: #2980b9;
+}
+
+.feature-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .feature-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-item {
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 6px;
+}
+
+[data-bs-theme="dark"] .feature-item {
+  background: #1a1a1a;
+}
+
+.feature-item strong {
+  display: block;
+  color: #2980b9;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.feature-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+[data-bs-theme="dark"] .feature-item p {
+  color: #aaa;
+}
+</style>
+
+<div class="tools-container">
+
+<div class="tool-section">
+
+## Procurement Spend Analyzer
+
+Understanding your cost structure and optimization opportunities is the foundation of data-driven procurement. This calculator helps you model potential savings across three key procurement levers.
+
+<div class="calculator-grid">
+<div>
+<div class="calc-input-group">
+<label for="currentSpend">Current Annual Spend</label>
+<input type="number" id="currentSpend" placeholder="e.g., 10000000" value="10000000">
+</div>
+
+<div class="calc-input-group">
+<label for="consolidationSavings">Supplier Consolidation Opportunity (%)</label>
+<input type="number" id="consolidationSavings" placeholder="e.g., 8" value="8" min="0" max="100">
+<small>Typical range: 5-15% from eliminating tail spend and redundancy</small>
+</div>
+
+<div class="calc-input-group">
+<label for="negotiationSavings">Negotiation Opportunity (%)</label>
+<input type="number" id="negotiationSavings" placeholder="e.g., 5" value="5" min="0" max="100">
+<small>Typical range: 3-10% from renegotiating terms with key suppliers</small>
+</div>
+
+<div class="calc-input-group">
+<label for="processOptimization">Process Optimization Opportunity (%)</label>
+<input type="number" id="processOptimization" placeholder="e.g., 4" value="4" min="0" max="100">
+<small>Typical range: 2-8% from automation, better ordering, reduced waste</small>
+</div>
+
+<button class="calculator-button" onclick="calculateSavings()">Calculate Savings Opportunity</button>
+</div>
+
+<div class="calculator-results" id="resultsContainer" style="display: none;">
+<div class="result-item">
+<div class="result-label">Total Annual Savings</div>
+<div class="result-value" id="totalSavings">$0</div>
+</div>
+
+<div class="result-item">
+<div class="result-label">From Supplier Consolidation</div>
+<div class="result-value" id="consolidationAmount" style="color: #27ae60;">$0</div>
+</div>
+
+<div class="result-item">
+<div class="result-label">From Negotiation & Terms</div>
+<div class="result-value" id="negotiationAmount" style="color: #27ae60;">$0</div>
+</div>
+
+<div class="result-item">
+<div class="result-label">From Process Optimization</div>
+<div class="result-value" id="optimizationAmount" style="color: #27ae60;">$0</div>
+</div>
+
+<div class="result-item">
+<div class="result-label">New Optimized Spend</div>
+<div class="result-value" id="newSpend">$0</div>
+</div>
+</div>
+</div>
+
+<script>
+function calculateSavings() {
+  const currentSpend = parseFloat(document.getElementById('currentSpend').value) || 0;
+  const consolidation = parseFloat(document.getElementById('consolidationSavings').value) || 0;
+  const negotiation = parseFloat(document.getElementById('negotiationSavings').value) || 0;
+  const optimization = parseFloat(document.getElementById('processOptimization').value) || 0;
+  
+  const consolidationAmount = currentSpend * (consolidation / 100);
+  const negotiationAmount = currentSpend * (negotiation / 100);
+  const optimizationAmount = currentSpend * (optimization / 100);
+  const totalSavings = consolidationAmount + negotiationAmount + optimizationAmount;
+  const newSpend = currentSpend - totalSavings;
+  
+  document.getElementById('totalSavings').textContent = '$' + totalSavings.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  document.getElementById('consolidationAmount').textContent = '$' + consolidationAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  document.getElementById('negotiationAmount').textContent = '$' + negotiationAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  document.getElementById('optimizationAmount').textContent = '$' + optimizationAmount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  document.getElementById('newSpend').textContent = '$' + newSpend.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  
+  document.getElementById('resultsContainer').style.display = 'block';
+}
+</script>
+
+</div>
+
+<div class="tool-section">
+
+## Supplier & Contract Management Assistant
+
+Complex supplier relationships, contract negotiations, and compliance require structured thinking. This assistant helps your team work through procurement decisions systematically.
+
+<div class="chatbot-grid">
+<div>
+<div class="chatbot-box">
+<div class="chat-messages" id="chatMessages">
+<div class="chat-message ai">Hi. I can help you think through contract terms, supplier risk, cost optimization strategies, compliance requirements, and strategic planning.
+
+What would you like to work through?</div>
+</div>
+<div class="chat-input-area">
+<input type="text" id="chatInput" placeholder="Ask about supplier strategy..." onkeypress="if(event.key==='Enter') sendMessage()">
+<button onclick="sendMessage()">Send</button>
+</div>
+</div>
+</div>
+
+<div>
+<div class="chatbot-info">
+<strong>How to Use This Assistant</strong>
+<ul class="info-list">
+<li><strong>Contract Analysis</strong> - Identify unfavorable terms, hidden costs, renewal obligations</li>
+<li><strong>Supplier Risk</strong> - Assess financial stability, concentration risk, geopolitical exposure</li>
+<li><strong>Negotiation Strategy</strong> - Identify leverage points, benchmark against market rates, find alternatives</li>
+<li><strong>Cost Optimization</strong> - Model consolidation opportunities, renegotiation windows, alternative sourcing</li>
+<li><strong>Compliance</strong> - Evaluate environmental standards, labor practices, regulatory requirements</li>
+<li><strong>Supply Chain Planning</strong> - Develop dual-sourcing strategy, manage geographic risk, build resilience</li>
+</ul>
+</div>
+
+<div style="margin-top: 1.5rem;">
+<strong>Key Capabilities</strong>
+<div class="feature-list">
+<div class="feature-item">
+<strong>Spend Pattern Analysis</strong>
+<p>Identify optimization opportunities across your supplier base and spending categories</p>
+</div>
+<div class="feature-item">
+<strong>Terms Assessment</strong>
+<p>Review contract language and identify areas for renegotiation and improvement</p>
+</div>
+<div class="feature-item">
+<strong>Risk Identification</strong>
+<p>Spot supplier vulnerabilities and supply chain concentrations before they become problems</p>
+</div>
+<div class="feature-item">
+<strong>Savings Modeling</strong>
+<p>Quantify potential savings and build action plans for procurement initiatives</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+const sampleResponses = {
+  'contract': 'Key areas to evaluate in supplier contracts: (1) Payment terms—30/60/90 day net significantly impacts cash flow; (2) Renewal clauses—auto-renewal language can lock you in; (3) Price adjustment mechanisms—ensure you\'re protected against commodity price spikes; (4) Termination for convenience—can you exit without penalty; (5) Liability and SLA clauses—are you adequately protected?\n\nShare specific contract language and I can help you identify risks.',
+  'supplier': 'Systematic supplier risk assessment covers: (1) Financial health—review recent financials and credit ratings; (2) Concentration—what percentage of your spend is with this supplier; (3) Geographic exposure—what geopolitical risks exist; (4) Alternative sources—can you switch suppliers if needed; (5) Service level compliance—are they meeting agreements.\n\nWhat supplier concerns do you want to evaluate?',
+  'cost': 'Core cost optimization levers: (1) Consolidation—reduce fragmented spend across too many suppliers (typical 5-15% savings); (2) Negotiation—renegotiate with top suppliers using competitive bids (typical 3-10%); (3) Process improvement—automation, better forecasting, waste reduction (typical 2-8%); (4) Alternative sourcing—identify new suppliers or categories (typical 10-20%).\n\nUse the calculator above to model your opportunity.',
+  'negotiate': 'Build procurement leverage through: (1) Data—use spend intelligence to show volume and multi-year commitment value; (2) Timing—renegotiate near renewal windows; (3) Alternatives—develop competitive bids from other suppliers; (4) Terms focus—negotiate payment terms, volumes, exclusivity, not just price; (5) Bundling—combine categories for better leverage.\n\nWhich category are you negotiating?',
+  'default': 'I can help with contract analysis, supplier risk assessment, cost optimization, negotiation strategy, compliance review, and supply chain planning. What aspect would you like to work through?'
+};
+
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const message = input.value.trim();
+  
+  if (!message) return;
+  
+  const messagesDiv = document.getElementById('chatMessages');
+  const userMsg = document.createElement('div');
+  userMsg.className = 'chat-message user';
+  userMsg.textContent = message;
+  messagesDiv.appendChild(userMsg);
+  
+  input.value = '';
+  
+  setTimeout(() => {
+    const lowerMessage = message.toLowerCase();
+    let response = sampleResponses['default'];
+    
+    if (lowerMessage.includes('contract') || lowerMessage.includes('terms')) {
+      response = sampleResponses['contract'];
+    } else if (lowerMessage.includes('supplier') || lowerMessage.includes('risk')) {
+      response = sampleResponses['supplier'];
+    } else if (lowerMessage.includes('cost') || lowerMessage.includes('saving')) {
+      response = sampleResponses['cost'];
+    } else if (lowerMessage.includes('negot') || lowerMessage.includes('leverage')) {
+      response = sampleResponses['negotiate'];
+    }
+    
+    const aiMsg = document.createElement('div');
+    aiMsg.className = 'chat-message ai';
+    aiMsg.textContent = response;
+    messagesDiv.appendChild(aiMsg);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }, 500);
+}
+</script>
+
+</div>
+
+</div>
+
 

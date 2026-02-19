@@ -247,19 +247,4 @@ This is the window for procurement leverage. Post-2026, capacity will normalize 
 </div>
 </div>
 
----
-
-## Key Takeaway
-
-**Infrastructure procurement is no longer about availability. It's about cost structure, environmental impact, and geopolitical resilience.**
-
-The winning procurement teams are:
-
-1. **Negotiating contracts with environmental & geographic diversification clauses**
-2. **Locking in pricing on emerging capacity** (space, new fabs, AI accelerators)
-3. **Quantifying the true cost of infrastructure** (water, carbon, supply chain risk)
-4. **Building relationships with non-traditional suppliers** before capacity normalizes
-
-The data-driven procurement advantage in 2026 isn't better spreadsheets. It's understanding **where capacity is shifting and securing terms before competitors do**.
-
 </div>
