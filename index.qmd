@@ -1,6 +1,6 @@
 ---
 title: "Sheena Taylor"
-subtitle: "MS Business Analytics UCSD"
+subtitle: "Data Analytics & AI Strategy"
 image: files/profile.jpg
 about:
   template: trestles
@@ -13,20 +13,20 @@ about:
       href: https://www.linkedin.com/in/sheenataylor
 ---
 
-I specialize in bridging the gap between deep data analytics and high-stakes infrastructure operations for industry leaders like Apple, Intuit, and Qualcomm.
+I bridge the gap between data analytics and high-stakes infrastructure operations for industry leaders like Apple, Intuit, and Qualcomm.
 
+## Expertise
 
+**Generative AI & LLMs:** Deep technical understanding of Large Language Model ecosystems, including Gemini, Anthropic (Claude), and OpenAI (GPT) architectures, with proven enterprise-level integration.
 
-Generative AI & LLMs: Deep technical understanding of Large Language Model (LLM) ecosystems, including Gemini, Anthropic (Claude), and OpenAI (GPT) architectures, with a focus on enterprise-level integration.
+**Data-Driven Insights:** I focus on unlocking value that already exists in your data rather than rushing to implement redundant solutions.
 
-A common mistake in the current landscape is the rush to digitalize or spend on redundant AI solutions when the answer is often already in your data. 
+## Career Highlights
 
-### Career Highlights
-
-* Sourcing: Managed 67M annual global spend Virtual Expert Platform at Intuit.
-* Operations: Achieved a 1.5M annual cost reduction while leading technical teams at Apple.
-* Supply Chain: Restructured microelectronics strategies for patented chip technologies, reducing time-to-market costs by up to 94%.
-* Predictive Modeling: Improved Qualcomm cycle-time forecasting accuracy from 60% to 85%.
+- **Sourcing:** Managed $67M annual global spend Virtual Expert Platform at Intuit
+- **Operations:** Achieved $1.5M annual cost reduction while leading technical teams at Apple
+- **Supply Chain:** Restructured microelectronics strategies for patented chip technologies, reducing time-to-market costs by up to 94%
+- **Predictive Modeling:** Improved Qualcomm cycle-time forecasting accuracy from 60% to 85%
 
 
 

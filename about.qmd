@@ -1,32 +1,26 @@
 ---
-title: "The Shift: AI as the New Foundation"
+title: "About"
 --- 
-I build automated systems that reduce latency and maximize ROI.
+## AI as the New Foundation
 
-Lead with the AI Paradigm Shift. 
-Whether it's finding the "missing millions" in a global spend portfolio or building predictive models that actually hit the mark, I’m all about maximizing ROI through strategic technical execution.
+I build automated systems that reduce latency and maximize ROI through strategic technical execution.
 
-1. Automated Profitability: Find savings.
+Whether it's uncovering "missing millions" in a global spend portfolio or building predictive models that deliver results, I focus on maximizing business impact through data-driven decision-making.
 
-2. Predictive Precision: Replace "best guesses".
+## Core Capabilities
 
-3. Operational Velocity: Clean data and automate end-to-end workflows.
+1. **Automated Profitability** — Identify and capture savings opportunities
+2. **Predictive Precision** — Replace guesswork with data-backed forecasts
+3. **Operational Velocity** — Clean data and automate end-to-end workflows
+4. **Executive Alignment** — Translate complex technical concepts into clear, actionable roadmaps
 
-4. Executive Decision Support: Translate complex technical stacks into clear, actionable executive roadmaps that empower leadership to move faster.
+## Technical Expertise
 
- 
+**Data Science & Analytics**  
+Python • SQL • Spark • Databricks • Predictive Modeling • Machine Learning
 
-Technical Foundation
+**Infrastructure & Operations**  
+AWS • Azure • Docker • Git • PostgreSQL • ERP Systems (Oracle/SAP) • Salesforce • Coupa • Contract Lifecycle Management
 
-Data Science and Analytics: Python, SQL, Spark, Databricks, Predictive Modeling, and Machine Learning.
-
-
-Infrastructure and Operations: AWS, Azure, Docker, Git, PostgreSQL, ERP (Oracle/SAP), Salesforce, Coupa, and CLM.
-
-
-AI and LLM Architecture: Strategic application of GPT, BERT, Gemini, and Claude series models for enterprise optimization.
-
-
-
-
-
+**AI & LLM Architecture**  
+GPT • BERT • Gemini • Claude series models • Enterprise LLM Integration

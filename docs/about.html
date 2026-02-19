@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.55">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>The Shift: AI as the New Foundation – Sheena Taylor</title>
+<title>Sheena Taylor - About</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -102,7 +102,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
+          <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -117,7 +117,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">The Shift: AI as the New Foundation</h1>
+<h1 class="title">About</h1>
 </div>
 
 
@@ -134,20 +134,31 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>I build automated systems that reduce latency and maximize ROI.</p>
-<p>Lead with the AI Paradigm Shift. Whether it’s finding the “missing millions” in a global spend portfolio or building predictive models that actually hit the mark, I’m all about maximizing ROI through strategic technical execution.</p>
+<section id="ai-as-the-new-foundation" class="level2">
+<h2 class="anchored" data-anchor-id="ai-as-the-new-foundation">AI as the New Foundation</h2>
+<p>I build automated systems that reduce latency and maximize ROI through strategic technical execution.</p>
+<p>Whether it’s uncovering “missing millions” in a global spend portfolio or building predictive models that deliver results, I focus on maximizing business impact through data-driven decision-making.</p>
+</section>
+<section id="core-capabilities" class="level2">
+<h2 class="anchored" data-anchor-id="core-capabilities">Core Capabilities</h2>
 <ol type="1">
-<li><p>Automated Profitability: Find savings.</p></li>
-<li><p>Predictive Precision: Replace “best guesses”.</p></li>
-<li><p>Operational Velocity: Clean data and automate end-to-end workflows.</p></li>
-<li><p>Executive Decision Support: Translate complex technical stacks into clear, actionable executive roadmaps that empower leadership to move faster.</p></li>
+<li><strong>Automated Profitability</strong> — Identify and capture savings opportunities</li>
+<li><strong>Predictive Precision</strong> — Replace guesswork with data-backed forecasts</li>
+<li><strong>Operational Velocity</strong> — Clean data and automate end-to-end workflows</li>
+<li><strong>Executive Alignment</strong> — Translate complex technical concepts into clear, actionable roadmaps</li>
 </ol>
-<p>Technical Foundation</p>
-<p>Data Science and Analytics: Python, SQL, Spark, Databricks, Predictive Modeling, and Machine Learning.</p>
-<p>Infrastructure and Operations: AWS, Azure, Docker, Git, PostgreSQL, ERP (Oracle/SAP), Salesforce, Coupa, and CLM.</p>
-<p>AI and LLM Architecture: Strategic application of GPT, BERT, Gemini, and Claude series models for enterprise optimization.</p>
+</section>
+<section id="technical-expertise" class="level2">
+<h2 class="anchored" data-anchor-id="technical-expertise">Technical Expertise</h2>
+<p><strong>Data Science &amp; Analytics</strong><br>
+Python • SQL • Spark • Databricks • Predictive Modeling • Machine Learning</p>
+<p><strong>Infrastructure &amp; Operations</strong><br>
+AWS • Azure • Docker • Git • PostgreSQL • ERP Systems (Oracle/SAP) • Salesforce • Coupa • Contract Lifecycle Management</p>
+<p><strong>AI &amp; LLM Architecture</strong><br>
+GPT • BERT • Gemini • Claude series models • Enterprise LLM Integration</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -185,7 +196,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const onCopySuccess = function(e) {
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -217,29 +239,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -247,7 +247,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
